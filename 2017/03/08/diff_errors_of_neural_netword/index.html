@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Heloowird, Notes" />
+  <meta name="keywords" content="machine learning," />
 
 
 
@@ -87,12 +87,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Heloowird">
-<meta property="og:url" content="https://heloowird.github.io/index.html">
+<meta name="description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。
+在使用神经网络训练分类模型时，通常以交叉熵误差来度量神">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用神经网络解决分类问题时，为什么选择交叉熵误差更好">
+<meta property="og:url" content="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_netword/index.html">
 <meta property="og:site_name" content="Heloowird">
+<meta property="og:description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。
+在使用神经网络训练分类模型时，通常以交叉熵误差来度量神">
+<meta property="og:updated_time" content="2017-03-15T16:02:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Heloowird">
+<meta name="twitter:title" content="使用神经网络解决分类问题时，为什么选择交叉熵误差更好">
+<meta name="twitter:description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。
+在使用神经网络训练分类模型时，通常以交叉熵误差来度量神">
 
 
 
@@ -120,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_netword/"/>
 
 
 
 
 
-  <title> Heloowird </title>
+  <title> 使用神经网络解决分类问题时，为什么选择交叉熵误差更好 | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -151,9 +158,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -256,9 +261,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -291,10 +296,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2017/03/08/diff_errors_of_neural_netword/" itemprop="url">
-                  使用神经网络解决分类问题时，为什么选择交叉熵误差更好
-                </a>
+                使用神经网络解决分类问题时，为什么选择交叉熵误差更好
               
             
           </h1>
@@ -388,562 +390,138 @@
       
 
       
-        
-          
-          在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/03/08/diff_errors_of_neural_netword/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <p>在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。</p>
+<p>在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏。为什么不使用0-1分类误差或者均方差呢？</p>
+<p>为说明这个问题，可以先从一个例子出发。例如预测某天天气情况（下雨、晴天、阴天），需要收集湿度、温度、云种等数据。在多分类且类别互斥问题中，通常选用<em>softmax函数</em><sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="external">1</a>]</sup>作为神经网络输出层的激活函数。现在假设有3个样本，输入某个训练阶段的神经网络模型, 最后输出层的输出结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>softmax输出</th>
+<th>真实标签</th>
+<th>是否正确</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.3 0.3 0.4</td>
+<td>0 0 1 (阴天)</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>0.3 0.4 0.3</td>
+<td>0 1 0 (晴天)</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>0.1 0.2 0.7</td>
+<td>1 0 0 (下雨)</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>如果使用0-1误差的话，此时神经网络模型的0-1误差为1/3=0.33, 分类准确率为2/3=0.67。假设经过迭代后，模型的输出发生了变化：</p>
+<table>
+<thead>
+<tr>
+<th>softmax输出</th>
+<th>真实标签</th>
+<th>是否正确</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1 0.2 0.7</td>
+<td>0 0 1 (阴天)</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>0.1 0.7 0.2</td>
+<td>0 1 0 (晴天)</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>0.3 0.4 0.3</td>
+<td>1 0 0 (下雨)</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>我们发现，模型的分类误差依然为1/3=0.33。直观上看，第二次模型比第一次更好：前两个预测正确样本的预测标签概率更接近1，同时最后一个样本虽然依然被错误分类，但是预测下雨的概率增大。所以，很容易看出0-1误差太过笼统，不适合作为模型的训练误差。</p>
+<p>而使用交叉熵损失函数来度量训练误差，上例第一个模型中第一个样本的误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-((ln(0.3)*0) + (ln(0.3)*0) + (ln(0.4)*1)) = -ln(0.4)</div></pre></td></tr></table></figure></p>
+<p>具体的交叉熵计算公式参见<sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="external">1</a>]</sup>。因此，第一个模型的平均交叉熵误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(ln(0.4) + ln(0.4) + ln(0.1)) / 3 = 1.38</div></pre></td></tr></table></figure></p>
+<p>同样的，第二个模型的平均交叉熵误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(ln(0.7) + ln(0.7) + ln(0.3)) / 3 = 0.64</div></pre></td></tr></table></figure></p>
+<p>可以看到，第二个模型的平均交叉熵误差比第一个模型的误差更小。交叉熵损失函数考虑了样本预测结果接近正确标签的程度，预测结果越接近正确标签，模型误差越小。</p>
+<p>再看看均方差，第一个模型第一个样本的训练均方差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.3 - 0)^2 + (0.3 - 0)^2 + (0.4 - 1)^2 = 0.09 + 0.09 + 0.36 = 0.54</div></pre></td></tr></table></figure></p>
+<p>第一个模型的均方差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.54 + 0.54 + 1.34) / 3 = 0.81</div></pre></td></tr></table></figure></p>
+<p>第二个模型的均方差比第一个模型的更小，为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.14 + 0.14 + 0.74) / 3 = 0.34</div></pre></td></tr></table></figure></p>
+<p>从误差数值变化来看，均方差和交叉熵误差一样，从第一个模型到第二个更好的模型时，误差有明显的下降。在衡量模型好坏方面差别似乎不大，但均方差更强调预测错误的样本。</p>
+<p>以上通过具体例子可以看到，在训练神经网络分类模型过程中，交叉熵误差比0-1分类误差更好；但是很难说服我们交叉熵误差比均方差更好。</p>
+<p>参考资料：</p>
+<ol>
+<li><a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" target="_blank" rel="external">UFLDL Softmax回归</a></li>
+<li><a href="https://jamesmccaffrey.wordpress.com/2013/11/05/why-you-should-use-cross-entropy-error-instead-of-classification-error-or-mean-squared-error-for-neural-network-classifier-training/" target="_blank" rel="external">Why You Should Use Cross-Entropy Error Instead Of Classification Error Or Mean Squared Error For Neural Network Classifier Training</a></li>
+</ol>
+
       
     </div>
 
     <div>
       
+        
+
+      
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2016/02/21/manager_python_http_server/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Heloowird">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/02/21/manager_python_http_server/" itemprop="url">
-                  使用shell脚本管理python内置的HTTPServer服务
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-21T23:29:22+08:00">
-                2016-02-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
           
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/02/21/manager_python_http_server/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/21/manager_python_http_server/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2016/02/21/manager_python_http_server/" class="leancloud_visitors" data-flag-title="使用shell脚本管理python内置的HTTPServer服务">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
         
-          
-          前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。Linux上内置Python，而Python
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/02/21/manager_python_http_server/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/21/manager_python_http_server/" rel="next" title="使用shell脚本管理python内置的HTTPServer服务">
+                <i class="fa fa-chevron-left"></i> 使用shell脚本管理python内置的HTTPServer服务
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
+          <span class="post-nav-divider"></span>
 
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2015/03/29/movie_yiyi/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Heloowird">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2015/03/29/movie_yiyi/" itemprop="url">
-                  《一一》：一个人成长的碎碎念
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-03-29T02:19:22+08:00">
-                2015-03-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2015/03/29/movie_yiyi/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/29/movie_yiyi/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2015/03/29/movie_yiyi/" class="leancloud_visitors" data-flag-title="《一一》：一个人成长的碎碎念">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          深夜，看完《一一》，依然惊到呆若木鸡。
-不知道第一次是怎么就迷恋上空镜头和长镜头的，她们像一个人静静地倾诉。或许是因为侯孝贤的《恋恋风尘》，按图索骥，开始接触到了杨德昌的电影，其中《一一》给我的印象最深刻：平淡无奇的镜头，好像就是我们的日常，交织起来却无比震撼。
-第一次，我所能感受是一个大家的各种生活琐事，碰到问题，解决问题，再碰到问题；第二次，我所能理解的是用各个角色完整地讲述人的各个成长阶段。
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/03/29/movie_yiyi/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2015/03/26/wonderful_words/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Heloowird">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/03/26/wonderful_words/" itemprop="url">
-                  致亲爱的我们
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-03-26T22:22:22+08:00">
-                2015-03-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/摘抄/" itemprop="url" rel="index">
-                    <span itemprop="name">摘抄</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2015/03/26/wonderful_words/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/26/wonderful_words/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2015/03/26/wonderful_words/" class="leancloud_visitors" data-flag-title="致亲爱的我们">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          I went to the woods because I wished to live deliberately, to front only the essential facts of life, and see if I could not learn what it had to teach, and not, when I came to die, discover that I ha
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/03/26/wonderful_words/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
           
           </div>
@@ -951,6 +529,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/08/diff_errors_of_neural_netword/"
+           data-title="使用神经网络解决分类问题时，为什么选择交叉熵误差更好" data-url="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_netword/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -1146,6 +732,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
@@ -1200,26 +790,6 @@
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
   
 
 
