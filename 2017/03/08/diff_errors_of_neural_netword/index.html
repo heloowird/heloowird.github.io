@@ -87,19 +87,19 @@
 
 
 
-<meta name="description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神">
+<meta name="description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
+在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用神经网络解决分类问题时，为什么选择交叉熵误差更好">
 <meta property="og:url" content="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_netword/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神">
-<meta property="og:updated_time" content="2017-03-15T16:02:55.000Z">
+<meta property="og:description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
+在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好">
+<meta property="og:updated_time" content="2017-03-17T12:24:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用神经网络解决分类问题时，为什么选择交叉熵误差更好">
-<meta name="twitter:description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神">
+<meta name="twitter:description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
+在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好">
 
 
 
@@ -390,7 +390,7 @@
       
 
       
-        <p>在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、对数损失函数、Hinge损失函数、指数损失函数等。</p>
+        <p>在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。</p>
 <p>在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏。为什么不使用0-1分类误差或者均方差呢？</p>
 <p>为说明这个问题，可以先从一个例子出发。例如预测某天天气情况（下雨、晴天、阴天），需要收集湿度、温度、云种等数据。在多分类且类别互斥问题中，通常选用<em>softmax函数</em><sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="external">1</a>]</sup>作为神经网络输出层的激活函数。现在假设有3个样本，输入某个训练阶段的神经网络模型, 最后输出层的输出结果如下：</p>
 <table>
