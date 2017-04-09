@@ -699,10 +699,8 @@
 		  processRefs: true
         },
 		TeX: {
-		  // TeX/LaTeX input processor
-		  formatNumber: function (n) {return n},
-		  //equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
-		  //extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
+		  equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
+		  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
 		},
       });
     </script>

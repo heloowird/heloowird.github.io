@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
 在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
-<meta property="og:updated_time" content="2017-04-09T05:47:26.000Z">
+<meta property="og:updated_time" content="2017-04-09T05:51:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
 <meta name="twitter:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
@@ -452,7 +452,7 @@
 <p>所以参数最终更新公式为：<br>\begin{equation} \label{5}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z)) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))<br>\end{cases}<br>\end{equation}<br>当预测值接近真实值(即$\sigma(z)$ 或者$(1-\sigma(z))$接近$0$时，更新项$\eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))$接近0，梯度出现“消失”现象。</p>
 <p>而交叉熵损失误差恰好可以避免这一点。为简单起见，以二分类为例，交叉熵损失函数为：<br>\begin{equation} \label{6}<br>L(y, x) = -(y \cdot lna + (1-y)ln(1-a))<br>\end{equation}<br>同样x为输入，y为label，a为最后分类器的输出：$a = \sigma(z), z = wx + b$ </p>
 <p>那么，$w$和$b$的更新公式为：<br>\begin{equation} \label{7}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot x \\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}</p>
-<p>根据公式\eqref{4}，可以消去$a \cdot (1-a)$得：<br>\begin{equation} \label{8}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y)<br>\end{cases}}<br>\end{equation}</p>
+<p>根据公式\eqref{4}，可以消去$a \cdot (1-a)$得：<br>\begin{equation} \label{8}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y)<br>\end{cases}<br>\end{equation}</p>
 <p>比较公式\eqref{5}和公式\eqref{8}易知，引发“梯度消失”的项已经消除。所以使用交叉熵误差使得整个梯度下降算法对参数更新方式比均方差的更加有效率。</p>
 <p>参考资料：</p>
 <ol>
@@ -808,10 +808,8 @@
 		  processRefs: true
         },
 		TeX: {
-		  // TeX/LaTeX input processor
-		  formatNumber: function (n) {return n},
-		  //equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
-		  //extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
+		  equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
+		  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
 		},
       });
     </script>
