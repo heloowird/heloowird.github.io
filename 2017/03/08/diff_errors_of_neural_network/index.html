@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
 在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
-<meta property="og:updated_time" content="2017-04-09T05:27:46.000Z">
+<meta property="og:updated_time" content="2017-04-09T05:36:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
 <meta name="twitter:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
@@ -804,12 +804,14 @@
         tex2jax: {
           inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
           processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+		  processRefs: true
         },
 		TeX: {
 		  // TeX/LaTeX input processor
-		  equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
-		  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
+		  formatNumber: function (n) {return n},
+		  //equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
+		  //extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
 		},
       });
     </script>

@@ -572,12 +572,14 @@
         tex2jax: {
           inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
           processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+		  processRefs: true
         },
 		TeX: {
 		  // TeX/LaTeX input processor
-		  equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
-		  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
+		  formatNumber: function (n) {return n},
+		  //equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
+		  //extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
 		},
       });
     </script>
