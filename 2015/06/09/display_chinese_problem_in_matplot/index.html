@@ -91,7 +91,7 @@
 定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
 
 修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
- font.family         : sans-serif        #默认情况下，该">
+12345font.family         : sans-serif        #默认情">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Matplot中文乱码解决方案">
 <meta property="og:url" content="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/index.html">
@@ -100,15 +100,15 @@
 定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
 
 修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
- font.family         : sans-serif        #默认情况下，该">
-<meta property="og:updated_time" content="2017-04-09T07:33:45.000Z">
+12345font.family         : sans-serif        #默认情">
+<meta property="og:updated_time" content="2017-04-09T07:38:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matplot中文乱码解决方案">
 <meta name="twitter:description" content="修改matplotlibrc文件 （永久解决方案）
 定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
 
 修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
- font.family         : sans-serif        #默认情况下，该">
+12345font.family         : sans-serif        #默认情">
 
 
 
@@ -393,26 +393,11 @@
 <li><p>定位matplotlibrc文件<br>该文件位于[<em>python_install_dir</em>]\Lib\site-packages\matplotlib\mpl-data目录下。</p>
 </li>
 <li><p>修改matplotlibrc文件内容<br>matplotlibrc文件部分内容如下：</p>
-<p> font.family         : sans-serif        #默认情况下，该字段为关闭状态。去掉注释即可。<br> font.sans-serif     : Microsoft YaHei , Bitstream Vera Sans, </p>
-<pre><code>Lucida Grande, Verdana, Geneva, Lucid,
-Arial, Helvetica, Avant Garde,
-sans-serif        #添加&quot;Microsoft YaHei&quot;
-</code></pre></li>
-</ol>
-<p>在<code>font.sans-serif</code>中添加 <strong>Mircosoft YaHei</strong> 之后，matplot 通过  C:\Users\[<em>your_account</em>]\.matplotlib\fontList.cache 中存储的映射关系找到字体文件所在的位置。fontList.cache 文件部分内容如下所示：</p>
-<pre><code>S&apos;Microsoft YaHei
-p147
-sg16
-I700
-sg17
-g13
-sg18
-g13
-sg19
-S&apos;C:\\Windows\\Fonts\\msyhbd.ttf&apos;
-</code></pre><p> Microsoft YaHei字体默认的位置位于 C:\Windows\Fonts\ 目录下。</p>
-<p><strong>注意</strong>：如果第三步操作完之后仍不起作用，可以将 C:\Windows\Fonts\ 目录下的Microsoft YaHei字体文件拷贝到 [<em>python_install_dir</em>]\Lib\site-packages\matplotlib\mpl-data\fonts\ttf\ 目录下</p>
-<ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">font.family         : sans-serif        #默认情况下，该字段为关闭状态。去掉注释即可。</div><div class="line">font.sans-serif     : Microsoft YaHei , Bitstream Vera Sans, </div><div class="line">                      Lucida Grande, Verdana, Geneva, Lucid,</div><div class="line">                      Arial, Helvetica, Avant Garde,</div><div class="line">                      sans-serif        #添加&quot;Microsoft YaHei&quot;</div></pre></td></tr></table></figure>
+<p> 在<code>font.sans-serif</code>中添加<strong>Mircosoft YaHei</strong>之后，matplot 通过C:\Users\[<em>your_account</em>]\.matplotlib\fontList.cache 中存储的映射关系找到字体文件所在的位置。fontList.cache 文件部分内容如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">S&apos;Microsoft YaHei</div><div class="line">p147</div><div class="line">sg16</div><div class="line">I700</div><div class="line">sg17</div><div class="line">g13</div><div class="line">sg18</div><div class="line">g13</div><div class="line">sg19</div><div class="line">S&apos;C:\\Windows\\Fonts\\msyhbd.ttf&apos;</div></pre></td></tr></table></figure>
+<p> Microsoft YaHei字体默认的位置位于 C:\Windows\Fonts\ 目录下。<br> <strong>注意</strong>：如果第三步操作完之后仍不起作用，可以将 C:\Windows\Fonts\ 目录下的Microsoft YaHei字体文件拷贝到 [<em>python_install_dir</em>]\Lib\site-packages\matplotlib\mpl-data\fonts\ttf\ 目录下</p>
+</li>
 <li><p>重建字体索引列表<br><a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6" target="_blank" rel="external">matplotlib不会每次启动时都重新扫描所有的字体文件并创建字体索引列表，因此在复制完字体文件之后，需要运行下面的语句以重新创建字体索引列表</a> ,需要在console中运行以下代码： </p>
 <blockquote>
 <blockquote>
@@ -476,8 +461,8 @@ S&apos;C:\\Windows\\Fonts\\msyhbd.ttf&apos;
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/02/21/manager_python_http_server/" rel="prev" title="使用shell脚本管理python内置的HTTPServer服务">
-                使用shell脚本管理python内置的HTTPServer服务 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/02/21/manager_python_http_server/" rel="prev" title="使用shell脚本管理python内置的HTTP服务">
+                使用shell脚本管理python内置的HTTP服务 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
