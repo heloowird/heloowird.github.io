@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
 在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
-<meta property="og:updated_time" content="2017-04-09T03:35:15.000Z">
+<meta property="og:updated_time" content="2017-04-09T03:37:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
 <meta name="twitter:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
@@ -446,7 +446,7 @@
 <p>第二个模型的均方差比第一个模型的更小，为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.14 + 0.14 + 0.74) / 3 = 0.34</div></pre></td></tr></table></figure></p>
 <p>从误差数值变化来看，均方差和交叉熵误差一样，从第一个模型到第二个更好的模型时，误差有明显的下降。在衡量模型好坏方面差别似乎不大，但均方差更强调预测错误的样本。</p>
 <p>以上通过具体例子可以看到，在训练神经网络分类模型训练过程中，交叉熵误差比0-1分类误差更好；但是很难说服我们交叉熵误差比均方差更好。</p>
-<h3 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h3><p>从均方差公式来看:<br>$$L(y, x) = {\frac 12}{(y - a)^2}$$<br>其中x为输入，y为label，a为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>在训练神经网络时，最后一层的参数$w$ 和$b$进行更新的公式为：<br>$$\begin{cases}<br>w \leftarrow w - \eta \cdot {\frac {\partial L} {\partial w}} \\<br>b \leftarrow b - \eta \cdot {\frac {\partial L} {\partial b}}<br>\end{cases}$$</p>
+<h3 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h3><p>从均方差公式来看:<br>$$L(y, x) = {\frac 12}{(y - a)^2}$$<br>其中x为输入，y为label，a为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>在训练神经网络时，最后一层参数$w$ 和$b$的更新公式为：<br>$$\begin{cases}<br>w \leftarrow w - \eta \cdot {\frac {\partial L} {\partial w}} \\<br>b \leftarrow b - \eta \cdot {\frac {\partial L} {\partial b}}<br>\end{cases}$$</p>
 <p>又根据链式求导法则：<br>$$\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = -(y -a) \cdot {\sigma}’(z) \cdot x \\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = -(y -a) \cdot {\sigma}’(z) \cdot 1<br>\end{cases}$$</p>
 <p>参考资料：</p>
 <ol>
