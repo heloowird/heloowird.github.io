@@ -381,9 +381,7 @@
         
           
           问题描述使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的issue。
-问题代码...
-with tf.Graph().as_default():
-    with slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope())
+问题代码 123456789101112131415161718192021222324252627282930...with tf.Graph().as_default():    with slim.arg_scope(in
           ...
           <!--noindex-->
           <div class="post-button text-center">

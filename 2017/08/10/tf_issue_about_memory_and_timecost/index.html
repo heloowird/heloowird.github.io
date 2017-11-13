@@ -88,24 +88,18 @@
 
 
 <meta name="description" content="问题描述使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的issue。
-问题代码...
-with tf.Graph().as_default():
-    with slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope())">
+问题代码 123456789101112131415161718192021222324252627282930...with tf.Graph().as_default():    with slim.arg_scope(in">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorFlow踩坑之内存和耗时不断增加的问题">
 <meta property="og:url" content="https://heloowird.github.io/2017/08/10/tf_issue_about_memory_and_timecost/index.html">
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="问题描述使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的issue。
-问题代码...
-with tf.Graph().as_default():
-    with slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope())">
-<meta property="og:updated_time" content="2017-11-12T03:58:50.000Z">
+问题代码 123456789101112131415161718192021222324252627282930...with tf.Graph().as_default():    with slim.arg_scope(in">
+<meta property="og:updated_time" content="2017-11-13T11:43:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TensorFlow踩坑之内存和耗时不断增加的问题">
 <meta name="twitter:description" content="问题描述使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的issue。
-问题代码...
-with tf.Graph().as_default():
-    with slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope())">
+问题代码 123456789101112131415161718192021222324252627282930...with tf.Graph().as_default():    with slim.arg_scope(in">
 
 
 
@@ -387,78 +381,11 @@ with tf.Graph().as_default():
 
       
         <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的<a href="https://github.com/tensorflow/tensorflow/issues/9471" target="_blank" rel="external">issue</a>。</p>
-<h4 id="问题代码"><a href="#问题代码" class="headerlink" title="问题代码"></a>问题代码</h4><pre><code>...
-with tf.Graph().as_default():
-    with slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope()):
-        # build graph
-        preprocessed_image = tf.placeholder(tf.float32, shape=(image_size,image_size,3), name=&quot;preprocessed_images&quot;)
-        processed_image = tf.expand_dims(preprocessed_image, 0)
-        logits, end_points = inception_resnet_v2.inception_resnet_v2(processed_image, num_classes=_NUM_CLASSES, is_training=False)
-        probabilities = logits
-        init_fn = slim.assign_from_checkpoint_fn(sys.argv[1], slim.get_model_variables(&apos;InceptionResnetV2&apos;))
-        with tf.Session() as sess:
-            # initialize graph
-            init_fn(sess)
-            # run graph
-            for line in sys.stdin:
-                start_time = time.time()
-                line = line.strip(&quot; \r\n&quot;)
-                if len(line) == 0:
-                    continue
-                try:
-                    image_string_tmp = tf.gfile.FastGFile(line, &apos;rb&apos;).read()
-                    image_decode_tmp = tf.image.decode_image(testImage_string_tmp, channels=3)
-                    preprocessed_image_tmp = inception_preprocessing.preprocess_image(image_decode_tmp, image_size, image_size, is_training=False)
-                    preprocessed_image_tmp_val = sess.run([preprocessed_image_tmp])
-                    np_probabilities = sess.run(probabilities,{&quot;preprocessed_image:0&quot;:preprocessed_image_tmp_val[0]})
-                    np_probabilities = np_probabilities[0, 0:]
-                    imgfea = np_probabilities.tolist()
-                    sys.stdout.write(&quot;%s\t%s\n&quot; % (line, &quot; &quot;.join([&quot;%.17f&quot;%x for x in imgfea])))
-                except Exception,e:
-                    pass
-                print &gt;&gt;sys.stderr, (time.time() - start_time) * 1000
-</code></pre><h4 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h4><p>tensorflow都是预先构建好graph，输入使用placeholder占位替代，然后再运行，即一次构建，多次运行。凭直觉，上面的代码中可能存在一个问题：<code>inception_preprocessing.preprocess_image</code>构建图操作放在了运行阶段。所以，第一步尝试把<code>inception_preprocessing.preprocess_image</code>从运行阶段放到构建图阶段，然而问题并未解决。之后查阅相关问题，按照issue上面的做法，详细记录各个步骤的耗时和内存占用。具体地，使用<code>time.time()</code>和<code>resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024</code>分别记录每步大耗时和内存占用情况。举个例子：</p>
-<pre><code>...
-import time
-import resource
-...
-end_read_time = time.time()
-image_decode_tmp = tf.image.decode_image(testImage_string_tmp, channels=3)
-end_decode_time = time.time()
-print &gt;&gt;sys.stderr, &quot;[decode image] timecost=%f memory_usage=%f&quot; % (end_decode_time - end_read_time, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
-...
-</code></pre><p>从记录日志来看，主要是<code>tf.image.decode_image</code>这一步耗时和内存不断增长。所以需要把这一步也挪到构建图阶段。</p>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><pre><code>with tf.Graph().as_default():
-    with slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope()):
-        # build graph
-        image_str = tf.placeholder(tf.string)
-        image_decode = tf.image.decode_image(image_str, channels=3)
-        image_tensor = tf.placeholder(tf.uint8, shape=[None, None, 3])
-        preprocessed_image = inception_preprocessing.preprocess_image(image_tensor, image_size, image_size, is_training=False)
-        processed_image = tf.expand_dims(preprocessed_image, 0)
-        logits, end_points = inception_resnet_v2.inception_resnet_v2(processed_image, num_classes=_NUM_CLASSES, is_training=False)
-        init_fn = slim.assign_from_checkpoint_fn(sys.argv[1], slim.get_model_variables(&apos;InceptionResnetV2&apos;))
-        with tf.Session() as sess:
-            # initialize graph
-            init_fn(sess)
-            # run graph
-            for line in sys.stdin:
-                start_time = time.time()
-                line = line.strip(&quot; \r\n&quot;)
-                if len(line) == 0:
-                    continue
-                try:
-                    with open(line, &quot;r&quot;) as f:
-                        image_string_tmp = f.read()
-                        image_decode_tmp = sess.run([image_decode], {image_str: image_string_tmp})
-                        image_feature = sess.run(logits, {image_tensor:image_decode_tmp[0]})
-                        image_feature = image_feature[0, 0:]
-                        imgfea = image_feature.tolist()
-                        sys.stdout.write(&quot;%s\t%s\n&quot; % (line, &quot; &quot;.join([&quot;%.17f&quot;%x for x in imgfea])))
-                except Exception,e:
-                    sys.stderr.write(&quot;%s&quot; % traceback.format_exc())
-                print &quot;cost:&quot;, (time.time() - start_time) * 1000
-</code></pre><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><code>tf.image.decode_image</code>仅仅是对图片进行图片解码（把图片字符转换成tensor），看似人畜无害，其实也暗藏陷阱。个人推测，每次构建图时，会为tensor分配内存。如果在运行时不断构建图，会导致内存急剧上升；时间上涨的原因待探索。所以，使用tensorflow时，<strong>尽量把tensor相关操作一次性定义在graph中</strong>，避免在运行阶段构建图。</p>
+<h4 id="问题代码"><a href="#问题代码" class="headerlink" title="问题代码"></a>问题代码</h4> <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">with</span> tf.Graph().as_default():</div><div class="line">    <span class="keyword">with</span> slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope()):</div><div class="line">        <span class="comment"># build graph</span></div><div class="line">        preprocessed_image = tf.placeholder(tf.float32, shape=(image_size,image_size,<span class="number">3</span>), name=<span class="string">"preprocessed_images"</span>)</div><div class="line">        processed_image = tf.expand_dims(preprocessed_image, <span class="number">0</span>)</div><div class="line">        logits, end_points = inception_resnet_v2.inception_resnet_v2(processed_image, num_classes=_NUM_CLASSES, is_training=<span class="keyword">False</span>)</div><div class="line">        probabilities = logits</div><div class="line">        init_fn = slim.assign_from_checkpoint_fn(sys.argv[<span class="number">1</span>], slim.get_model_variables(<span class="string">'InceptionResnetV2'</span>))</div><div class="line">        <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">            <span class="comment"># initialize graph</span></div><div class="line">            init_fn(sess)</div><div class="line">            <span class="comment"># run graph</span></div><div class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</div><div class="line">                start_time = time.time()</div><div class="line">                line = line.strip(<span class="string">" \r\n"</span>)</div><div class="line">                <span class="keyword">if</span> len(line) == <span class="number">0</span>:</div><div class="line">                    <span class="keyword">continue</span></div><div class="line">                <span class="keyword">try</span>:</div><div class="line">                    image_string_tmp = tf.gfile.FastGFile(line, <span class="string">'rb'</span>).read()</div><div class="line">                    image_decode_tmp = tf.image.decode_image(testImage_string_tmp, channels=<span class="number">3</span>)</div><div class="line">                    preprocessed_image_tmp = inception_preprocessing.preprocess_image(image_decode_tmp, image_size, image_size, is_training=<span class="keyword">False</span>)</div><div class="line">                    preprocessed_image_tmp_val = sess.run([preprocessed_image_tmp])</div><div class="line">                    np_probabilities = sess.run(probabilities,&#123;<span class="string">"preprocessed_image:0"</span>:preprocessed_image_tmp_val[<span class="number">0</span>]&#125;)</div><div class="line">                    np_probabilities = np_probabilities[<span class="number">0</span>, <span class="number">0</span>:]</div><div class="line">                    imgfea = np_probabilities.tolist()</div><div class="line">                    sys.stdout.write(<span class="string">"%s\t%s\n"</span> % (line, <span class="string">" "</span>.join([<span class="string">"%.17f"</span>%x <span class="keyword">for</span> x <span class="keyword">in</span> imgfea])))</div><div class="line">                <span class="keyword">except</span> Exception,e:</div><div class="line">                    <span class="keyword">pass</span></div><div class="line">                <span class="keyword">print</span> &gt;&gt;sys.stderr, (time.time() - start_time) * <span class="number">1000</span></div></pre></td></tr></table></figure>
+<h4 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h4><p>tensorflow都是预先构建好graph，输入使用placeholder占位替代，然后再运行，即一次构建，多次运行。凭直觉，上面的代码中可能存在一个问题：<code>inception_preprocessing.preprocess_image</code>构建图操作放在了运行阶段。所以，第一步尝试把<code>inception_preprocessing.preprocess_image</code>从运行阶段放到构建图阶段，然而问题并未解决。之后查阅相关问题，按照issue上面的做法，详细记录各个步骤的耗时和内存占用。具体地，使用<code>time.time()</code>和<code>resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024</code>分别记录每步大耗时和内存占用情况。举个例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> resource</div><div class="line">...</div><div class="line">end_read_time = time.time()</div><div class="line">image_decode_tmp = tf.image.decode_image(testImage_string_tmp, channels=<span class="number">3</span>)</div><div class="line">end_decode_time = time.time()</div><div class="line"><span class="keyword">print</span> &gt;&gt;sys.stderr, <span class="string">"[decode image] timecost=%f memory_usage=%f"</span> % (end_decode_time - end_read_time, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / <span class="number">1024</span>)</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>从记录日志来看，主要是<code>tf.image.decode_image</code>这一步耗时和内存不断增长。所以需要把这一步也挪到构建图阶段。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4> <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> tf.Graph().as_default():</div><div class="line">    <span class="keyword">with</span> slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope()):</div><div class="line">        <span class="comment"># build graph</span></div><div class="line">        image_str = tf.placeholder(tf.string)</div><div class="line">        image_decode = tf.image.decode_image(image_str, channels=<span class="number">3</span>)</div><div class="line">        image_tensor = tf.placeholder(tf.uint8, shape=[<span class="keyword">None</span>, <span class="keyword">None</span>, <span class="number">3</span>])</div><div class="line">        preprocessed_image = inception_preprocessing.preprocess_image(image_tensor, image_size, image_size, is_training=<span class="keyword">False</span>)</div><div class="line">        processed_image = tf.expand_dims(preprocessed_image, <span class="number">0</span>)</div><div class="line">        logits, end_points = inception_resnet_v2.inception_resnet_v2(processed_image, num_classes=_NUM_CLASSES, is_training=<span class="keyword">False</span>)</div><div class="line">        init_fn = slim.assign_from_checkpoint_fn(sys.argv[<span class="number">1</span>], slim.get_model_variables(<span class="string">'InceptionResnetV2'</span>))</div><div class="line">        <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</div><div class="line">            <span class="comment"># initialize graph</span></div><div class="line">            init_fn(sess)</div><div class="line">            <span class="comment"># run graph</span></div><div class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</div><div class="line">                start_time = time.time()</div><div class="line">                line = line.strip(<span class="string">" \r\n"</span>)</div><div class="line">                <span class="keyword">if</span> len(line) == <span class="number">0</span>:</div><div class="line">                    <span class="keyword">continue</span></div><div class="line">                <span class="keyword">try</span>:</div><div class="line">                    <span class="keyword">with</span> open(line, <span class="string">"r"</span>) <span class="keyword">as</span> f:</div><div class="line">                        image_string_tmp = f.read()</div><div class="line">                        image_decode_tmp = sess.run([image_decode], &#123;image_str: image_string_tmp&#125;)</div><div class="line">                        image_feature = sess.run(logits, &#123;image_tensor:image_decode_tmp[<span class="number">0</span>]&#125;)</div><div class="line">                        image_feature = image_feature[<span class="number">0</span>, <span class="number">0</span>:]</div><div class="line">                        imgfea = image_feature.tolist()</div><div class="line">                        sys.stdout.write(<span class="string">"%s\t%s\n"</span> % (line, <span class="string">" "</span>.join([<span class="string">"%.17f"</span>%x <span class="keyword">for</span> x <span class="keyword">in</span> imgfea])))</div><div class="line">                <span class="keyword">except</span> Exception,e:</div><div class="line">                    sys.stderr.write(<span class="string">"%s"</span> % traceback.format_exc())</div><div class="line">                <span class="keyword">print</span> <span class="string">"cost:"</span>, (time.time() - start_time) * <span class="number">1000</span></div></pre></td></tr></table></figure>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><code>tf.image.decode_image</code>仅仅是对图片进行图片解码（把图片字符转换成tensor），看似人畜无害，其实也暗藏陷阱。个人推测，每次构建图时，会为tensor分配内存。如果在运行时不断构建图，会导致内存急剧上升；时间上涨的原因待探索。所以，使用tensorflow时，<strong>尽量把tensor相关操作一次性定义在graph中</strong>，避免在运行阶段构建图。</p>
 
       
     </div>
