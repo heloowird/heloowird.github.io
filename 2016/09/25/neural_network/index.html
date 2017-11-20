@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="matplot,python," />
+  <meta name="keywords" content="machine learning," />
 
 
 
@@ -87,28 +87,19 @@
 
 
 
-<meta name="description" content="修改matplotlibrc文件 （永久解决方案）
-定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
-
-修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
-12345font.family         : sans-serif        #默认情">
+<meta name="description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
+原理先看看神经网络的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Matplot中文乱码解决方案">
-<meta property="og:url" content="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/index.html">
+<meta property="og:title" content="神经网络的原理和参数更新推导">
+<meta property="og:url" content="https://heloowird.github.io/2016/09/25/neural_network/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="修改matplotlibrc文件 （永久解决方案）
-定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
-
-修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
-12345font.family         : sans-serif        #默认情">
-<meta property="og:updated_time" content="2017-04-09T07:38:11.000Z">
+<meta property="og:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
+原理先看看神经网络的">
+<meta property="og:updated_time" content="2017-11-20T09:12:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Matplot中文乱码解决方案">
-<meta name="twitter:description" content="修改matplotlibrc文件 （永久解决方案）
-定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
-
-修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
-12345font.family         : sans-serif        #默认情">
+<meta name="twitter:title" content="神经网络的原理和参数更新推导">
+<meta name="twitter:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
+原理先看看神经网络的">
 
 
 
@@ -136,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2016/09/25/neural_network/"/>
 
 
 
 
 
-  <title> Matplot中文乱码解决方案 | Heloowird </title>
+  <title> 神经网络的原理和参数更新推导 | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -281,7 +272,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/">
+  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2016/09/25/neural_network/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
@@ -305,7 +296,7 @@
             
             
               
-                Matplot中文乱码解决方案
+                神经网络的原理和参数更新推导
               
             
           </h1>
@@ -320,8 +311,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-06-09T02:19:22+08:00">
-                2015-06-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-25T22:19:15+08:00">
+                2016-09-25
               </time>
             
 
@@ -343,8 +334,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
                   </a>
                 </span>
 
@@ -360,7 +351,7 @@
 
           
           
-             <span id="/2015/06/09/display_chinese_problem_in_matplot/" class="leancloud_visitors" data-flag-title="Matplot中文乱码解决方案">
+             <span id="/2016/09/25/neural_network/" class="leancloud_visitors" data-flag-title="神经网络的原理和参数更新推导">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -389,30 +380,18 @@
       
 
       
-        <h3 id="修改matplotlibrc文件-（永久解决方案）"><a href="#修改matplotlibrc文件-（永久解决方案）" class="headerlink" title="修改matplotlibrc文件 （永久解决方案）"></a>修改matplotlibrc文件 （永久解决方案）</h3><ol>
-<li><p>定位matplotlibrc文件<br>该文件位于[<em>python_install_dir</em>]\Lib\site-packages\matplotlib\mpl-data目录下。</p>
-</li>
-<li><p>修改matplotlibrc文件内容<br>matplotlibrc文件部分内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">font.family         : sans-serif        #默认情况下，该字段为关闭状态。去掉注释即可。</div><div class="line">font.sans-serif     : Microsoft YaHei , Bitstream Vera Sans, </div><div class="line">                      Lucida Grande, Verdana, Geneva, Lucid,</div><div class="line">                      Arial, Helvetica, Avant Garde,</div><div class="line">                      sans-serif        #添加&quot;Microsoft YaHei&quot;</div></pre></td></tr></table></figure>
-<p> 在<code>font.sans-serif</code>中添加<strong>Mircosoft YaHei</strong>之后，matplot 通过C:\Users\[<em>your_account</em>]\.matplotlib\fontList.cache 中存储的映射关系找到字体文件所在的位置。fontList.cache 文件部分内容如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">S&apos;Microsoft YaHei</div><div class="line">p147</div><div class="line">sg16</div><div class="line">I700</div><div class="line">sg17</div><div class="line">g13</div><div class="line">sg18</div><div class="line">g13</div><div class="line">sg19</div><div class="line">S&apos;C:\\Windows\\Fonts\\msyhbd.ttf&apos;</div></pre></td></tr></table></figure>
-<p> Microsoft YaHei字体默认的位置位于 C:\Windows\Fonts\ 目录下。<br> <strong>注意</strong>：如果第三步操作完之后仍不起作用，可以将 C:\Windows\Fonts\ 目录下的Microsoft YaHei字体文件拷贝到 [<em>python_install_dir</em>]\Lib\site-packages\matplotlib\mpl-data\fonts\ttf\ 目录下</p>
-</li>
-<li><p>重建字体索引列表<br><a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6" target="_blank" rel="external">matplotlib不会每次启动时都重新扫描所有的字体文件并创建字体索引列表，因此在复制完字体文件之后，需要运行下面的语句以重新创建字体索引列表</a> ,需要在console中运行以下代码： </p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>from matplotlib.font_manager import _rebuild<br>_rebuild()</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</li>
-</ol>
-<h3 id="在py文件中显式加载字体-（临时解决方案）"><a href="#在py文件中显式加载字体-（临时解决方案）" class="headerlink" title="在py文件中显式加载字体 （临时解决方案）"></a>在py文件中显式加载字体 （临时解决方案）</h3><ol>
-<li>显示加载matplotlib的字体管理器，代码如下：<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 加载自定义字体</span></div><div class="line"><span class="comment"># fname 为字体文件路径</span></div><div class="line"><span class="keyword">import</span> matplotlib</div><div class="line">myfont = matplotlib.font_manager.FontProperties(fname=<span class="string">r'C:/Windows/Fonts/msyh.ttf'</span>)</div><div class="line"> ...</div><div class="line"><span class="comment"># 在需要显示汉字的地方，指定自定义字体即可</span></div><div class="line">plt.xlabel(<span class="string">u'汉字'</span>,  fontproperties=myfont)</div><div class="line">plt.xlabel(<span class="string">u'汉字'</span>,  fontproperties=myfont)</div><div class="line">...</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>参考文献<br><a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6" target="_blank" rel="external">http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6</a></p>
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>先看看神经网络的基本概念－节点和权重。<br><a href="http://7xiakl.com1.z0.glb.clouddn.com/neural_unit.jpg" target="_blank" rel="external">节点和连接权重</a><br>其中$x_0$, $x_1$, $x_2$ 为标量，分别表示该层各个节点的输出，如果该层为输入层，则为输入特征，$X$为特征的行向量形式。$w_0$, $w_1$, $w_2$ 同为标量，表示当前节点到与之相连节点的权重，该参数控制着节点对与之连接节点的影响程度，是需要学习的参数，$W$ 为权重的行向量形式，在这里为$(w_0、w_1、w_2)$。$b$ 为bias(偏置)，可理解为线性变换中y轴方向的偏移，也是需要学习的参数。$g(x)$ 为激活函数，一般为非线性函数，是神经网络的核心部分。常用的激活函数有sigmoid，tanh，softmax，relu函数等，作用为对线性输入进行非线性转换，起到特征组合与变换的效果。则图中的红色节点的输出$a$ 为：<br>\begin{equation} \label{1}<br>z = W \cdot X^T + b = w_0 \cdot x_0 + w_1 \cdot x_1 + w_2 \cdot x_2 + b<br>\end{equation}<br>\begin{equation} \label{2}<br>a = g(z)<br>\end{equation}</p>
+<p>有了节点，通过组合和连接方式，就可以组成基本的神经网络，如下图所示。<br><a href="http://7xiakl.com1.z0.glb.clouddn.com/neural_network.jpg" target="_blank" rel="external">神经网络</a><br>神经网络包含不同的层(Layer)，不同的层又由多个节点组成。层是一个逻辑单元，是同等位置节点形成的，因为层与层之间的连接实际为不同层节点之间的连接。图中的神经网络由三层组成，分别为输入层，隐藏层和输出层。以神经网络进行二分类任务为例，训练样本为$(X_i, y_i)$, $i = 1,2,…,N$; $y_i \in \{0, 1\}$; 其中$X_i$ 为第$i$ 个训练数据的特征向量，$y_i$ 是第$i$ 个训练数据的真实label值。那么，输入层输入的数据为$X_i$，依次计算隐藏层各个节点的值，最后输出层会计算出一个预测值$\hat{y_i}$，这个预测值与真实label值${y_i}$可能存在一定的差距。而神经网络的终极目标是使得尽可能多的训练数据的预测值越来越接近其真实label值。用数学的语言来说：$\min \frac{1}{N}{\sum_{1}^{N}(\left | \hat{y_i} - {y_i} \right | )}$ 。一般地，$\left | \hat{y_i} - {y_i} \right |$ 可以用$(\hat{y_i} - {y_i})^2$ 代替。为了求导方便，加上$\frac{1}{2}$ ，所以，最后的损失函数（或者代价函数）为<br>\begin{equation} \label{3}<br>L(w, b) = \min_{w, b}\frac{1}{N}{\sum_{1}^{N}\frac{1}{2}(\hat{y_i} - {y_i})^2}<br>\end{equation}</p>
+<p>接下来如何让预测值越来越接近真实值呢？我们知道，特征是固定，调节的是参数$w$ 和$b$。如果$w$ 和$b$ 分别改变$\Delta w$ 和$\Delta b$，那么预测值$\hat{y}$ 会慢慢地接近$y$。那$\Delta w$ 和$\Delta b$ 如何得到呢？<br>令$\theta = (w, b)$，$f$为损失函数， 则$L(\theta) = f(\theta)$的泰勒一阶展开式为：<br>\begin{equation} \label{4}<br>f(\theta) \approx f({\theta}_0) + \frac{\partial f({\theta}_0)}{\partial {\theta}_0} \cdot (\theta - {\theta}_0)<br>\end{equation}</p>
+<p>要使得$f(\theta) &lt; f({\theta}_0)$, 可让：<br>\begin{equation} \label{5}<br>\theta - {\theta}_0 = - \alpha \cdot \frac{\partial f(\theta)}{\partial \theta} \text{;    }(\alpha &gt; 0)<br>\end{equation}</p>
+<p>使用随机梯度下降时，$\theta$ 替换为第t次更新后的参数${\theta}_{t+1}$，${\theta}_0$ 替换为第t次更新前的参数${\theta}_{t}$ 。每次参数更新方法为：<br>\begin{equation} \label{6}<br>{\theta}_{t+1} = \theta_{t} - \alpha \cdot \frac{\partial f(\theta_{t})}{\partial \theta_{t}}<br>\end{equation}</p>
+<h3 id="参数更新推导"><a href="#参数更新推导" class="headerlink" title="参数更新推导"></a>参数更新推导</h3><p>神经网络有很多层参数，需要对每层参数都进行更新操作。为了方便说明每层参数的更新方式，我们对神经网络前向传播公式\eqref{1} 和公式\eqref{2} 重新定义：<br>\begin{equation} \label{7}<br>z_{j}^{(l+1)} = W^{(l)} \cdot a^{(l)T} + b^{(l)} = (\sum_{i} w_{ij}^{(l)} \cdot a_i^{(l)}) + b_j^{(l+1)}<br>\end{equation}<br>\begin{equation} \label{8}<br>a_{j}^{(l+1)} = g(z_{j}^{(l+1)})<br>\end{equation}<br>其中$a_{j}^{l}$ 表示第$l$ 层第$j$ 个节点，$w_{ij}^{(l)}$ 表示连接第$l$ 层第$i$ 个节点到第$(l+1)$ 层第$j$ 个节点的权重。$b_j^{(l+1)}$ 为第$(l+1)$ 层第$j$ 个节点的偏置。<br>在图2中，为了更新参数，需要分别计算$\frac{\partial L}{\partial w_{ij}^{(1)}}$ 和$\frac{\partial L}{\partial w_{ij}^{(2)}}$。因为$w_{ij}^{(2)}$ 离L较近，我们先求$\frac{\partial L}{\partial w_{ij}^{(2)}}$，根据链式求导法则：</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot \frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} \cdot \frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}}</script><p>根据公式\eqref{8}，得：</p>
+<script type="math/tex; mode=display">\frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} ＝ g'(z_{j}^{(3)})</script><p>根据公式\eqref{7}，得：</p>
+<script type="math/tex; mode=display">\frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}} ＝ a_{i}^{(2)}</script><p>所以：<br>\begin{equation} \label{9}<br>\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot g’(z_{j}^{(3)}) \cdot a_{i}^{(2)}<br>\end{equation}<br>同样地，通过$L$ 对$w_{ij}^{(1)}$ 进行链式求导得：</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot \frac{\partial a_{j}^{(2)}}{\partial z_{j}^{(2)}} \cdot \frac{\partial z_{j}^{(2)}}{\partial w_{ij}^{(1)}}</script><p>化简得：<br>\begin{equation} \label{10}<br>\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot g’(z_{j}^{(2)}) \cdot a_{i}^{(1)}<br>\end{equation}<br>仔细对比公式\eqref{9} 和公式\eqref{10}，我们发现，等式右边前两项具有相同形式，令$\delta_{j} = \frac{\partial L}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot \frac{\partial a_{j}}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot g’(z_{j})$，所以公式\eqref{9} 和公式\eqref{10}可统一表示为：<br>\begin{equation} \label{11}<br>\frac{\partial L}{\partial w_{ij}^{(l)}} = \delta_{j}^{(l+1)} \cdot a_{i}^{(l)}<br>\end{equation}</p>
+<p>这里主要是$\frac{\partial L}{\partial a_{j}^{(2)}}$稍微复杂些，如果再回过头看看公式\eqref{7}，$a_{j}^{(2)}$和$z_{i}^{(3)}$是有联系的，有：<br>\begin{equation} \label{12}<br>\frac{\partial L}{\partial a_{j}^{(l)}} ＝ \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot \frac{\partial z_{i}^{(l+1)}}{\partial a_{j}^{(l)}} = \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot w_{ji} ＝ \sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}<br>\end{equation}<br>两边同时乘以$g’(z_{j})$，则：<br>\begin{equation} \label{13}<br>\delta_{j}^{(l)} ＝ (\sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}) \cdot g’(z_{j}^{l})<br>\end{equation}<br>综上推导，神经网络反向传播时，可以依靠公式\eqref{13}，将训练误差依次传递到前面的层；然后利用公式\eqref{11}对各层的参数进行更新。经过反复训练，最终可以得到一个有效的分类器。详细实现代码在<a href="https://github.com/heloowird/ann" target="_blank" rel="external">github</a>，欢迎试用。</p>
 
       
     </div>
@@ -436,9 +415,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/matplot/" rel="tag"># matplot</a>
-          
-            <a href="/tags/python/" rel="tag"># python</a>
+            <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
           
         </div>
       
@@ -451,8 +428,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/03/26/wonderful_words/" rel="next" title="致我们">
-                <i class="fa fa-chevron-left"></i> 致我们
+              <a href="/2016/02/21/manager_python_http_server/" rel="next" title="使用shell脚本管理python内置的HTTP服务">
+                <i class="fa fa-chevron-left"></i> 使用shell脚本管理python内置的HTTP服务
               </a>
             
           </div>
@@ -461,8 +438,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/02/21/manager_python_http_server/" rel="prev" title="使用shell脚本管理python内置的HTTP服务">
-                使用shell脚本管理python内置的HTTP服务 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/03/08/diff_errors_of_neural_network/" rel="prev" title="使用神经网络解决分类问题时，为什么交叉熵误差更好">
+                使用神经网络解决分类问题时，为什么交叉熵误差更好 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -599,7 +576,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改matplotlibrc文件-（永久解决方案）"><span class="nav-number">1.</span> <span class="nav-text">修改matplotlibrc文件 （永久解决方案）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在py文件中显式加载字体-（临时解决方案）"><span class="nav-number">2.</span> <span class="nav-text">在py文件中显式加载字体 （临时解决方案）</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数更新推导"><span class="nav-number">3.</span> <span class="nav-text">参数更新推导</span></a></li></ol></div>
             
 
           </div>
