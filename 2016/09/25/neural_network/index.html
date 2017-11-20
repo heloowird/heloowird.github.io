@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
 原理先看看神经网络的">
-<meta property="og:updated_time" content="2017-11-20T09:12:02.000Z">
+<meta property="og:updated_time" content="2017-11-20T09:21:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="神经网络的原理和参数更新推导">
 <meta name="twitter:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
@@ -392,6 +392,12 @@
 <script type="math/tex; mode=display">\frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}} ＝ a_{i}^{(2)}</script><p>所以：<br>\begin{equation} \label{9}<br>\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot g’(z_{j}^{(3)}) \cdot a_{i}^{(2)}<br>\end{equation}<br>同样地，通过$L$ 对$w_{ij}^{(1)}$ 进行链式求导得：</p>
 <script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot \frac{\partial a_{j}^{(2)}}{\partial z_{j}^{(2)}} \cdot \frac{\partial z_{j}^{(2)}}{\partial w_{ij}^{(1)}}</script><p>化简得：<br>\begin{equation} \label{10}<br>\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot g’(z_{j}^{(2)}) \cdot a_{i}^{(1)}<br>\end{equation}<br>仔细对比公式\eqref{9} 和公式\eqref{10}，我们发现，等式右边前两项具有相同形式，令$\delta_{j} = \frac{\partial L}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot \frac{\partial a_{j}}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot g’(z_{j})$，所以公式\eqref{9} 和公式\eqref{10}可统一表示为：<br>\begin{equation} \label{11}<br>\frac{\partial L}{\partial w_{ij}^{(l)}} = \delta_{j}^{(l+1)} \cdot a_{i}^{(l)}<br>\end{equation}</p>
 <p>这里主要是$\frac{\partial L}{\partial a_{j}^{(2)}}$稍微复杂些，如果再回过头看看公式\eqref{7}，$a_{j}^{(2)}$和$z_{i}^{(3)}$是有联系的，有：<br>\begin{equation} \label{12}<br>\frac{\partial L}{\partial a_{j}^{(l)}} ＝ \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot \frac{\partial z_{i}^{(l+1)}}{\partial a_{j}^{(l)}} = \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot w_{ji} ＝ \sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}<br>\end{equation}<br>两边同时乘以$g’(z_{j})$，则：<br>\begin{equation} \label{13}<br>\delta_{j}^{(l)} ＝ (\sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}) \cdot g’(z_{j}^{l})<br>\end{equation}<br>综上推导，神经网络反向传播时，可以依靠公式\eqref{13}，将训练误差依次传递到前面的层；然后利用公式\eqref{11}对各层的参数进行更新。经过反复训练，最终可以得到一个有效的分类器。详细实现代码在<a href="https://github.com/heloowird/ann" target="_blank" rel="external">github</a>，欢迎试用。</p>
+<p>参考资料：</p>
+<ol>
+<li><a href="http://blog.csdn.net/zhongkejingwang/
+ article/details/44514073" target="_blank" rel="external">BP神经网络的数学原理及其算法实现</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/22473137" target="_blank" rel="external">神经网络反向传播的数学原理</a></li>
+</ol>
 
       
     </div>
