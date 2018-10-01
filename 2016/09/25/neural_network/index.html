@@ -95,14 +95,14 @@
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
 原理先看看神经网络的">
-<meta property="og:image" content="http://7xiakl.com1.z0.glb.clouddn.com/neural_unit.jpg">
-<meta property="og:image" content="http://7xiakl.com1.z0.glb.clouddn.com/neural_network.jpg">
-<meta property="og:updated_time" content="2017-11-23T12:07:48.000Z">
+<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/70863da0gy1fvt2rb11bmj20hl0e03zy.jpg">
+<meta property="og:updated_time" content="2018-10-01T14:15:48.444Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="神经网络的基本原理和数学推导">
 <meta name="twitter:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
 原理先看看神经网络的">
-<meta name="twitter:image" content="http://7xiakl.com1.z0.glb.clouddn.com/neural_unit.jpg">
+<meta name="twitter:image" content="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg">
 
 
 
@@ -384,8 +384,8 @@
 
       
         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>先看看神经网络的基本概念－节点和权重。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://7xiakl.com1.z0.glb.clouddn.com/neural_unit.jpg" class="full-image" alt="节点和连接权重" title="节点和连接权重"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>其中$x_0$, $x_1$, $x_2$ 为标量，分别表示该层各个节点的输出，如果该层为输入层，则为输入特征，$X$为特征的行向量形式。$w_0$, $w_1$, $w_2$ 同为标量，表示当前节点到与之相连节点的权重，该参数控制着节点对与之连接节点的影响程度，是需要学习的参数，$W$ 为权重的行向量形式，在这里为$(w_0、w_1、w_2)$。$b$ 为bias(偏置)，可理解为线性变换中y轴方向的偏移，也是需要学习的参数。$g(x)$ 为激活函数，一般为非线性函数，是神经网络的核心部分。常用的激活函数有sigmoid，tanh，softmax，relu函数等，作用为对线性输入进行非线性转换，起到特征组合与变换的效果。则图中的红色节点的输出$a$ 为：<br>\begin{equation} \label{1}<br>z = W \cdot X^T + b = w_0 \cdot x_0 + w_1 \cdot x_1 + w_2 \cdot x_2 + b<br>\end{equation}<br>\begin{equation} \label{2}<br>a = g(z)<br>\end{equation}</p>
-<p>有了节点，通过组合和连接方式，就可以组成基本的神经网络，如下图所示。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://7xiakl.com1.z0.glb.clouddn.com/neural_network.jpg" class="full-image" alt="神经网络" title="神经网络"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>神经网络包含不同的层(Layer)，不同的层又由多个节点组成。层是一个逻辑单元，是同等位置节点形成的，因为层与层之间的连接实际为不同层节点之间的连接。图中的神经网络由三层组成，分别为输入层，隐藏层和输出层。以神经网络进行二分类任务为例，训练样本为$(X_i, y_i)$, $i = 1,2,…,N$; $y_i \in \{0, 1\}$; 其中$X_i$ 为第$i$ 个训练数据的特征向量，$y_i$ 是第$i$ 个训练数据的真实label值。那么，输入层输入的数据为$X_i$，依次计算隐藏层各个节点的值，最后输出层会计算出一个预测值$\hat{y_i}$，这个预测值与真实label值${y_i}$可能存在一定的差距。而神经网络的终极目标是使得尽可能多的训练数据的预测值越来越接近其真实label值。用数学的语言来说：$\min \frac{1}{N}{\sum_{1}^{N}(\left | \hat{y_i} - {y_i} \right | )}$ 。一般地，$\left | \hat{y_i} - {y_i} \right |$ 可以用其他损失函数代替，如平方损失函数$(\hat{y_i} - {y_i})^2$。这里损失函数不作为重点，具体可参考<a href="http://heloowird.com/2017/03/08/diff_errors_of_neural_network/" target="_blank" rel="external">这里</a>。为了求导方便，加上$\frac{1}{2}$ ，所以，最后的损失函数（或者代价函数）为<br>\begin{equation} \label{3}<br>L(w, b) = \min_{w, b}\frac{1}{N}{\sum_{1}^{N}\frac{1}{2}(\hat{y_i} - {y_i})^2}<br>\end{equation}</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>先看看神经网络的基本概念－节点和权重。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg" class="full-image" alt="节点和连接权重" title="节点和连接权重"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>其中$x_0$, $x_1$, $x_2$ 为标量，分别表示该层各个节点的输出，如果该层为输入层，则为输入特征，$X$为特征的行向量形式。$w_0$, $w_1$, $w_2$ 同为标量，表示当前节点到与之相连节点的权重，该参数控制着节点对与之连接节点的影响程度，是需要学习的参数，$W$ 为权重的行向量形式，在这里为$(w_0、w_1、w_2)$。$b$ 为bias(偏置)，可理解为线性变换中y轴方向的偏移，也是需要学习的参数。$g(x)$ 为激活函数，一般为非线性函数，是神经网络的核心部分。常用的激活函数有sigmoid，tanh，softmax，relu函数等，作用为对线性输入进行非线性转换，起到特征组合与变换的效果。则图中的红色节点的输出$a$ 为：<br>\begin{equation} \label{1}<br>z = W \cdot X^T + b = w_0 \cdot x_0 + w_1 \cdot x_1 + w_2 \cdot x_2 + b<br>\end{equation}<br>\begin{equation} \label{2}<br>a = g(z)<br>\end{equation}</p>
+<p>有了节点，通过组合和连接方式，就可以组成基本的神经网络，如下图所示。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx2.sinaimg.cn/mw690/70863da0gy1fvt2rb11bmj20hl0e03zy.jpg" class="full-image" alt="神经网络" title="神经网络"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>神经网络包含不同的层(Layer)，不同的层又由多个节点组成。层是一个逻辑单元，是同等位置节点形成的，因为层与层之间的连接实际为不同层节点之间的连接。图中的神经网络由三层组成，分别为输入层，隐藏层和输出层。以神经网络进行二分类任务为例，训练样本为$(X_i, y_i)$, $i = 1,2,…,N$; $y_i \in \{0, 1\}$; 其中$X_i$ 为第$i$ 个训练数据的特征向量，$y_i$ 是第$i$ 个训练数据的真实label值。那么，输入层输入的数据为$X_i$，依次计算隐藏层各个节点的值，最后输出层会计算出一个预测值$\hat{y_i}$，这个预测值与真实label值${y_i}$可能存在一定的差距。而神经网络的终极目标是使得尽可能多的训练数据的预测值越来越接近其真实label值。用数学的语言来说：$\min \frac{1}{N}{\sum_{1}^{N}(\left | \hat{y_i} - {y_i} \right | )}$ 。一般地，$\left | \hat{y_i} - {y_i} \right |$ 可以用其他损失函数代替，如平方损失函数$(\hat{y_i} - {y_i})^2$。这里损失函数不作为重点，具体可参考<a href="http://heloowird.com/2017/03/08/diff_errors_of_neural_network/" target="_blank" rel="external">这里</a>。为了求导方便，加上$\frac{1}{2}$ ，所以，最后的损失函数（或者代价函数）为<br>\begin{equation} \label{3}<br>L(w, b) = \min_{w, b}\frac{1}{N}{\sum_{1}^{N}\frac{1}{2}(\hat{y_i} - {y_i})^2}<br>\end{equation}</p>
 <p>接下来如何让预测值越来越接近真实值呢？我们知道，特征是固定，调节的是参数$w$ 和$b$。如果$w$ 和$b$ 分别改变$\Delta w$ 和$\Delta b$，那么预测值$\hat{y}$ 会慢慢地接近$y$。那$\Delta w$ 和$\Delta b$ 如何得到呢？<br>令$\theta = (w, b)$，$f$为损失函数， 则$L(\theta) = f(\theta)$的泰勒一阶展开式为：<br>\begin{equation} \label{4}<br>f(\theta) \approx f({\theta}_0) + \frac{\partial f({\theta}_0)}{\partial {\theta}_0} \cdot (\theta - {\theta}_0)<br>\end{equation}</p>
 <p>要使得$f(\theta) &lt; f({\theta}_0)$, 可让：<br>\begin{equation} \label{5}<br>\theta - {\theta}_0 = - \alpha \cdot \frac{\partial f(\theta)}{\partial \theta} \text{;    }(\alpha &gt; 0)<br>\end{equation}</p>
 <p>使用随机梯度下降时，$\theta$ 替换为第t次更新后的参数${\theta}_{t+1}$，${\theta}_0$ 替换为第t次更新前的参数${\theta}_{t}$ 。每次参数更新方法为：<br>\begin{equation} \label{6}<br>{\theta}_{t+1} = \theta_{t} - \alpha \cdot \frac{\partial f(\theta_{t})}{\partial \theta_{t}}<br>\end{equation}</p>
@@ -521,7 +521,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -608,7 +608,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
