@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Heloowird Notes" />
+  <meta name="keywords" content="hive,python," />
 
 
 
@@ -87,12 +87,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Heloowird">
-<meta property="og:url" content="https://heloowird.github.io/tags/shell/index.html">
+<meta name="description" content="之前习惯使用Hadoop Streaming 处理行文本，而目前主要使用Hive SQL 或者Spark 处理大数据。Hive 大部分数据格式为ORC 格式，不适合直接使用Hadoop Streaming。
+一般情况下，Hive SQL 可以满足日常统计和特征提取，然而涉及复杂的数据逻辑处理，Hive 內置函数无法胜任。这时，需要用到UDF 或者UDAF。实际上Hive SQL 会被转化成map">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive UDF/UDAF 的Python 实现">
+<meta property="og:url" content="https://heloowird.github.io/2018/01/29/hive_python_udf/index.html">
 <meta property="og:site_name" content="Heloowird">
+<meta property="og:description" content="之前习惯使用Hadoop Streaming 处理行文本，而目前主要使用Hive SQL 或者Spark 处理大数据。Hive 大部分数据格式为ORC 格式，不适合直接使用Hadoop Streaming。
+一般情况下，Hive SQL 可以满足日常统计和特征提取，然而涉及复杂的数据逻辑处理，Hive 內置函数无法胜任。这时，需要用到UDF 或者UDAF。实际上Hive SQL 会被转化成map">
+<meta property="og:updated_time" content="2019-02-14T15:00:06.389Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Heloowird">
+<meta name="twitter:title" content="Hive UDF/UDAF 的Python 实现">
+<meta name="twitter:description" content="之前习惯使用Hadoop Streaming 处理行文本，而目前主要使用Hive SQL 或者Spark 处理大数据。Hive 大部分数据格式为ORC 格式，不适合直接使用Hadoop Streaming。
+一般情况下，Hive SQL 可以满足日常统计和特征提取，然而涉及复杂的数据逻辑处理，Hive 內置函数无法胜任。这时，需要用到UDF 或者UDAF。实际上Hive SQL 会被转化成map">
 
 
 
@@ -120,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/tags/shell/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2018/01/29/hive_python_udf/"/>
 
 
 
 
 
-  <title> 标签: shell | Heloowird </title>
+  <title> Hive UDF/UDAF 的Python 实现 | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -151,7 +158,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -255,46 +262,195 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        shell
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2018/01/29/hive_python_udf/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Heloowird">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Heloowird">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Hive UDF/UDAF 的Python 实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T02:19:22+08:00">
+                2018-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/01/29/hive_python_udf/" class="leancloud_visitors" data-flag-title="Hive UDF/UDAF 的Python 实现">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>之前习惯使用Hadoop Streaming 处理行文本，而目前主要使用Hive SQL 或者Spark 处理大数据。Hive 大部分数据格式为ORC 格式，不适合直接使用Hadoop Streaming。</p>
+<p>一般情况下，Hive SQL 可以满足日常统计和特征提取，然而涉及复杂的数据逻辑处理，Hive 內置函数无法胜任。这时，需要用到UDF 或者UDAF。实际上Hive SQL 会被转化成map 和reduce，并最终在Hadoop 集群上执行。所以Hive SQL 不过披上SQL 解释器这件“外衣”的Hadoop Streaming。</p>
+<p>什么是UDF 和UDAF ？UDF 为用户自定义函数(User Defined Function)，可以自定义其中的处理逻辑，运行在map 或者reduce 阶段。UDAF 和UDF 差了一个A，这个A 代表Aggregation，即用户自定义聚合函数，和 内置的SUM()、 COUNT()函数类似，用于处理聚簇数据，运行在reduce 阶段。那么接下来怎么实现UDF/UDAF ？</p>
+<p>Hive 支持Java、Python、Scale等语言进行UDF 的编写。这里主要介绍Python 实现方式。首先，看看在Hive SQL 中如何使用UDF 命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">add file udf.py;</div><div class="line">......</div><div class="line">select</div><div class="line">    transform(id, addr_and_name)</div><div class="line">    using &apos;python udf.py&apos;</div><div class="line">    as (id, addr, poi_name)</div><div class="line">from</div><div class="line">    test.test_udf</div><div class="line">......</div></pre></td></tr></table></figure></p>
+<p>其中第2行，添加udf.py 到Hive Resource，即分发到各个运行Hive 任务的机器上。第5-7行，transform(…) using ‘xx xxx’ as (……)为Python UDF/UDAF 的固有格式。另外，有的会使用map 或者 reduce 代替transform，这里需特殊说明：map 和reduce 并不会强制对应的UDF 代码在map 阶段或reduce 阶段执行，仅便于人工阅读，作为transform 的别名(alias)。</p>
+<p>UDF 和UDAF 的输入需用户Hive SQL中指定字段，在自定义代码中通过标准输入<code>sys.stdin</code>按行读取，字段之间使用tab 分隔；按行输出，列之间也使用tab 分隔：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># udf.py</span></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</div><div class="line">        id, addr_and_name = line.strip(<span class="string">'\r\n'</span>).split(<span class="string">'\t'</span>)</div><div class="line">        addr, poi_name = addr_and_name.split(<span class="string">'|'</span>)</div><div class="line">        <span class="keyword">print</span> <span class="string">'%s\t%s\t%s'</span> % (id, addr, poi_name)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    main()</div></pre></td></tr></table></figure></p>
+<p>如果udf.py 需要用到第三方包时，可以使用conda 或者virtualenv 打包自定义Python环境。建议将自定义Python 环境进行压缩，然后添加到Hive Resource；使用时，为自定义Pyhton 添加可执行权限，并使用一个额外的shell 脚本进行包装:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># udf.sh</div><div class="line">chmod -R 777 custom_python.tgz</div><div class="line"></div><div class="line">./custom_python.tgz/custom_python/bin/python udf.py</div></pre></td></tr></table></figure></p>
+<p>相应地，Hive SQL 改为如下形式:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">add file udf.py;</div><div class="line">add file udf.sh;</div><div class="line">add archive custom_python.tgz;</div><div class="line">......</div><div class="line">select</div><div class="line">    transform(id, addr_and_name)</div><div class="line">    using &apos;sh udf.sh&apos;</div><div class="line">    as (id, addr, poi_name)</div><div class="line">from test.test_udf</div><div class="line">......</div></pre></td></tr></table></figure></p>
+<p>通过add archive 添加的文件会自动解压到和udf.py、udf.sh 同级的目录custom_python.tgz 下，注意：这里目录的名字就是custom_python.tgz，而不再是 压缩包。当然可以在.sh 文件中输出日志来确定自定义Python 环境的目录结构。以上UDF 仍按上述方法编写和使用即可。</p>
+<p>UDAF 的编写和使用方式，与UDF 一致。只是在Hive SQL 上需要配合distribute by 或者cluster by 使用。建议在UDAF 的Python 执行文件中输出运行日志，方便确定UDAF 在reduce 阶段执行。</p>
 
-      <h1 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2016/02/21/manager_python_http_server/" itemprop="url">
-              
-                <span itemprop="name">使用shell脚本管理python内置的HTTP服务</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-02-21T23:29:22+08:00"
-              content="2016-02-21" >
-          02-21
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hive-python/" rel="tag"># hive,python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/10/tf_issue_about_memory_and_timecost/" rel="next" title="TensorFlow踩坑之内存和耗时不断增加的问题">
+                <i class="fa fa-chevron-left"></i> TensorFlow踩坑之内存和耗时不断增加的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
           
           </div>
@@ -302,6 +458,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -497,6 +657,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
