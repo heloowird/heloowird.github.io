@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="machine learning," />
+  <meta name="keywords" content="machine leaning," />
 
 
 
@@ -87,19 +87,30 @@
 
 
 
-<meta name="description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
+<meta name="description" content="本文我们将讨论机器学习中一个经常被提及的概念— “维度灾难”，也有译作“维度诅咒”，以及其在分类问题中的重要性。接下来我们通过一个直观的例子来解释维度灾难z，例子来源于The Curse of Dimensionality in classification。
+假设我们有一个仅有猫(🐱)和狗(🐶)图片集合，然后想建立一个分类器，用来区分出猫和狗。首先，我们需要构造一个数字描述来表示每个类别，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
-<meta property="og:url" content="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/index.html">
+<meta property="og:title" content="维度灾难">
+<meta property="og:url" content="https://heloowird.github.io/2018/03/29/curse_of_dimmensionality/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
-<meta property="og:updated_time" content="2017-04-09T06:55:17.000Z">
+<meta property="og:description" content="本文我们将讨论机器学习中一个经常被提及的概念— “维度灾难”，也有译作“维度诅咒”，以及其在分类问题中的重要性。接下来我们通过一个直观的例子来解释维度灾难z，例子来源于The Curse of Dimensionality in classification。
+假设我们有一个仅有猫(🐱)和狗(🐶)图片集合，然后想建立一个分类器，用来区分出猫和狗。首先，我们需要构造一个数字描述来表示每个类别，">
+<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/70863da0ly1g0c25l7cz2j20e60920t0.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hvc1x3jpj206y04d3yj.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/70863da0ly1g0hvc7lay2j208l05qdgh.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hvccynioj20940bqjsj.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/70863da0ly1g0hvcjbhc4j20a10bqabk.jpg">
+<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/70863da0ly1g0hvco7sxlj208m05qab0.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/mw690/70863da0ly1g0hvdkkrk2j208l06d3zg.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/mw690/70863da0ly1g0hvduv8ebj20on083gol.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hve0paezj2066066dgl.jpg">
+<meta property="og:image" content="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hve53kudj20aj0a9glt.jpg">
+<meta property="og:updated_time" content="2019-02-24T16:50:26.902Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
-<meta name="twitter:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
+<meta name="twitter:title" content="维度灾难">
+<meta name="twitter:description" content="本文我们将讨论机器学习中一个经常被提及的概念— “维度灾难”，也有译作“维度诅咒”，以及其在分类问题中的重要性。接下来我们通过一个直观的例子来解释维度灾难z，例子来源于The Curse of Dimensionality in classification。
+假设我们有一个仅有猫(🐱)和狗(🐶)图片集合，然后想建立一个分类器，用来区分出猫和狗。首先，我们需要构造一个数字描述来表示每个类别，">
+<meta name="twitter:image" content="http://wx2.sinaimg.cn/mw690/70863da0ly1g0c25l7cz2j20e60920t0.jpg">
 
 
 
@@ -127,13 +138,13 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2018/03/29/curse_of_dimmensionality/"/>
 
 
 
 
 
-  <title> 使用神经网络解决分类问题时，为什么交叉熵误差更好 | Heloowird </title>
+  <title> 维度灾难 | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -272,7 +283,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/">
+  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2018/03/29/curse_of_dimmensionality/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
@@ -296,7 +307,7 @@
             
             
               
-                使用神经网络解决分类问题时，为什么交叉熵误差更好
+                维度灾难
               
             
           </h1>
@@ -311,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-08T22:52:20+08:00">
-                2017-03-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-29T00:00:00+08:00">
+                2018-03-29
               </time>
             
 
@@ -351,7 +362,7 @@
 
           
           
-             <span id="/2017/03/08/diff_errors_of_neural_network/" class="leancloud_visitors" data-flag-title="使用神经网络解决分类问题时，为什么交叉熵误差更好">
+             <span id="/2018/03/29/curse_of_dimmensionality/" class="leancloud_visitors" data-flag-title="维度灾难">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -380,84 +391,28 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。</p>
-<p>在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏。为什么不使用0-1分类误差或者均方差呢？</p>
-<h3 id="交叉熵误差和0-1分类误差"><a href="#交叉熵误差和0-1分类误差" class="headerlink" title="交叉熵误差和0-1分类误差"></a>交叉熵误差和0-1分类误差</h3><p>为说明这个问题，可以先从一个例子出发。例如预测某天天气情况（下雨、晴天、阴天），需要收集湿度、温度、云种等数据。在多分类且类别互斥问题中，通常选用<em>softmax函数</em><sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="external">1</a>]</sup>作为神经网络输出层的激活函数。现在假设有3个样本，在神经网络分类模型某个训练阶段前向传播过程中最后输出层的输出结果如下：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>softmax输出</th>
-<th>真实标签</th>
-<th>是否正确</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.3 0.3 0.4</td>
-<td>0 0 1 (阴天)</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>0.3 0.4 0.3</td>
-<td>0 1 0 (晴天)</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>0.1 0.2 0.7</td>
-<td>1 0 0 (下雨)</td>
-<td>no</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>如果使用0-1误差的话，此时神经网络模型的0-1误差为1/3=0.33, 分类准确率为2/3=0.67。假设经过迭代后，模型的输出发生了变化：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>softmax输出</th>
-<th>真实标签</th>
-<th>是否正确</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.1 0.2 0.7</td>
-<td>0 0 1 (阴天)</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>0.1 0.7 0.2</td>
-<td>0 1 0 (晴天)</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>0.3 0.4 0.3</td>
-<td>1 0 0 (下雨)</td>
-<td>no</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>我们发现，模型的分类误差依然为1/3=0.33。直观上看，第二次模型比第一次更好：前两个预测正确样本的预测标签概率更接近1，同时最后一个样本虽然依然被错误分类，但是预测下雨的概率增大。所以，很容易看出0-1误差太过笼统，不适合作为模型的训练误差。</p>
-<p>而使用交叉熵损失函数来度量训练误差，上例第一个模型中第一个样本的误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-((ln(0.3)*0) + (ln(0.3)*0) + (ln(0.4)*1)) = -ln(0.4)</div></pre></td></tr></table></figure></p>
-<p>具体的交叉熵计算公式参见<sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="external">1</a>]</sup>。因此，第一个模型的平均交叉熵误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(ln(0.4) + ln(0.4) + ln(0.1)) / 3 = 1.38</div></pre></td></tr></table></figure></p>
-<p>同样的，第二个模型的平均交叉熵误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(ln(0.7) + ln(0.7) + ln(0.3)) / 3 = 0.64</div></pre></td></tr></table></figure></p>
-<p>可以看到，第二个模型的平均交叉熵误差比第一个模型的误差更小。交叉熵损失函数考虑了样本预测结果接近正确标签的程度，预测结果越接近正确标签，模型误差越小。</p>
-<p>再看看均方差，第一个模型第一个样本的训练均方差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.3 - 0)^2 + (0.3 - 0)^2 + (0.4 - 1)^2 = 0.09 + 0.09 + 0.36 = 0.54</div></pre></td></tr></table></figure></p>
-<p>第一个模型的均方差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.54 + 0.54 + 1.34) / 3 = 0.81</div></pre></td></tr></table></figure></p>
-<p>第二个模型的均方差比第一个模型的更小，为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.14 + 0.14 + 0.74) / 3 = 0.34</div></pre></td></tr></table></figure></p>
-<p>从误差数值变化来看，均方差和交叉熵误差一样，从第一个模型到第二个更好的模型时，误差有明显的下降。在衡量模型好坏方面差别似乎不大，但均方差更强调预测错误的样本。</p>
-<p>以上通过具体例子可以看到，在训练神经网络分类模型训练过程中，交叉熵误差比0-1分类误差更好；但是很难说服我们交叉熵误差比均方差更好。</p>
-<h3 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h3><p>从均方差公式来看:<br>\begin{equation} \label{1}<br>L(y, x) = {\frac 12}{(y - a)^2}<br>\end{equation}<br>其中$x$为输入，$y$为label，$a$为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>在训练神经网络时，根据梯度下降算法，最后一层参数$w$ 和$b$的更新公式为：<br>\begin{equation} \label{2}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot {\frac {\partial L} {\partial w}} \\\\<br>b \leftarrow b - \eta \cdot {\frac {\partial L} {\partial b}}<br>\end{cases}<br>\end{equation}<br>根据链式求导法则：<br>\begin{equation} \label{3}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = -(y -a) \cdot {\sigma}’(z) \cdot x \\\\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = -(y -a) \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>而$\sigma’(z)$由不同激活函数决定：<br>\begin{equation} \label{4}<br>\begin{cases}<br>{\sigma}’(z) = \sigma(z) \cdot (1-\sigma(z)) &amp;\text{if } \sigma(z) = \frac {1}{1+e^{-z}} \\\\<br>{\sigma}’(z_k) = \sigma(z_k) \cdot (1-\sigma(z_k)) &amp;\text{if } \sigma(z) = softmax(z)<br>\end{cases}<br>\end{equation}<br>所以参数最终更新公式为：<br>\begin{equation} \label{5}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z)) \cdot x \\\\<br>b \leftarrow b - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))<br>\end{cases}<br>\end{equation}<br>当预测值接近真实值(即$\sigma(z)$ 或者$(1-\sigma(z))$接近$0$时，更新项$\eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))$接近0，梯度出现“消失”现象。举例来说，当输出值$a$为$0.9$时，$a \cdot (1-a) = 0.09$，使得$w$和$b$的更新项变得很小，导致参数几乎不更新。</p>
-<p>而交叉熵损失误差恰好可以避免这一点。为简单起见，以二分类为例，交叉熵损失函数为：<br>\begin{equation} \label{6}<br>L(y, x) = -(y \cdot lna + (1-y) \cdot ln(1-a))<br>\end{equation}<br>同样$x$为输入，$y$为label，$a$为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>那么，根据链式求导法则，$w$和$b$的更新公式为：<br>\begin{equation} \label{7}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot x \\\\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>根据公式\eqref{4}，消去$a \cdot (1-a)$，得：<br>\begin{equation} \label{8}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot x \\\\<br>b \leftarrow b - \eta \cdot (a-y)<br>\end{cases}<br>\end{equation}<br>比较公式\eqref{5}和公式\eqref{8}易知，引发“梯度消失”的项已经消除，当输出值$a$为$0.9$时，$0.09$这项乘式因子变为1，故$w$和$b$更新更快。</p>
-<p>综上所知，使用交叉熵误差使得整个梯度下降算法对参数更新方式比均方差的更加有效率。</p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏，而不使用0-1分类误差或者均方差。以上的误差均为训练过程中对模型好坏的度量。而在测试过程中，通常使用0-1误差，即分类准确率指标，更贴近应用层面。</p>
+        <p> 本文我们将讨论机器学习中一个经常被提及的概念— “维度灾难”，也有译作“维度诅咒”，以及其在分类问题中的重要性。接下来我们通过一个直观的例子来解释维度灾难z，例子来源于<a href="http://www.visiondummy.com/2014/04/curse-dimensionality-affect-classification/" target="_blank" rel="external">The Curse of Dimensionality in classification</a>。</p>
+<p>假设我们有一个仅有猫(🐱)和狗(🐶)图片集合，然后想建立一个分类器，用来区分出猫和狗。首先，我们需要构造一个数字描述来表示每个类别，比如可以用数学表达式来区分物体类别，也就是一个分类器。比如，我们认为猫和狗通常有着不同的颜色，那么我们可以使用图片中的红色均值，绿色均值，蓝色均值这三个值区分这两类。一个简单的线性分类器可以来辨别图片所属类别：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">If 0.5*red + 0.3*green + 0.2*blue &gt; 0.6:</div><div class="line">    return cat</div><div class="line">else</div><div class="line">    return dog</div></pre></td></tr></table></figure></p>
+<p>然而仅使用这三种颜色树枝，也就是特征，很显然不足以得到一个完美的分类器。因此，我们决定添加一些描述图片纹理的特征，如x和y方向的平均边缘亮度。结合之前，现在有了5个特征，或许可以用来构建一个区分猫和狗的分类器了。</p>
+<p>为了得到一个更准确的分类器，可增加更多的特征，如基于颜色或者纹理直方图统计矩。那我们是否可以获得一个拥有上百维特征的完美分类算法呢？答案听起来有点反直觉：不能得到。实际上，达到一个零界点后，试图通过增加新特征来增加问题的维度将会降低分类器的准确度。如下图所示，一开始，随着维度增加，分类器的性能也随之变好，直到最优特征数量；在没有继续增加训练样本的情况下，继续增加维度，分类器反而效果变差，这也是我们常说的“维度灾难”。如图1所示：<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx2.sinaimg.cn/mw690/70863da0ly1g0c25l7cz2j20e60920t0.jpg" class="full-image" title="图1 分类器性能随维度变化趋势，前提是训练样本数量保持不变"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
+<p>那么为什么会出现这样的现象呢？</p>
+<p>在上面的例子中，假设我们有无限的猫狗生活在我们地球上，由于有限的时间和处理能力，我们仅能获取10张猫和狗的图片。但终极目标仍是星辰大海：仅通过这10个训练样本训练出一个分类器，识别出所有的猫和狗。</p>
+<p>先尝试一个简单的线性分类器。仅使用1个特征，如图片的红色均值。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hvc1x3jpj206y04d3yj.jpg" class="full-image" title="图2 单个特征无法分离猫和狗"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>图2发现，仅通过单个特征无法得到一个良好的分类器。因此，再增加一个特征，如图片的绿色均值。发现：增加第二个特征仍无法找到一个线性可分的分类器：<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx1.sinaimg.cn/mw690/70863da0ly1g0hvc7lay2j208l05qdgh.jpg" class="full-image" title="图3 增加一个特征仍无法线性分割"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>最后再添加第三个特征，如图片的蓝色均值，构成一个三维特征空间：<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hvccynioj20940bqjsj.jpg" class="full-image" title="图4 增加第三个特征可线性分类，存在一个平面分隔开猫和狗"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>在三维特征空间中，可以找到一个平面完美地分隔开猫和狗。这意味着，在这10个训练图片中，三个特征的线性组合可以得到一个完美的分类器.<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx2.sinaimg.cn/mw690/70863da0ly1g0hvcjbhc4j20a10bqabk.jpg" class="full-image" title="图5 特征越多，越容易找出一个线性分类器"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>以上过程似乎在说明在取得良好分类效果之前，增加特征数量带来的效果在训练过程中是“立竿见影”的，然而并不是这么回事。需要注意的是，随着维度的增加，训练样本密度是呈指数级变少的。</p>
+<p>假设特征空间都分为5个空间单元（1维为等长线段，2维为正方形，3维为立方体）。图2中，10个训练数据覆盖1维特征空间，那么在1维空间中，样本密度维10/5=2 （样本/空间单元）。在2维空间（图3）中，10个训练样本仍覆盖拥有5*5=25个单位正方形，其样本密度是10/25=0.4（样本/空间单元）。同理，三维空间例子中，样本密度为10/125=0.08（样本/空间单元）。</p>
+<p>如果继续增加特征，那么特征空间不断增长，也就是越来越稀疏，最终结果是会越来越容易找到一个可分离的超平面。因为当特征向量趋向于无穷大时，一个样本被分到超平面分错的可能性会变得无限小。<br>既然这样，那么维度越高越好吗？<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx2.sinaimg.cn/mw690/70863da0ly1g0hvco7sxlj208m05qab0.jpg" class="full-image" title="图6 使用更多特征会导致过拟合，分类器会学到训练数据的噪声"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>当把一个高维分类器投影到低维空间时，一个严重的问题也将随之而来。图6展示了把三维空间分类器投影到二维空间。可以看到，在三维空间线性可分，并不意味着二维空间也是线性可分。实际上，增加一维特征获得一个简单的线性分类器，和在低维空间使用复杂的非线性分类器是相当的。复杂的非线性分类器会学到训练集合中的特例或者异类。最终，训练得到的分类器在实际预测中对那些“未曾谋面”的数据会表现得糟糕。</p>
+<p>这就是过拟合，是维度灾难的直接产物。图7展示由两个特征训练得到的线性分类器。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx3.sinaimg.cn/mw690/70863da0ly1g0hvdkkrk2j208l06d3zg.jpg" class="full-image" title="图7 在训练集中拟合边界尽管不如图5，但在未知数据上效果或许更好"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>尽管线性分类器（图7）看起来比非线性分类器（图6），但是在未知数据上简单线性分类器泛化更好。因为线性分类器没有学习仅训练集中有的特例。换而言之，使用更好的特征，可避免过拟合，即分类器也不会在训练集上过拟合。</p>
+<p>从另一方式来看：假设所有特征都被归一化到[0, 1]，且特征是每只猫和狗独有的。如果想让训练数据覆盖该维特征的20%，那么训练数据将需要20%所有猫狗样本。如果增加一个特征，为了覆盖二维空间的20%，那么每维上需要45%所有猫狗样本（0.45^2=0.2）。三维场景下，这个数字更甚，每维上需要58%所有猫狗样本才能覆盖三维空间的20%（0.58^3=0.2）。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx3.sinaimg.cn/mw690/70863da0ly1g0hvduv8ebj20on083gol.jpg" class="full-image" title="图8 覆盖20%特征范围所需的训练样本数量随维度指数增长"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>换句话，如果训练样本的数量是固定的，那么在不断增加特征的情况下维度灾难必然发生。另一方面，如果继续增加特征，训练样本数量需要指数随之增长才能保持一定的覆盖比例来防止过拟合。</p>
+<p>在上面例子中，可以看到维度灾难引入了训练数据的稀疏性。特征越多，数据越稀疏，导致分类算法参数的准确估计更加困难。维度灾难的另一个影响是数据稀疏性在搜索空间分布并不均匀。实际上，离超立方体中心近的地方数据稀疏性比超立方体边角更加严重。举个栗子：</p>
+<p>想象一个单位正方形代表着一个二维空间。特征空间的均值位于单位正方形的中心，所有离中心单位距离的数据都包含在一个内切单位圆内。而那些落在单位圆外的训练数据离搜索空间边角更近。由于这些样本的特征值变化很大，会很难对其进行正确分类。（譬如分布在对面角落的样本。）因此，如果大部分训练数据分布在单位圆内，分类会更加容易，如图9所示。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hve0paezj2066066dgl.jpg" class="full-image" title="图9 落在单位圆外的训练样本比靠近中心的样本更难以分类"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
+<p>一个有意思的问题：当增加特征空间的维度时，内切圆（超球体）的体积如何随着正方形（超立方体）的面积变化而变化呢。假设n维超立方体的体积总是1，半径为0.5的n维超球体的体积有如下公式可以计算得到：<br>\begin{equation} \label{1}<br>V(d) = \frac{\pi ^{\frac{d}{2}}}{\Gamma (\frac{d}{2}+1)}0.5^{d}<br>\end{equation}</p>
+<p>图10展示了超球体体积随着维度变化情况。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hve53kudj20aj0a9glt.jpg" class="full-image" title="图10 随着维度趋向于无穷，超球体体积将趋向于0"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
+<p>意味着随着维度趋向于无穷，超球体体积将趋向于0，超球体外体积将保持不变。这个奇怪且反直觉的结论部分解释了在分类中伴随维度灾难而来的问题：在高维空间中，大部分的训练数据位于超立方体（特征空间）的角落。加上前面提到的，角落的样本比靠近中心的样本更难以分类。如图11所示，二维单位正方形，三维单位立方体，以及八维超立方体（2^8=256个角落）</p>
+<p>对于8维超立方体，约98%的样本分布在它的256个角落。当特征空间趋向于无穷大时，样本离中心点的最大最小欧式距离的差值和最小距离的比值趋向于0。<br>\begin{equation} \label{2}<br>\lim_{d\rightarrow \infty }\frac{dist_{max}-dist_{min}}{dist_{min}} \rightarrow 0<br>\end{equation}</p>
+<p>因此，距离在高维空间将无法度量相似性。由于分类器依赖于距离度量（如欧拉距离、、马氏距离、曼哈顿距离），分类器在低维空间（使用更少特征描述物体属性）通常更容易。类似地，高维空间中高斯分布更平坦，分布更加长尾。最大最小似然差值和最小似然的比值趋向于0。</p>
 <p>参考资料：</p>
 <ol>
-<li><a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" target="_blank" rel="external">UFLDL Softmax回归</a></li>
-<li><a href="https://jamesmccaffrey.wordpress.com/2013/11/05/why-you-should-use-cross-entropy-error-instead-of-classification-error-or-mean-squared-error-for-neural-network-classifier-training/" target="_blank" rel="external">Why You Should Use Cross-Entropy Error Instead Of Classification Error Or Mean Squared Error For Neural Network Classifier Training</a></li>
+<li><a href="http://www.visiondummy.com/2014/04/curse-dimensionality-affect-classification/" target="_blank" rel="external">The Curse of Dimensionality in classification</a></li>
+<li><a href="https://web.stanford.edu/~hastie/ElemStatLearn//" target="_blank" rel="external">The Elements of Statistical Learning</a></li>
 </ol>
 
       
@@ -482,7 +437,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
+            <a href="/tags/machine-leaning/" rel="tag"># machine leaning</a>
           
         </div>
       
@@ -495,8 +450,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/25/neural_network/" rel="next" title="神经网络的基本原理和数学推导">
-                <i class="fa fa-chevron-left"></i> 神经网络的基本原理和数学推导
+              <a href="/2018/01/29/hive_python_udf/" rel="next" title="Hive UDF/UDAF 的Python 实现">
+                <i class="fa fa-chevron-left"></i> Hive UDF/UDAF 的Python 实现
               </a>
             
           </div>
@@ -504,10 +459,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/08/10/tf_issue_about_memory_and_timecost/" rel="prev" title="TensorFlow 踩坑之内存和耗时不断增加的问题">
-                TensorFlow 踩坑之内存和耗时不断增加的问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -554,17 +505,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460"
@@ -633,22 +575,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交叉熵误差和0-1分类误差"><span class="nav-number">2.</span> <span class="nav-text">交叉熵误差和0-1分类误差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交叉熵误差和均方差"><span class="nav-number">3.</span> <span class="nav-text">交叉熵误差和均方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

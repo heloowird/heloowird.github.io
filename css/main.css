@@ -641,8 +641,6 @@ pre .javascript .function {
 @media (min-width: 992px) {
   .full-image.full-image.full-image {
     max-width: none;
-    width: 110%;
-    margin: 25px -5%;
   }
 }
 .blockquote-center,
@@ -1700,7 +1698,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff3478;
+  background: #b145f0;
 }
 .links-of-blogroll {
   font-size: 13px;
