@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="python,shell,simple-http-server," />
+  <meta name="keywords" content="nlp," />
 
 
 
@@ -87,19 +87,24 @@
 
 
 
-<meta name="description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。
-Linux上内置Python，而Pytho">
+<meta name="description" content="论文题目Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent)
+背景介绍许多现代NLP系统依赖以无监督方式在大规模语料上训练得到的词向量，但鲜有大文本块（如句子）级别向量取得了成功。一些无监督地学习句子表示的尝试均未达到令人满意的结果，以至没有">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Shell 脚本管理Python 内置的HTTPServer 服务">
-<meta property="og:url" content="https://heloowird.github.io/2016/07/21/manager_python_http_server/index.html">
+<meta property="og:title" content="NLP论文阅读- InferSent">
+<meta property="og:url" content="https://heloowird.github.io/2019/08/06/nlp_pr_infersent/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。
-Linux上内置Python，而Pytho">
-<meta property="og:updated_time" content="2019-02-14T15:57:36.293Z">
+<meta property="og:description" content="论文题目Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent)
+背景介绍许多现代NLP系统依赖以无监督方式在大规模语料上训练得到的词向量，但鲜有大文本块（如句子）级别向量取得了成功。一些无监督地学习句子表示的尝试均未达到令人满意的结果，以至没有">
+<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/70863da0ly1g5qf15h491j20co0agjs0.jpg">
+<meta property="og:image" content="http://wx3.sinaimg.cn/mw690/70863da0ly1g5qf1brmjaj20a00b03z7.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/70863da0ly1g5qf1umi0pj20cc09b0tk.jpg">
+<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/70863da0ly1g5qf1zx941j20dl0hkjsx.jpg">
+<meta property="og:updated_time" content="2019-08-06T16:48:05.904Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Shell 脚本管理Python 内置的HTTPServer 服务">
-<meta name="twitter:description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。
-Linux上内置Python，而Pytho">
+<meta name="twitter:title" content="NLP论文阅读- InferSent">
+<meta name="twitter:description" content="论文题目Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent)
+背景介绍许多现代NLP系统依赖以无监督方式在大规模语料上训练得到的词向量，但鲜有大文本块（如句子）级别向量取得了成功。一些无监督地学习句子表示的尝试均未达到令人满意的结果，以至没有">
+<meta name="twitter:image" content="http://wx2.sinaimg.cn/mw690/70863da0ly1g5qf15h491j20co0agjs0.jpg">
 
 
 
@@ -127,13 +132,13 @@ Linux上内置Python，而Pytho">
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2016/07/21/manager_python_http_server/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2019/08/06/nlp_pr_infersent/"/>
 
 
 
 
 
-  <title> 使用Shell 脚本管理Python 内置的HTTPServer 服务 | Heloowird </title>
+  <title> NLP论文阅读- InferSent | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -272,7 +277,7 @@ Linux上内置Python，而Pytho">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2016/07/21/manager_python_http_server/">
+  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2019/08/06/nlp_pr_infersent/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
@@ -296,7 +301,7 @@ Linux上内置Python，而Pytho">
             
             
               
-                使用Shell 脚本管理Python 内置的HTTPServer 服务
+                NLP论文阅读- InferSent
               
             
           </h1>
@@ -311,8 +316,8 @@ Linux上内置Python，而Pytho">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-21T23:29:22+08:00">
-                2016-07-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-06T22:44:22+08:00">
+                2019-08-06
               </time>
             
 
@@ -334,8 +339,8 @@ Linux上内置Python，而Pytho">
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
                   </a>
                 </span>
 
@@ -351,7 +356,7 @@ Linux上内置Python，而Pytho">
 
           
           
-             <span id="/2016/07/21/manager_python_http_server/" class="leancloud_visitors" data-flag-title="使用Shell 脚本管理Python 内置的HTTPServer 服务">
+             <span id="/2019/08/06/nlp_pr_infersent/" class="leancloud_visitors" data-flag-title="NLP论文阅读- InferSent">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -380,21 +385,58 @@ Linux上内置Python，而Pytho">
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。</p>
-<p>Linux上内置Python，而Python自带一个SimpleHTTPServer类，只需要运行下面的一行代码便可启动一个web服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python -m SimpleHTTPServer [port]</div></pre></td></tr></table></figure></p>
-<p>在浏览器上输入<code>http://[机器名]:[port]</code>，便可以访问到该目录下的所有文件。运行该命令的目录为web服务器的根目录，只需要保证对外共享的静态页面、或文件放在该目录下，其他人就可以通过HTTP方式访问。如果不指定port，会默认使用8000。所以，在不同工作目录下，只需以不同的端口启动HTTPServer即可。</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>当一台机器上启动多个SimpleHTTTPServer时，会碰到若干问题：忘记哪些端口已经使用过，或者忘记哪个目录已经处于共享状态，同时对一些很久以前启动的HTTP服务需要停掉以减轻机器负荷等。因此，本文旨在介绍如何使用Shell脚本来管理一台机器上多个HTTPServer。</p>
-<p>根据上述罗列的问题，分别对应三个功能：</p>
+        <h4 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h4><p>Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent)</p>
+<h4 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h4><p>许多现代NLP系统依赖以无监督方式在大规模语料上训练得到的词向量，但鲜有大文本块（如句子）级别向量取得了成功。一些无监督地学习句子表示的尝试均未达到令人满意的结果，以至没有得到大规模应用。</p>
+<p>如何学习句子通用表示，或者说如何找到一个通用的句子编码器—将句子中的多个单词和短语映射到一个固定长度的向量。这个问题可分解为两个子问题：</p>
 <ul>
-<li>启动web服务，判断端口是否占用</li>
-<li>列出正在使用web服务信息，包括进程号、端口号、根目录</li>
-<li>停止指定web服务或者全部web服务</li>
+<li>需要找到一个优良的神经网络结构</li>
+<li>在何种任务上，以何种方式训练该网络</li>
 </ul>
-<h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>首先启动web服务比较简单，直接使用上述命令，在末尾加上<code>&amp;</code>以保持web服务后台运行。在此之前，需要判断指定端口是否占用。使用<code>netstat</code>获得端口使用信息，然后使用<code>grep</code>进行查询指定端口是否已经在使用。</p>
-<p>其次列出web服务的各项信息，方便找出哪些端口占用、哪些目录已经共享，同时列出进程号，为停止某个web服务做准备。这里使用<code>ps</code>命令，找出所有名字中含有“SimpleHTTPServer”的进程。在Linux中，一切皆以文件的形式进行管理，进程也不例外，只需要使用<code>ls －l /proc/[id]</code>就可以找出启动该进程的目录，也就是web服务的根目录。</p>
-<p>最后是停掉web服务。根据上文所描述的列出web服务信息，可以轻易某个web服务找到对应进程id，然后通过<code>kill [id]</code>即可关闭对应的web服务。关闭所有的web服务，只是重复上述过程即可，直到没有可以kill掉的进程为止。</p>
-<p>代码结构主要包括3个脚本：启动web服务对应start_http.sh，显示web服务对应list_http.sh，停止web服务对应stop_http.sh。为了方便，可以使用<code>alias</code>设置别名。在<code>.bashrc</code>或者<code>.bash_profile</code>文件中里面添如下面配置，然后source修过后的文件生效。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">alias start_http=&apos;sh [the_absolute_path_of_your_shell_dir]/start_http.sh&apos;</div><div class="line">alias list_http=&apos;sh [the_absolute_path_of_your_shell_dir]/list_http.sh&apos;</div><div class="line">alias stop_http=&apos;sh [the_absolute_path_of_your_shell_dir]/stop_http.sh&apos;</div></pre></td></tr></table></figure></p>
-<h3 id="后语"><a href="#后语" class="headerlink" title="后语"></a>后语</h3><p>我在工作中使用这套脚本来管理Linux机器上的多个web服务，用起来很省心、顺手，特此分享出来。详细代码在<a href="https://github.com/heloowird/manager_http_server" target="_blank" rel="external">github</a>，欢迎试用。</p>
+<p>围绕着这两个问题，本文提出了以监督学习方式在Stanford Natural Language Inference数据集学习通用句子表示，并在大部分迁移任务中超过了无监督方法的SkipThought。</p>
+<h5 id="何为SNLI？"><a href="#何为SNLI？" class="headerlink" title="何为SNLI？"></a>何为SNLI？</h5><p>SNLI数据集<sup>[<a href="https://www.jianshu.com/p/92d7f6eaacf5" title="Siamese network 孪生神经网络" target="_blank" rel="external">2</a>]</sup>共有57万人工生成的句子对，即推理前提(premise)与推理假设(hypothesis)，人工标注了句子对存在的以下三种逻辑关系标签：</p>
+<ul>
+<li>蕴含（entailment），即由前提可推出假设</li>
+<li>矛盾（contradiction），即前提和假设相矛盾</li>
+<li>中立（neutral ），即无法判断前提和假设的关系</li>
+</ul>
+<p>该语料通常用于自然语言推理 (Natural language inference,NLI)任务，也称为文本蕴含识别(Recognizing Textual Entailment, RTE)。</p>
+<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx2.sinaimg.cn/mw690/70863da0ly1g5qf15h491j20co0agjs0.jpg" class="full-image" alt="NLI通用训练框架"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<p>NLI任务通常有两种模型结构，一种是分别对每个句子进行编码，另一种是使用特征交叉或注意力机制对句子进行联合编码。前一种方式的副产品是可以学习到良好的句子向量表示，后一种更倾向于直奔主题地解决该任务。</p>
+<p>本文旨在学习通用的句子表示，故选择前种通用训练方式，使用了一个孪生神经网络（Siamese Network）。Siamese也有连体的意思，对神经网络而言，连体就是共享网络权重<sup>[<a href="https://nlp.stanford.edu/projects/snli/" title="SNLI" target="_blank" rel="external">3</a>]</sup>，在实际操作中，使用同一模型即可。分为3部分：</p>
+<ol>
+<li>使用同一句子编码器对推理前提句子和推理假设句子做编码，分别得到句子向量$u$和$v$</li>
+<li>匹配部分使用拼接concat($u$, $v$)，逐元素相乘($u * v$)，逐元素差绝对值$(|u - v|)$来抽取相互特征</li>
+<li>经过多个全联接之后，接三分类softmax层</li>
+</ol>
+<p>文中接下来比较了7种句子编码器：LSTM最后隐层，GRU最后隐层，BiGRU最后隐层拼接，BiLSTM+Mean Pooling，BiLSTM+Max Pooling，自注意力网络(Inner-attention)和层次卷积网络(HConvNet)。</p>
+<p>LSTM和GRU按下不表，下面分别介绍BiLSTM+Max Pooling，自注意力网络和层次卷积网络。</p>
+<h5 id="BiLSTM-Max-Pooling"><a href="#BiLSTM-Max-Pooling" class="headerlink" title="BiLSTM + Max Pooling"></a>BiLSTM + Max Pooling</h5><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx3.sinaimg.cn/mw690/70863da0ly1g5qf1brmjaj20a00b03z7.jpg" class="full-image" alt="BiLSTM-Max网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<p>先通过BiLSTM对句子进行编码，每个$t$时刻的前后向隐层拼接成$h_{t}$；然后将$n$个隐层转化成一个定长向量：具体地，可以$h_{t}$对应各个维度上取$n$个数的最大值（max-pooling）或者求平均（mean-pooling），这样就得到一个维度和$h_{t}$一样的向量来表示句子。</p>
+<h5 id="Self-attentive-network"><a href="#Self-attentive-network" class="headerlink" title="Self-attentive network"></a>Self-attentive network</h5><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx1.sinaimg.cn/mw690/70863da0ly1g5qf1umi0pj20cc09b0tk.jpg" class="full-image" alt="Inner-attention网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<p>\begin{equation}<br>\overline{h_{i}} = tanh(w_{i}h_{i}+b_{i})<br>\end{equation}<br>\begin{equation}<br>\alpha_{i} = \frac{e^{\overline{h}_{i}^{T}}u_{w}}{\sum_{i}e^{\overline{h}_{i}^{T}}u_{w}}<br>\end{equation}<br>\begin{equation}<br>u = \sum_{i}^{n}\alpha_{i}h_{i}<br>\end{equation}</p>
+<p>用BiLSTM进行句子编码，拼接前后向隐层状态$h_{i}$，经过$(w_{i}, b_{i})$仿射变换和$tanh$激活函数，得到$\overline{h_{i}}$。然后计算$\overline{h_{i}}$和上下文向量$u_{w}$相似度$\alpha_{i}$，后面作为$\overline{h_{i}}$的权重；最后各个$\alpha_{i}$乘以$h_{i}$并累加得到句子向量。</p>
+<p>这里上下文向量$u_{w}$没有详细说明。在其引用的文章中，有两种方式计算上下文向量。两种方式通过对隐层状态进行变换得到，但变换方式不一样。文中$u_{w}$采用的变换方式<sup>[<a href="https://arxiv.org/pdf/1703.03130.pdf" title="A Structured Self-attentive Sentence Embedding" target="_blank" rel="external">4</a>]</sup>如下：<br>\begin{equation}<br>\alpha  = softmax(w_{s2}tanh(W_{s1}H^{T})<br>\end{equation}<br>\begin{equation}<br>u_{w} = \alpha H^{T}<br>\end{equation}</p>
+<p>当$w_{s2}$为矩阵时，会产出多个$u_{w}$，即多个上下文向量，因此会生成多个句子表示，拼接起来即为句子向量。</p>
+<h5 id="Hierarchical-ConvNet"><a href="#Hierarchical-ConvNet" class="headerlink" title="Hierarchical ConvNet"></a>Hierarchical ConvNet</h5><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx1.sinaimg.cn/mw690/70863da0ly1g5qf1zx941j20dl0hkjsx.jpg" class="full-image" alt="层次卷积网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<p>层次卷积结构使用了4层卷积层提取不同层次的特征，额外使用3个max-pooling获取不同层次的句子特征，最后把各个层次的特征拼接起来，得到句子向量。</p>
+<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>训练超参数</p>
+<ul>
+<li>SGD with lr=0.1， weight decay ratio=0.99；每遍训练完成时，若验证集上准确率下降，lr=lr/5</li>
+<li>batch size=64</li>
+<li>当lr&lt;$10^{-5}$，停止训练</li>
+<li>全联接选用一个含512隐层单元的隐层</li>
+<li>选用Common Crawl 840B数据集上300维GloVe向量作为固定的词向量</li>
+</ul>
+<p>在迁移任务中，输入为句子编码器输出的句子向量，然后使用batch size=64，Adam方式训练出一个LR作为分类器，比较各个句子编码器的效果。</p>
+<h4 id="模型比较"><a href="#模型比较" class="headerlink" title="模型比较"></a>模型比较</h4><p>BiLSTM-MaxPooling输出4096维的句子向量在SNLI和迁移任务上表现最佳。有些模型专注于学习目标任务上的句子向量，而忽视通用用途的句子表示，如Inner-attention网络；相反，想BiLSTM-Mean不聚焦目标任务所需的特有特征，但学习到了句子的通用信息。</p>
+<p>在一定范围内，迁移任务效果随句子向量维度增加而更佳。随着向量维度增大，不同模型具有不等程度抽取信息能力。作者认为有些模型抽取的特征虽然和目标任务不直接相关，但对迁移任务还是很有用。</p>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://arxiv.org/pdf/1705.02364.pdf" target="_blank" rel="external">Supervised Learning of Universal Sentence Representations from Natural Language Inference Data</a></li>
+<li><a href="https://www.jianshu.com/p/92d7f6eaacf5" target="_blank" rel="external">Siamese network 孪生神经网络</a></li>
+<li><a href="https://nlp.stanford.edu/projects/snli/" target="_blank" rel="external">SNLI</a></li>
+<li><a href="https://arxiv.org/pdf/1703.03130.pdf" target="_blank" rel="external">A Structured Self-attentive Sentence Embedding</a></li>
+</ol>
 
       
     </div>
@@ -418,11 +460,7 @@ Linux上内置Python，而Pytho">
       
         <div class="post-tags">
           
-            <a href="/tags/python/" rel="tag"># python</a>
-          
-            <a href="/tags/shell/" rel="tag"># shell</a>
-          
-            <a href="/tags/simple-http-server/" rel="tag"># simple-http-server</a>
+            <a href="/tags/nlp/" rel="tag"># nlp</a>
           
         </div>
       
@@ -435,8 +473,8 @@ Linux上内置Python，而Pytho">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/06/09/display_chinese_problem_in_matplot/" rel="next" title="Matplot中文乱码解决方案">
-                <i class="fa fa-chevron-left"></i> Matplot中文乱码解决方案
+              <a href="/2019/08/04/nlp_pr_ulmfit/" rel="next" title="NLP论文阅读- ULMFiT">
+                <i class="fa fa-chevron-left"></i> NLP论文阅读- ULMFiT
               </a>
             
           </div>
@@ -444,10 +482,6 @@ Linux上内置Python，而Pytho">
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/25/neural_network/" rel="prev" title="神经网络的基本原理和数学推导">
-                神经网络的基本原理和数学推导 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -583,7 +617,7 @@ Linux上内置Python，而Pytho">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方案"><span class="nav-number">3.</span> <span class="nav-text">方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后语"><span class="nav-number">4.</span> <span class="nav-text">后语</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#论文题目"><span class="nav-number">1.</span> <span class="nav-text">论文题目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#背景介绍"><span class="nav-number">2.</span> <span class="nav-text">背景介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#何为SNLI？"><span class="nav-number">2.1.</span> <span class="nav-text">何为SNLI？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构"><span class="nav-number">3.</span> <span class="nav-text">模型结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BiLSTM-Max-Pooling"><span class="nav-number">3.1.</span> <span class="nav-text">BiLSTM + Max Pooling</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Self-attentive-network"><span class="nav-number">3.2.</span> <span class="nav-text">Self-attentive network</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Hierarchical-ConvNet"><span class="nav-number">3.3.</span> <span class="nav-text">Hierarchical ConvNet</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">4.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型比较"><span class="nav-number">5.</span> <span class="nav-text">模型比较</span></a></li></ol></div>
             
 
           </div>
