@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://wx3.sinaimg.cn/mw690/70863da0ly1g0hvduv8ebj20on083gol.jpg">
 <meta property="og:image" content="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hve0paezj2066066dgl.jpg">
 <meta property="og:image" content="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hve53kudj20aj0a9glt.jpg">
-<meta property="og:updated_time" content="2019-02-24T16:50:26.902Z">
+<meta property="og:updated_time" content="2019-08-06T16:55:41.672Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="维度灾难">
 <meta name="twitter:description" content="本文我们将讨论机器学习中一个经常被提及的概念— “维度灾难”，也有译作“维度诅咒”，以及其在分类问题中的重要性。接下来我们通过一个直观的例子来解释维度灾难z，例子来源于The Curse of Dimensionality in classification。
@@ -406,7 +406,7 @@
 <p>想象一个单位正方形代表着一个二维空间。特征空间的均值位于单位正方形的中心，所有离中心单位距离的数据都包含在一个内切单位圆内。而那些落在单位圆外的训练数据离搜索空间边角更近。由于这些样本的特征值变化很大，会很难对其进行正确分类。（譬如分布在对面角落的样本。）因此，如果大部分训练数据分布在单位圆内，分类会更加容易，如图9所示。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hve0paezj2066066dgl.jpg" class="full-image" title="图9 落在单位圆外的训练样本比靠近中心的样本更难以分类"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
 <p>一个有意思的问题：当增加特征空间的维度时，内切圆（超球体）的体积如何随着正方形（超立方体）的面积变化而变化呢。假设n维超立方体的体积总是1，半径为0.5的n维超球体的体积有如下公式可以计算得到：<br>\begin{equation} \label{1}<br>V(d) = \frac{\pi ^{\frac{d}{2}}}{\Gamma (\frac{d}{2}+1)}0.5^{d}<br>\end{equation}</p>
 <p>图10展示了超球体体积随着维度变化情况。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx4.sinaimg.cn/mw690/70863da0ly1g0hve53kudj20aj0a9glt.jpg" class="full-image" title="图10 随着维度趋向于无穷，超球体体积将趋向于0"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
-<p>意味着随着维度趋向于无穷，超球体体积将趋向于0，超球体外体积将保持不变。这个奇怪且反直觉的结论部分解释了在分类中伴随维度灾难而来的问题：在高维空间中，大部分的训练数据位于超立方体（特征空间）的角落。加上前面提到的，角落的样本比靠近中心的样本更难以分类。如图11所示，二维单位正方形，三维单位立方体，以及八维超立方体（2^8=256个角落）</p>
+<p>意味着随着维度趋向于无穷，超球体体积将趋向于0，超球体外体积将保持不变。这个奇怪且反直觉的结论部分解释了在分类中伴随维度灾难而来的问题：在高维空间中，大部分的训练数据位于超立方体（特征空间）的角落。加上前面提到的，角落的样本比靠近中心的样本更难以分类。如图11所示，二维单位正方形，三维单位立方体，以及八维超立方体（$2^{8}=256$个角落）</p>
 <p>对于8维超立方体，约98%的样本分布在它的256个角落。当特征空间趋向于无穷大时，样本离中心点的最大最小欧式距离的差值和最小距离的比值趋向于0。<br>\begin{equation} \label{2}<br>\lim_{d\rightarrow \infty }\frac{dist_{max}-dist_{min}}{dist_{min}} \rightarrow 0<br>\end{equation}</p>
 <p>因此，距离在高维空间将无法度量相似性。由于分类器依赖于距离度量（如欧拉距离、、马氏距离、曼哈顿距离），分类器在低维空间（使用更少特征描述物体属性）通常更容易。类似地，高维空间中高斯分布更平坦，分布更加长尾。最大最小似然差值和最小似然的比值趋向于0。</p>
 <p>参考资料：</p>
