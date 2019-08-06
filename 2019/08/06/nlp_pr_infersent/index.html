@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://wx3.sinaimg.cn/mw690/70863da0ly1g5qf1brmjaj20a00b03z7.jpg">
 <meta property="og:image" content="http://wx1.sinaimg.cn/mw690/70863da0ly1g5qf1umi0pj20cc09b0tk.jpg">
 <meta property="og:image" content="http://wx1.sinaimg.cn/mw690/70863da0ly1g5qf1zx941j20dl0hkjsx.jpg">
-<meta property="og:updated_time" content="2019-08-06T16:48:05.904Z">
+<meta property="og:updated_time" content="2019-08-06T17:29:59.184Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP论文阅读- InferSent">
 <meta name="twitter:description" content="论文题目Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent)
@@ -428,7 +428,7 @@
 <li>选用Common Crawl 840B数据集上300维GloVe向量作为固定的词向量</li>
 </ul>
 <p>在迁移任务中，输入为句子编码器输出的句子向量，然后使用batch size=64，Adam方式训练出一个LR作为分类器，比较各个句子编码器的效果。</p>
-<h4 id="模型比较"><a href="#模型比较" class="headerlink" title="模型比较"></a>模型比较</h4><p>BiLSTM-MaxPooling输出4096维的句子向量在SNLI和迁移任务上表现最佳。有些模型专注于学习目标任务上的句子向量，而忽视通用用途的句子表示，如Inner-attention网络；相反，想BiLSTM-Mean不聚焦目标任务所需的特有特征，但学习到了句子的通用信息。</p>
+<h4 id="模型比较"><a href="#模型比较" class="headerlink" title="模型比较"></a>模型比较</h4><p>BiLSTM-MaxPooling输出4096维的句子向量在SNLI和迁移任务上表现最佳。有些模型专注于学习目标任务上的句子向量，而忽视通用用途的句子表示，如Inner-attention网络；相反，BiLSTM-Mean不聚焦目标任务所需的特有特征，但学习到了句子的通用信息。</p>
 <p>在一定范围内，迁移任务效果随句子向量维度增加而更佳。随着向量维度增大，不同模型具有不等程度抽取信息能力。作者认为有些模型抽取的特征虽然和目标任务不直接相关，但对迁移任务还是很有用。</p>
 <p>参考资料：</p>
 <ol>
