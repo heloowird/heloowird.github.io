@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="matplot,python," />
+  <meta name="keywords" content="docker," />
 
 
 
@@ -87,28 +87,46 @@
 
 
 
-<meta name="description" content="修改matplotlibrc文件 （永久解决方案）
-定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
+<meta name="description" content="基本概念
+镜像(image)
+容器(container)
 
-修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
-12345font.family         : sans-serif        #默认情">
+粗浅的理解: 镜像相当于一个类, 容器就是根据这个类创建的对象。详细参考Docker从入门到实践
+镜像又分为远程镜像和本地镜像。这两个和git类似, 一个是远程, 一个是本地。
+实践指南
+帮助命令
+12345查看docker使用说明 docker --help查看具体command 使用说明docker command --help
+
+常">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Matplot中文乱码解决方案">
-<meta property="og:url" content="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/index.html">
+<meta property="og:title" content="Docker 使用最佳指南">
+<meta property="og:url" content="https://heloowird.github.io/2020/01/16/docker_usage/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="修改matplotlibrc文件 （永久解决方案）
-定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
+<meta property="og:description" content="基本概念
+镜像(image)
+容器(container)
 
-修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
-12345font.family         : sans-serif        #默认情">
-<meta property="og:updated_time" content="2017-04-09T07:38:11.000Z">
+粗浅的理解: 镜像相当于一个类, 容器就是根据这个类创建的对象。详细参考Docker从入门到实践
+镜像又分为远程镜像和本地镜像。这两个和git类似, 一个是远程, 一个是本地。
+实践指南
+帮助命令
+12345查看docker使用说明 docker --help查看具体command 使用说明docker command --help
+
+常">
+<meta property="og:updated_time" content="2020-01-22T08:30:50.506Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Matplot中文乱码解决方案">
-<meta name="twitter:description" content="修改matplotlibrc文件 （永久解决方案）
-定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。
+<meta name="twitter:title" content="Docker 使用最佳指南">
+<meta name="twitter:description" content="基本概念
+镜像(image)
+容器(container)
 
-修改matplotlibrc文件内容matplotlibrc文件部分内容如下：
-12345font.family         : sans-serif        #默认情">
+粗浅的理解: 镜像相当于一个类, 容器就是根据这个类创建的对象。详细参考Docker从入门到实践
+镜像又分为远程镜像和本地镜像。这两个和git类似, 一个是远程, 一个是本地。
+实践指南
+帮助命令
+12345查看docker使用说明 docker --help查看具体command 使用说明docker command --help
+
+常">
 
 
 
@@ -136,13 +154,13 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2020/01/16/docker_usage/"/>
 
 
 
 
 
-  <title> Matplot中文乱码解决方案 | Heloowird </title>
+  <title> Docker 使用最佳指南 | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -281,7 +299,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/">
+  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2020/01/16/docker_usage/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
@@ -305,7 +323,7 @@
             
             
               
-                Matplot中文乱码解决方案
+                Docker 使用最佳指南
               
             
           </h1>
@@ -320,8 +338,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-06-09T02:19:22+08:00">
-                2015-06-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-16T02:19:22+08:00">
+                2020-01-16
               </time>
             
 
@@ -360,7 +378,7 @@
 
           
           
-             <span id="/2015/06/09/display_chinese_problem_in_matplot/" class="leancloud_visitors" data-flag-title="Matplot中文乱码解决方案">
+             <span id="/2020/01/16/docker_usage/" class="leancloud_visitors" data-flag-title="Docker 使用最佳指南">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -389,30 +407,27 @@
       
 
       
-        <h3 id="修改matplotlibrc文件-（永久解决方案）"><a href="#修改matplotlibrc文件-（永久解决方案）" class="headerlink" title="修改matplotlibrc文件 （永久解决方案）"></a>修改matplotlibrc文件 （永久解决方案）</h3><ol>
-<li><p>定位matplotlibrc文件<br>该文件位于[<em>python_install_dir</em>]\Lib\site-packages\matplotlib\mpl-data目录下。</p>
+        <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><ul>
+<li>镜像(image)</li>
+<li>容器(container)</li>
+</ul>
+<p>粗浅的理解: 镜像相当于一个类, 容器就是根据这个类创建的对象。详细参考<a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="external">Docker从入门到实践</a></p>
+<p>镜像又分为远程镜像和本地镜像。这两个和git类似, 一个是远程, 一个是本地。</p>
+<h4 id="实践指南"><a href="#实践指南" class="headerlink" title="实践指南"></a>实践指南</h4><ul>
+<li><p>帮助命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">查看docker使用说明 </div><div class="line">docker --help</div><div class="line"></div><div class="line">查看具体command 使用说明</div><div class="line">docker command --help</div></pre></td></tr></table></figure>
 </li>
-<li><p>修改matplotlibrc文件内容<br>matplotlibrc文件部分内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">font.family         : sans-serif        #默认情况下，该字段为关闭状态。去掉注释即可。</div><div class="line">font.sans-serif     : Microsoft YaHei , Bitstream Vera Sans, </div><div class="line">                      Lucida Grande, Verdana, Geneva, Lucid,</div><div class="line">                      Arial, Helvetica, Avant Garde,</div><div class="line">                      sans-serif        #添加&quot;Microsoft YaHei&quot;</div></pre></td></tr></table></figure>
-<p> 在<code>font.sans-serif</code>中添加<strong>Mircosoft YaHei</strong>之后，matplot 通过C:\Users\[<em>your_account</em>]\.matplotlib\fontList.cache 中存储的映射关系找到字体文件所在的位置。fontList.cache 文件部分内容如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">S&apos;Microsoft YaHei</div><div class="line">p147</div><div class="line">sg16</div><div class="line">I700</div><div class="line">sg17</div><div class="line">g13</div><div class="line">sg18</div><div class="line">g13</div><div class="line">sg19</div><div class="line">S&apos;C:\\Windows\\Fonts\\msyhbd.ttf&apos;</div></pre></td></tr></table></figure>
-<p> Microsoft YaHei字体默认的位置位于 C:\Windows\Fonts\ 目录下。<br> <strong>注意</strong>：如果第三步操作完之后仍不起作用，可以将 C:\Windows\Fonts\ 目录下的Microsoft YaHei字体文件拷贝到 [<em>python_install_dir</em>]\Lib\site-packages\matplotlib\mpl-data\fonts\ttf\ 目录下</p>
+<li><p>常用命令集合</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"># 1. 列出本地docker 镜像</div><div class="line">docker image ls</div><div class="line"></div><div class="line"># 2. 查看正在运行的容器</div><div class="line">docker ps</div><div class="line"></div><div class="line"># 3. 查看所有容器, 包括killed 状态的容器</div><div class="line">docker ps -a</div><div class="line"></div><div class="line"># 4. 启动一个新的容器</div><div class="line">docker run --it --name &#123;container_name&#125; -v &#123;host_absolute_path&#125;:&#123;docker_absoulute_path&#125; [&#123;image_repo:image_tag&#125;|&#123;image_id&#125;]</div><div class="line"></div><div class="line"># container_name 参数必须是唯一的, 不能和本地的其他容器名字同名. 在docker 其它命令中, 可以使用container_id 的地方也都可以使用container_name 代替, 方便记忆.</div><div class="line"># -v 用于指定挂载目录, 将宿主机器的目录映射到容器目录, 容器挂载目录下的所有数据实际存储在宿主机器目录下.</div><div class="line"># 本地docker 镜像既可以使用image_repo:image_tag, 可以通过image_id 来唯一标识</div><div class="line"># 一般地, 安装的软件放在非挂载目录下, 其他数据和开发脚本等最好放在挂载目录下。安装软件的命令可以写入新的docker file 或者临时的install_list.sh , 存在挂载目录下, 方便创建新的镜像/重新安装软件。</div><div class="line"># 重要: 启动之后, 推荐使用ctrl+p+q 快捷键, 让容器运行运行于后台。ctrl+p+q 的作用是让运行当前容器的线程脱离当前shell 的主线程, 当当前shell退出时, 容器仍保持后台运行。</div><div class="line"># 使用ctrl+p+q 让容器运行后台的前提是, docker run 启动时必须加上-i 参数</div><div class="line"></div><div class="line"># 5. 重新连接后台运行的容器</div><div class="line">#  方法一: 可用于连接killed 容器</div><div class="line">docker start -i &#123;container_name|container_id&#125;</div><div class="line"></div><div class="line">#  方法二: 推荐</div><div class="line">docker exec -it &#123;container_name|container_id&#125; [zsh|/bin/bash]</div><div class="line"></div><div class="line"># 方法一可以连接killed 容器, 缺点是exit 之后容器会进入killed 状态; 方法二只能连接运行状态的容器, exit 之后不会影响容器状态。</div><div class="line"></div><div class="line"># 方法一有一个重要的作用: 清理通过方法二启动但未exit 的进程。一般地, 方法二连接了一个容器, 当网断了该进程就会一直运行于后台, 长此以往就会有很多进程在后台连接该容器, 这样比较浪费机器资源. 通过docker top &#123;container_name|container_id&#125; 查看该容器相关的进程, 如果发现很多连接进程, 可以采取以下方法:</div><div class="line">#     1). 使用方法一连接容器, exit, 会使容器处于killed状态, 间接kill 掉与之连接的进程;</div><div class="line">#     2). 使用方法二连接容器, ctrl+p+q 使容器运行于后台即可;</div><div class="line">#     3). docker top &#123;container_name|container_id&#125; 查看容器相关进程。</div><div class="line"></div><div class="line"># 6. 查看正在运行容器的宿主机器进程</div><div class="line">docker top &#123;container_name|container_id&#125;</div><div class="line"># 同一个container 的父进程是一样的。</div><div class="line"></div><div class="line"># 7. 删除容器(慎用)</div><div class="line">docker rm &#123;container_name|container_id&#125;</div><div class="line"></div><div class="line"># 一般地, 如果启动容器后, 如果安装了安装耗时长且必备的软件, 建议创建一个新的dockerfile, 构建一个新的镜像</div><div class="line"># 如果安装一些小或者临时性的软件, 可以通过install_list.sh 记录下, 启动新的容器时, 可以sh install_list.sh 来快速安装, 如pip .</div><div class="line"># 可用于清理killed容器</div><div class="line"></div><div class="line"># 8. 建议把常用docker 相关命令通过alias 管理起来, 方便快速使用, 举个栗子:</div><div class="line">alias run_dc=&apos;docker run -it --name $(whoami) -v [your_machine_dir]:[your_docer_dir] image_id&apos;</div><div class="line">alias list_dc=&apos;docker ps | grep $(whoami) | awk &apos;\&apos;&apos;ENGIN&#123;print &quot;CONTANINER_ID\tIMAGE&quot;&#125; &#123;print $1&quot;\t&quot;$2&#125;&apos;\&apos;&apos;&apos;</div><div class="line">alias list_dead_dc=&apos;docker ps -a | grep &quot;Exited&quot; | grep $(whoami) | awk &apos;\&apos;&apos;ENGIN&#123;print &quot;CONTANINER_ID\tIMAGE&quot;&#125; &#123;print $1&quot;\t&quot;$2&#125;&apos;\&apos;&apos;&apos;</div><div class="line">alias start_dc=&apos;docker start -i $(whoami)&apos;</div><div class="line">alias connect_dc=&apos;docker exit -it $(list_dc | awk &apos;\&apos;&apos;NR==2&#123;print $1&#125;&apos;\&apos;&apos;) env LANG=C.UTF-8 /bin/bash&apos;</div></pre></td></tr></table></figure>
 </li>
-<li><p>重建字体索引列表<br><a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6" target="_blank" rel="external">matplotlib不会每次启动时都重新扫描所有的字体文件并创建字体索引列表，因此在复制完字体文件之后，需要运行下面的语句以重新创建字体索引列表</a> ,需要在console中运行以下代码： </p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>from matplotlib.font_manager import _rebuild<br>_rebuild()</p>
-</blockquote>
-</blockquote>
-</blockquote>
+<li><p>自定义镜像<br>参考<a href="https://yeasy.gitbooks.io/docker_practice/image/build.html" target="_blank" rel="external">使用Dockerfile 定制镜像</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"># base image</div><div class="line">FROM base_image_repo:base_image_tag</div><div class="line"></div><div class="line"># set argument</div><div class="line">ARG OPENFST_VERSION=&quot;openfst-1.7.2&quot;</div><div class="line">ARG SRILM_VERSION=&quot;srilm-1.7.2&quot;</div><div class="line"></div><div class="line"># set work directory</div><div class="line">WORKDIR /root</div><div class="line"></div><div class="line"># copy your script</div><div class="line">COPY . .</div><div class="line"></div><div class="line"># install your software</div><div class="line">RUN set -ex \</div><div class="line">    &amp;&amp; apt-get update \</div><div class="line">    &amp;&amp; apt-get install -y git g++ make autoconf-archive libtool gfortran automake autoconf python-setuptools python-dev fontconfig \ </div><div class="line">    &amp;&amp; cd /root \</div><div class="line">    ...</div></pre></td></tr></table></figure>
 </li>
+</ul>
+<p>参考资料</p>
+<ol>
+<li><a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="external">Docker - 从入门到实践</a></li>
 </ol>
-<h3 id="在py文件中显式加载字体-（临时解决方案）"><a href="#在py文件中显式加载字体-（临时解决方案）" class="headerlink" title="在py文件中显式加载字体 （临时解决方案）"></a>在py文件中显式加载字体 （临时解决方案）</h3><ol>
-<li>显示加载matplotlib的字体管理器，代码如下：<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 加载自定义字体</span></div><div class="line"><span class="comment"># fname 为字体文件路径</span></div><div class="line"><span class="keyword">import</span> matplotlib</div><div class="line">myfont = matplotlib.font_manager.FontProperties(fname=<span class="string">r'C:/Windows/Fonts/msyh.ttf'</span>)</div><div class="line"> ...</div><div class="line"><span class="comment"># 在需要显示汉字的地方，指定自定义字体即可</span></div><div class="line">plt.xlabel(<span class="string">u'汉字'</span>,  fontproperties=myfont)</div><div class="line">plt.xlabel(<span class="string">u'汉字'</span>,  fontproperties=myfont)</div><div class="line">...</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>参考文献<br><a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6" target="_blank" rel="external">http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6</a></p>
 
       
     </div>
@@ -436,9 +451,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/matplot/" rel="tag"># matplot</a>
-          
-            <a href="/tags/python/" rel="tag"># python</a>
+            <a href="/tags/docker/" rel="tag"># docker</a>
           
         </div>
       
@@ -451,8 +464,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/03/26/wonderful_words/" rel="next" title="致我们">
-                <i class="fa fa-chevron-left"></i> 致我们
+              <a href="/2020/01/11/spelling_correction/" rel="next" title="拼写纠错概述">
+                <i class="fa fa-chevron-left"></i> 拼写纠错概述
               </a>
             
           </div>
@@ -460,10 +473,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/21/manager_python_http_server/" rel="prev" title="使用Shell 脚本管理Python 内置的HTTPServer 服务">
-                使用Shell 脚本管理Python 内置的HTTPServer 服务 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -599,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改matplotlibrc文件-（永久解决方案）"><span class="nav-number">1.</span> <span class="nav-text">修改matplotlibrc文件 （永久解决方案）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在py文件中显式加载字体-（临时解决方案）"><span class="nav-number">2.</span> <span class="nav-text">在py文件中显式加载字体 （临时解决方案）</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实践指南"><span class="nav-number">2.</span> <span class="nav-text">实践指南</span></a></li></ol></div>
             
 
           </div>
