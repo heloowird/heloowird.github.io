@@ -103,7 +103,7 @@
 实单词拼写错误（real word spelling error），即需要纠错的单词存在现有词典中，如把there 输错成three 。
 
 拼写错误一般由字母增删改、字母调换顺序等错误造成。在">
-<meta property="og:updated_time" content="2020-01-15T15:27:19.058Z">
+<meta property="og:updated_time" content="2020-02-04T07:48:45.700Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="拼写纠错概述">
 <meta name="twitter:description" content="拼写错误介绍在输入过程中，会存在拼写错误。拼写错误分为两类：
@@ -410,7 +410,19 @@
 <h4 id="噪声信道模型-Noisy-Channel-Model"><a href="#噪声信道模型-Noisy-Channel-Model" class="headerlink" title="噪声信道模型(Noisy Channel Model)"></a>噪声信道模型(Noisy Channel Model)</h4><p>根据贝叶斯公式：<br>\begin{equation}<br>\begin{aligned}<br>p(w|x) = \frac{p(x|w) * p(w)}{p(x)}<br>\end{aligned}<br>\end{equation}</p>
 <p>对于所有的纠错候选词$w$ ，$x$ 是一样的。所以$p(x)$ 可以去掉。得：<br>\begin{equation}<br>\begin{aligned}<br>p(w|x) = p(x|w) * p(w)<br>\end{aligned}<br>\end{equation}</p>
 <p>$p(x|w)$ 为$w$ 错输成$x$ 的概率，亦称作似然或者$w$ 转化成$x$ 的信道模型。$p(w)$ 为纠错候选的先验概率，从语料中统计得到，p(w) 可以是unigram 、bigram 或者trigram 。</p>
-<p>影响$p(x|w)$ 的因素有很多。一般我们转化为字符错误类型。错误类型分为：增、删、改以及交换（Damerau-Levenshtein)。通过统计字符四种错误类型的混淆矩阵来近似$p(x|w)$ 。举个例子：$p(acress|across)$ 可以使用大语料中字符o 被e 替换的概率代替。</p>
+<p>影响$p(x|w)$ 的因素有很多。一般我们转化为字符错误类型。错误类型分为：增、删、改以及交换（Damerau-Levenshtein)。通过统计字符四种错误类型的混淆矩阵来近似$p(x|w)$ 。举个例子：$p(acress|across)$ 可以使用大语料中字符o 被e 替换的概率$p(e|o)$ 代替。</p>
+<h4 id="实单词拼写错误"><a href="#实单词拼写错误" class="headerlink" title="实单词拼写错误"></a>实单词拼写错误</h4><p>实单词拼写错误依然遵循通用框架的后两步。 首先，通过编辑距离召回候选，然后根据先验概率和信道噪声模型进行排序。 在召回候选时，一般编辑距离小于等于1，这里和非单词错误不一样，需要纠错单词本身也是候选词之一。信道噪声模型首先要考虑需要纠错的单词其实是没有错误，即$p(w|w)$ 的概率$\alpha$ 会根据不同任务设定不同的值。通常为$.95$。那么，剩下的候选词分摊$1-\alpha$ 。<br>\begin{equation}<br>\begin{aligned}<br>p(x|w) = \begin{cases}<br>\alpha &amp;  \text{if }  x=w \\<br>\frac{1-\alpha}{\left | C(x) \right |} &amp; \text{if } x\subset C(x) \\<br>0 &amp; \text{otherwise }<br>\end{cases}<br>\end{aligned}<br>\end{equation}<br>除了使用均匀分布，更精确的做法是：按照字符混淆矩阵的概率分配。先验概率$p(w)$ 依然采用语言模型，bigram 或者trigram。</p>
+<h4 id="改进点"><a href="#改进点" class="headerlink" title="改进点"></a>改进点</h4><ul>
+<li>不再假设一句话只有一处错误。对每个单词进行检查。如果仅使用简单的纠错模型，会造成很多误纠错。特别是不常见的单词。<ul>
+<li>使用不纠错白名单</li>
+<li>使用$logP(w|x) - log(x|x) &gt; \theta$ 代替$logP(w|x) - log(x|x) &gt; 0$</li>
+<li>使用额外分类器决定是否纠错是否可靠</li>
+</ul>
+</li>
+<li>使用更大的词表，特别是在互联网场景下。</li>
+<li>改进纠错模型：使用加权方式平衡似然和先验概率。<br>\begin{equation}<br>\begin{aligned}<br>\hat{w}=\arg\max_{w \in C}p(x|w){p(w)}^{\lambda}<br>\end{aligned}<br>\end{equation}</li>
+<li>对于实单词拼写错误中的固定错误形式，考虑监督算法</li>
+</ul>
 <p>参考资料：</p>
 <ol>
 <li><a href="http://web.stanford.edu/~jurafsky/slp3/" target="_blank" rel="external">Speech and Language Processing</a></li>
@@ -599,7 +611,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#拼写错误介绍"><span class="nav-number">1.</span> <span class="nav-text">拼写错误介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拼写纠错通用框架"><span class="nav-number">2.</span> <span class="nav-text">拼写纠错通用框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#噪声信道模型-Noisy-Channel-Model"><span class="nav-number">3.</span> <span class="nav-text">噪声信道模型(Noisy Channel Model)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#拼写错误介绍"><span class="nav-number">1.</span> <span class="nav-text">拼写错误介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拼写纠错通用框架"><span class="nav-number">2.</span> <span class="nav-text">拼写纠错通用框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#噪声信道模型-Noisy-Channel-Model"><span class="nav-number">3.</span> <span class="nav-text">噪声信道模型(Noisy Channel Model)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实单词拼写错误"><span class="nav-number">4.</span> <span class="nav-text">实单词拼写错误</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#改进点"><span class="nav-number">5.</span> <span class="nav-text">改进点</span></a></li></ol></div>
             
 
           </div>
