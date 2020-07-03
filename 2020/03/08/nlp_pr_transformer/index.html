@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="machine learning," />
+  <meta name="keywords" content="nlp," />
 
 
 
@@ -87,22 +87,26 @@
 
 
 
-<meta name="description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
-原理先看看神经网络的">
+<meta name="description" content="论文题目Attention Is All You Need (Transformer)
+背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。
+另一方面，注意力机制已经成了序">
 <meta property="og:type" content="article">
-<meta property="og:title" content="神经网络的基本原理和数学推导">
-<meta property="og:url" content="https://heloowird.github.io/2016/09/25/neural_network/index.html">
+<meta property="og:title" content="NLP论文阅读- Transformer">
+<meta property="og:url" content="https://heloowird.github.io/2020/03/08/nlp_pr_transformer/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
-原理先看看神经网络的">
-<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg">
-<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/70863da0gy1fvt2rb11bmj20hl0e03zy.jpg">
-<meta property="og:updated_time" content="2018-10-01T14:15:48.444Z">
+<meta property="og:description" content="论文题目Attention Is All You Need (Transformer)
+背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。
+另一方面，注意力机制已经成了序">
+<meta property="og:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg">
+<meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gfxanjnen4j20md0caq52.jpg">
+<meta property="og:image" content="https://wx4.sinaimg.cn/mw690/70863da0ly1gge59l3742j20jn04r3z4.jpg">
+<meta property="og:updated_time" content="2020-07-03T14:55:36.083Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="神经网络的基本原理和数学推导">
-<meta name="twitter:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
-原理先看看神经网络的">
-<meta name="twitter:image" content="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg">
+<meta name="twitter:title" content="NLP论文阅读- Transformer">
+<meta name="twitter:description" content="论文题目Attention Is All You Need (Transformer)
+背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。
+另一方面，注意力机制已经成了序">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg">
 
 
 
@@ -130,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2016/09/25/neural_network/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2020/03/08/nlp_pr_transformer/"/>
 
 
 
 
 
-  <title> 神经网络的基本原理和数学推导 | Heloowird </title>
+  <title> NLP论文阅读- Transformer | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -275,7 +279,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2016/09/25/neural_network/">
+  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2020/03/08/nlp_pr_transformer/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
@@ -299,7 +303,7 @@
             
             
               
-                神经网络的基本原理和数学推导
+                NLP论文阅读- Transformer
               
             
           </h1>
@@ -314,8 +318,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-25T22:19:15+08:00">
-                2016-09-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-08T02:29:22+08:00">
+                2020-03-08
               </time>
             
 
@@ -354,7 +358,7 @@
 
           
           
-             <span id="/2016/09/25/neural_network/" class="leancloud_visitors" data-flag-title="神经网络的基本原理和数学推导">
+             <span id="/2020/03/08/nlp_pr_transformer/" class="leancloud_visitors" data-flag-title="NLP论文阅读- Transformer">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -383,23 +387,34 @@
       
 
       
-        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>先看看神经网络的基本概念－节点和权重。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg" class="full-image" alt="节点和连接权重" title="节点和连接权重"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>其中$x_0$, $x_1$, $x_2$ 为标量，分别表示该层各个节点的输出，如果该层为输入层，则为输入特征，$X$为特征的行向量形式。$w_0$, $w_1$, $w_2$ 同为标量，表示当前节点到与之相连节点的权重，该参数控制着节点对与之连接节点的影响程度，是需要学习的参数，$W$ 为权重的行向量形式，在这里为$(w_0、w_1、w_2)$。$b$ 为bias(偏置)，可理解为线性变换中y轴方向的偏移，也是需要学习的参数。$g(x)$ 为激活函数，一般为非线性函数，是神经网络的核心部分。常用的激活函数有sigmoid，tanh，softmax，relu函数等，作用为对线性输入进行非线性转换，起到特征组合与变换的效果。则图中的红色节点的输出$a$ 为：<br>\begin{equation} \label{1}<br>z = W \cdot X^T + b = w_0 \cdot x_0 + w_1 \cdot x_1 + w_2 \cdot x_2 + b<br>\end{equation}<br>\begin{equation} \label{2}<br>a = g(z)<br>\end{equation}</p>
-<p>有了节点，通过组合和连接方式，就可以组成基本的神经网络，如下图所示。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx2.sinaimg.cn/mw690/70863da0gy1fvt2rb11bmj20hl0e03zy.jpg" class="full-image" alt="神经网络" title="神经网络"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>神经网络包含不同的层(Layer)，不同的层又由多个节点组成。层是一个逻辑单元，是同等位置节点形成的，因为层与层之间的连接实际为不同层节点之间的连接。图中的神经网络由三层组成，分别为输入层，隐藏层和输出层。以神经网络进行二分类任务为例，训练样本为$(X_i, y_i)$, $i = 1,2,…,N$; $y_i \in \{0, 1\}$; 其中$X_i$ 为第$i$ 个训练数据的特征向量，$y_i$ 是第$i$ 个训练数据的真实label值。那么，输入层输入的数据为$X_i$，依次计算隐藏层各个节点的值，最后输出层会计算出一个预测值$\hat{y_i}$，这个预测值与真实label值${y_i}$可能存在一定的差距。而神经网络的终极目标是使得尽可能多的训练数据的预测值越来越接近其真实label值。用数学的语言来说：$\min \frac{1}{N}{\sum_{1}^{N}(\left | \hat{y_i} - {y_i} \right | )}$ 。一般地，$\left | \hat{y_i} - {y_i} \right |$ 可以用其他损失函数代替，如平方损失函数$(\hat{y_i} - {y_i})^2$。这里损失函数不作为重点，具体可参考<a href="http://heloowird.com/2017/03/08/diff_errors_of_neural_network/" target="_blank" rel="external">这里</a>。为了求导方便，加上$\frac{1}{2}$ ，所以，最后的损失函数（或者代价函数）为<br>\begin{equation} \label{3}<br>L(w, b) = \min_{w, b}\frac{1}{N}{\sum_{1}^{N}\frac{1}{2}(\hat{y_i} - {y_i})^2}<br>\end{equation}</p>
-<p>接下来如何让预测值越来越接近真实值呢？我们知道，特征是固定，调节的是参数$w$ 和$b$。如果$w$ 和$b$ 分别改变$\Delta w$ 和$\Delta b$，那么预测值$\hat{y}$ 会慢慢地接近$y$。那$\Delta w$ 和$\Delta b$ 如何得到呢？<br>令$\theta = (w, b)$，$f$为损失函数， 则$L(\theta) = f(\theta)$的泰勒一阶展开式为：<br>\begin{equation} \label{4}<br>f(\theta) \approx f({\theta}_0) + \frac{\partial f({\theta}_0)}{\partial {\theta}_0} \cdot (\theta - {\theta}_0)<br>\end{equation}</p>
-<p>要使得$f(\theta) &lt; f({\theta}_0)$, 可让：<br>\begin{equation} \label{5}<br>\theta - {\theta}_0 = - \alpha \cdot \frac{\partial f(\theta)}{\partial \theta} \text{;    }(\alpha &gt; 0)<br>\end{equation}</p>
-<p>使用随机梯度下降时，$\theta$ 替换为第t次更新后的参数${\theta}_{t+1}$，${\theta}_0$ 替换为第t次更新前的参数${\theta}_{t}$ 。每次参数更新方法为：<br>\begin{equation} \label{6}<br>{\theta}_{t+1} = \theta_{t} - \alpha \cdot \frac{\partial f(\theta_{t})}{\partial \theta_{t}}<br>\end{equation}</p>
-<h3 id="参数更新推导"><a href="#参数更新推导" class="headerlink" title="参数更新推导"></a>参数更新推导</h3><p>神经网络有很多层参数，需要对每层参数都进行更新操作。为了方便说明每层参数的更新方式，我们对神经网络前向传播公式\eqref{1} 和公式\eqref{2} 重新定义：<br>\begin{equation} \label{7}<br>z_{j}^{(l+1)} = W^{(l)} \cdot a^{(l)T} + b^{(l)} = (\sum_{i} w_{ij}^{(l)} \cdot a_i^{(l)}) + b_j^{(l+1)}<br>\end{equation}<br>\begin{equation} \label{8}<br>a_{j}^{(l+1)} = g(z_{j}^{(l+1)})<br>\end{equation}<br>其中$a_{j}^{l}$ 表示第$l$ 层第$j$ 个节点，$w_{ij}^{(l)}$ 表示连接第$l$ 层第$i$ 个节点到第$(l+1)$ 层第$j$ 个节点的权重。$b_j^{(l+1)}$ 为第$(l+1)$ 层第$j$ 个节点的偏置。<br>在图2中，为了更新参数，需要分别计算$\frac{\partial L}{\partial w_{ij}^{(1)}}$ 和$\frac{\partial L}{\partial w_{ij}^{(2)}}$。因为$w_{ij}^{(2)}$ 离L较近，我们先求$\frac{\partial L}{\partial w_{ij}^{(2)}}$，根据链式求导法则：</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot \frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} \cdot \frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}}</script><p>根据公式\eqref{8}，得：</p>
-<script type="math/tex; mode=display">\frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} ＝ g'(z_{j}^{(3)})</script><p>根据公式\eqref{7}，得：</p>
-<script type="math/tex; mode=display">\frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}} ＝ a_{i}^{(2)}</script><p>所以：<br>\begin{equation} \label{9}<br>\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot g’(z_{j}^{(3)}) \cdot a_{i}^{(2)}<br>\end{equation}<br>同样地，通过$L$ 对$w_{ij}^{(1)}$ 进行链式求导得：</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot \frac{\partial a_{j}^{(2)}}{\partial z_{j}^{(2)}} \cdot \frac{\partial z_{j}^{(2)}}{\partial w_{ij}^{(1)}}</script><p>化简得：<br>\begin{equation} \label{10}<br>\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot g’(z_{j}^{(2)}) \cdot a_{i}^{(1)}<br>\end{equation}<br>仔细对比公式\eqref{9} 和公式\eqref{10}，我们发现，等式右边前两项具有相同形式，令$\delta_{j} = \frac{\partial L}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot \frac{\partial a_{j}}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot g’(z_{j})$，所以公式\eqref{9} 和公式\eqref{10}可统一表示为：<br>\begin{equation} \label{11}<br>\frac{\partial L}{\partial w_{ij}^{(l)}} = \delta_{j}^{(l+1)} \cdot a_{i}^{(l)}<br>\end{equation}</p>
-<p>这里主要是$\frac{\partial L}{\partial a_{j}^{(2)}}$稍微复杂些，如果再回过头看看公式\eqref{7}，$a_{j}^{(2)}$和$z_{i}^{(3)}$是有联系的，有：<br>\begin{equation} \label{12}<br>\frac{\partial L}{\partial a_{j}^{(l)}} ＝ \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot \frac{\partial z_{i}^{(l+1)}}{\partial a_{j}^{(l)}} = \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot w_{ji} ＝ \sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}<br>\end{equation}<br>两边同时乘以$g’(z_{j})$，则：<br>\begin{equation} \label{13}<br>\delta_{j}^{(l)} ＝ (\sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}) \cdot g’(z_{j}^{l})<br>\end{equation}<br>综上推导，神经网络反向传播时，可以依靠公式\eqref{13}，将训练误差依次传递到前面的层；然后利用公式\eqref{11}对各层的参数进行更新。经过反复训练，最终可以得到一个有效的分类器。详细实现代码在<a href="https://github.com/heloowird/ann" target="_blank" rel="external">github</a>，欢迎试用。</p>
+        <h4 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h4><p>Attention Is All You Need (Transformer)</p>
+<h4 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h4><p>RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态<code>h(t)</code> 依赖前一个隐层状态<code>h(t-1)</code> 和当前输入<code>x(t)</code> 。这种结构性问题导致RNN 训练时难以并行。</p>
+<p>另一方面，注意力机制已经成了序列建模和转换模型的必备部分，可以不受距离限制地建模输入和输出之间的依赖关系。现在绝大部分的注意力机制和RNN 捆绑一起使用。</p>
+<p>考虑到以上两点，Transformer 避开了RNN 结构，并且完全使用依赖注意力机制来捕捉输入和输出之间的全局依赖信息。Transformer 在8块P100上12个小时内就可以达到新的SOTA。</p>
+<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg" class="full-image" alt="Transformer 模型架构图"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<p>模型分成三部分，输入层，编/解码层，预测输出层。编/解码层具有相似结构，区别在于解码层的基础构件多了一个多头自注意力子层。网络基础构件分为有两个，一个为多头自注意力子层，另一个为前向全连接子层，两层之间使用残差连接和层归一化，即：$LayerNorm(x + Sublayer(x))$。编码层使用了6 个（多头自注意力子层+ 前向连接子层），解码层使用了6 个（2 个多头自注意力子层+ 前向连接子层）。下面详细介绍各个部分。</p>
+<h5 id="自注意力"><a href="#自注意力" class="headerlink" title="自注意力"></a>自注意力</h5><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx2.sinaimg.cn/mw690/70863da0ly1gfxanjnen4j20md0caq52.jpg" class="full-image" alt="多头注意力"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<p>注意力函数将输入向量映射成查询向量(query vector)，一系列键(key vector)、值对向量(value vector)，然后转化成输出向量。输出向量是一系列值向量的加权和，是与查询向量对应的隐层表示。每个值向量的权重由查询向量和对应键向量的相关性决定。</p>
+<p>每个输入通过3个转换矩阵，分别映射成查询向量、键值对向量。之后它们的运作方式如上图左边所示。查询向量和键向量做点积，然后除以一个常数进行缩放，经过Softmax 函数得到查询向量和键向量的权重，最后乘以与键向量对应的值向量并累加起来作为查询向量的表示。</p>
+<p>对于输出层，当前输出只和前面的输出有关。需要使用掩盖的方式来屏蔽后面输入的影响，通常会把Softmax 的输入设置成负无穷，权重接近为0，即忽略相应输入的值向量对当前输出的影响。所以就有了$Mask(opt.)$。</p>
+<p>缩放的目的是降低输出值的方差，避免大部分梯度落在微小梯度区域。假设查询向量和键向量都是相互独立的均值为0，方差为1的等同分布，那么，查询向量和键向量的内积就是均值为0，方差为$d_k$分布。为了减弱方差的影响，计算Softmax概率前除以$\sqrt(k)$。</p>
+<p>以上就是单头自注意力机制。对于同一个输入，使用不同转换矩阵，可以并行计算多个注意力表示，拼接起来作为注意力子层的输出值。多头注意力可以捕捉不同维度的语义特征，类似卷积神经网络的卷积核可以捕捉不同维度的图像特征。文章采用的是8个并行自注意力构成的注意力子层。</p>
+<h5 id="前向全连接"><a href="#前向全连接" class="headerlink" title="前向全连接"></a>前向全连接</h5><p>注意力层之后接两层全连接，全连接中间使用Relu激活函数。<br>\begin{equation}<br>\begin{aligned}<br>FNN(x) = max(0, xW_1 + b_1)W_2 + b_2<br>\end{aligned}<br>\end{equation}</p>
+<p>不同全连接层使用不同参数。其中x为512维，$W_1$为2048维，$W_2$为512维。</p>
+<h5 id="词向量和Softmax"><a href="#词向量和Softmax" class="headerlink" title="词向量和Softmax"></a>词向量和Softmax</h5><p>词向量和Softmax 均使用学习好的参数。使用固定的词向量将输入词和预测词转化成$d_model$ 大小的向量。同样地，使用预训练好的线性转换和Softmax函数将解码层的输出转换成下一个词的概率。输入和输出序列词的Embedding层和Softmax的线性转换层共享参数。为了弥补缩放，Embedding层参数需乘以一个$\sqrt{d_k}$。</p>
+<h5 id="位置编码"><a href="#位置编码" class="headerlink" title="位置编码"></a>位置编码</h5><p>目前为止，并没有使用到位置信息。本文使用固定位置编码— 正余弦函数来表示不同位置信息，和Emedding层相加作为编码层和解码层的输入。</p>
+<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><ol>
+<li>8块NVIDIA P100 GPU训练基础版模型大约使用12小时或者迭代10万次，每次花费0.4秒；</li>
+<li>使用Adam优化器，$\beta_1 = 0.9, \beta_2 = 0.98 and \epsilon = 10^{−9}$；</li>
+<li>使用残差Dropout，即任意子层（前向全连接和自注意力）的输出应用Dropout。Embedding层和位置编码相加之后也应用Dropout；</li>
+<li>使用注意力Dropout，即使用Softmax计算完权重后，应用Dropout，然后再乘以值向量。</li>
+</ol>
+<h4 id="为什么使用自注意力"><a href="#为什么使用自注意力" class="headerlink" title="为什么使用自注意力"></a>为什么使用自注意力</h4><p>对比RNN和CNN可从3个指标进行考虑：每层的总计算量，并行计算量（最小串行操作数），输入输出序列任意位置的最大路径长度。前面两个指标好理解，第三个指标可以理解为输入和输出的连结复杂度。输入输出序列任意两个位置连结起来越短，越容易捕捉到长距离依赖关系。自注意力层任意位置是直接相连的，所以最大路径长度为$O(1)$。3个指标的对比如下图所示。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx4.sinaimg.cn/mw690/70863da0ly1gge59l3742j20jn04r3z4.jpg" class="full-image" alt="不同网络结构的3个指标比较"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span> </p>
+<p>其中<code>n</code>为输入或输出长度，<code>d</code>为隐层向量维度。可以看出，相比于RNN，自注意力结构的每层总计算量更小，因为<code>n</code>通常比<code>d</code>小。另外，自注意力结构的串行操作数和最路径长度更小。相比于CNN，CNN的每层总计算量比RNN更大，多了卷积核大小的倍数。最大路径长度仍然比自注意力结构更大，意味着捕获长距离依赖关系能力更差。</p>
+<p>总的来说，自注意力结构计算量更小，并行度好，且捕捉长距离依赖关系能力更强。还有一个好处是，模型解释能力更好，利用自注意力权重，方便可视化输入和输出的依赖关系的强度。</p>
 <p>参考资料：</p>
 <ol>
-<li><a href="http://blog.csdn.net/zhongkejingwang/
- article/details/44514073" target="_blank" rel="external">BP神经网络的数学原理及其算法实现</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/22473137" target="_blank" rel="external">神经网络反向传播的数学原理</a></li>
+<li><a href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank" rel="external">Attention Is All You Need</a></li>
 </ol>
 
       
@@ -424,7 +439,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
+            <a href="/tags/nlp/" rel="tag"># nlp</a>
           
         </div>
       
@@ -437,8 +452,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/21/manager_python_http_server/" rel="next" title="使用Shell 脚本管理Python 内置的HTTPServer 服务">
-                <i class="fa fa-chevron-left"></i> 使用Shell 脚本管理Python 内置的HTTPServer 服务
+              <a href="/2020/01/16/docker_usage/" rel="next" title="Docker 使用最佳指南">
+                <i class="fa fa-chevron-left"></i> Docker 使用最佳指南
               </a>
             
           </div>
@@ -446,10 +461,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/08/diff_errors_of_neural_network/" rel="prev" title="使用神经网络解决分类问题时，为什么交叉熵误差更好">
-                使用神经网络解决分类问题时，为什么交叉熵误差更好 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -585,7 +596,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数更新推导"><span class="nav-number">3.</span> <span class="nav-text">参数更新推导</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#论文题目"><span class="nav-number">1.</span> <span class="nav-text">论文题目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#背景介绍"><span class="nav-number">2.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构"><span class="nav-number">3.</span> <span class="nav-text">模型结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#自注意力"><span class="nav-number">3.1.</span> <span class="nav-text">自注意力</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#前向全连接"><span class="nav-number">3.2.</span> <span class="nav-text">前向全连接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#词向量和Softmax"><span class="nav-number">3.3.</span> <span class="nav-text">词向量和Softmax</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#位置编码"><span class="nav-number">3.4.</span> <span class="nav-text">位置编码</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">4.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么使用自注意力"><span class="nav-number">5.</span> <span class="nav-text">为什么使用自注意力</span></a></li></ol></div>
             
 
           </div>
