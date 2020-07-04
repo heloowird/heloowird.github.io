@@ -100,7 +100,7 @@
 <meta property="og:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg">
 <meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gfxanjnen4j20md0caq52.jpg">
 <meta property="og:image" content="https://wx4.sinaimg.cn/mw690/70863da0ly1gge59l3742j20jn04r3z4.jpg">
-<meta property="og:updated_time" content="2020-07-04T13:05:25.681Z">
+<meta property="og:updated_time" content="2020-07-04T13:08:03.722Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP论文阅读- Transformer">
 <meta name="twitter:description" content="论文题目Attention Is All You Need (Transformer)
@@ -397,12 +397,12 @@
 <p>注意力函数将输入向量映射成查询向量(query vector)，一系列键(key vector)、值对向量(value vector)，然后转化成输出向量。输出向量是一系列值向量的加权和，是与查询向量对应的隐层表示。每个值向量的权重由查询向量和对应键向量的相关性决定。</p>
 <p>每个输入通过3个转换矩阵，分别映射成查询向量、键值对向量。之后它们的运作方式如上图左边所示。查询向量和键向量做点积，然后除以一个常数进行缩放，经过Softmax 函数得到查询向量和键向量的权重，最后乘以与键向量对应的值向量并累加起来作为查询向量的表示。</p>
 <p>对于输出层，当前输出只和前面的输出有关。需要使用掩盖的方式来屏蔽后面输入的影响，通常会把Softmax 的输入设置成负无穷，权重接近为0，即忽略相应输入的值向量对当前输出的影响。所以就有了$Mask(opt.)$。</p>
-<p>缩放的目的是降低输出值的方差，避免大部分梯度落在微小梯度区域。假设查询向量和键向量都是相互独立的均值为0，方差为1的等同分布，那么，查询向量和键向量的内积就是均值为0，方差为$d_k$分布。为了减弱方差的影响，计算Softmax概率前除以$\sqrt(k)$。</p>
+<p>缩放的目的是降低输出值的方差，避免大部分梯度落在微小梯度区域。假设查询向量和键向量都是相互独立的均值为0，方差为1的等同分布，那么，查询向量和键向量的内积就是均值为0，方差为$d_k$分布。为了减弱方差的影响，计算Softmax概率前除以$\sqrt{d_k}$。</p>
 <p>以上就是单头自注意力机制。对于同一个输入，使用不同转换矩阵，可以并行计算多个注意力表示，拼接起来作为注意力子层的输出值。多头注意力可以捕捉不同维度的语义特征，类似卷积神经网络的卷积核可以捕捉不同维度的图像特征。文章采用的是8个并行自注意力构成的注意力子层。</p>
 <h5 id="前向全连接"><a href="#前向全连接" class="headerlink" title="前向全连接"></a>前向全连接</h5><p>注意力层之后接两层全连接，全连接中间使用Relu激活函数。<br>\begin{equation}<br>\begin{aligned}<br>FNN(x) = max(0, xW_1 + b_1)W_2 + b_2<br>\end{aligned}<br>\end{equation}</p>
 <p>不同全连接层使用不同参数。其中$x$为512维，$W_1$为2048维，$W_2$为512维。</p>
 <h5 id="词向量和Softmax"><a href="#词向量和Softmax" class="headerlink" title="词向量和Softmax"></a>词向量和Softmax</h5><p>词向量和Softmax 均使用学习好的参数。使用固定的词向量将输入词和预测词转化成$d_{model}$ 大小的向量。同样地，使用预训练好的线性转换和Softmax函数将解码层的输出转换成下一个词的概率。输入和输出序列词的Embedding层和Softmax的线性转换层共享参数。为了弥补缩放，Embedding层参数需乘以一个$\sqrt{d_k}$。</p>
-<h5 id="位置编码"><a href="#位置编码" class="headerlink" title="位置编码"></a>位置编码</h5><p>目前为止，并没有使用到位置信息。本文使用固定位置编码— 正余弦函数来表示不同位置信息，和Emedding层相加作为编码层和解码层的输入。</p>
+<h5 id="位置编码"><a href="#位置编码" class="headerlink" title="位置编码"></a>位置编码</h5><p>目前为止，并没有使用到位置信息。本文使用固定位置编码— 正余弦函数来表示不同位置信息，和Embedding层相加作为编码层和解码层的输入。</p>
 <h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><ol>
 <li>8块NVIDIA P100 GPU训练基础版模型大约使用12小时或者迭代10万次，每次花费0.4秒；</li>
 <li>使用Adam优化器，$\beta_1 = 0.9, \beta_2 = 0.98 and \epsilon = 10^{−9}$；</li>
