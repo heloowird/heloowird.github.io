@@ -100,7 +100,7 @@
 <meta property="og:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg">
 <meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gfxanjnen4j20md0caq52.jpg">
 <meta property="og:image" content="https://wx4.sinaimg.cn/mw690/70863da0ly1gge59l3742j20jn04r3z4.jpg">
-<meta property="og:updated_time" content="2020-07-04T13:08:03.722Z">
+<meta property="og:updated_time" content="2020-07-04T13:13:33.617Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP论文阅读- Transformer">
 <meta name="twitter:description" content="论文题目Attention Is All You Need (Transformer)
@@ -392,7 +392,7 @@
 <p>另一方面，注意力机制已经成了序列建模和转换模型的必备部分，可以不受距离限制地建模输入和输出之间的依赖关系。现在绝大部分的注意力机制和RNN 捆绑一起使用。</p>
 <p>考虑到以上两点，Transformer 避开了RNN 结构，并且完全使用依赖注意力机制来捕捉输入和输出之间的全局依赖信息。Transformer 在8块P100上12个小时内就可以达到新的SOTA。</p>
 <h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg" class="full-image" alt="Transformer 模型架构图"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-<p>模型分成三部分，输入层，编/解码层，预测输出层。编/解码层具有相似结构，区别在于解码层的基础构件多了一个多头自注意力子层。网络基础构件分为有两个，一个为多头自注意力子层，另一个为前向全连接子层，两层之间使用残差连接和层归一化，即：$LayerNorm(x + Sublayer(x))$。编码层使用了6 个（多头自注意力子层+ 前向连接子层），解码层使用了6 个（2 个多头自注意力子层+ 前向连接子层）。下面详细介绍各个部分。</p>
+<p>模型分成三部分，输入层，编/解码层，预测输出层。编/解码层具有相似结构，区别在于解码层的基础构件多了一个多头自注意力子层。网络基础构件分为有两个，一个为多头自注意力子层，另一个为前向全连接子层。两层之间使用残差连接和层归一化，即：$LayerNorm(x + Sublayer(x))$，其中$Sublayer$为自注意力子层或者前向全连接层。编码层使用了6 个（多头自注意力子层+ 前向连接子层），解码层使用了6 个（2 个多头自注意力子层+ 前向连接子层）。下面详细介绍各个部分。</p>
 <h5 id="自注意力"><a href="#自注意力" class="headerlink" title="自注意力"></a>自注意力</h5><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx2.sinaimg.cn/mw690/70863da0ly1gfxanjnen4j20md0caq52.jpg" class="full-image" alt="多头注意力"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
 <p>注意力函数将输入向量映射成查询向量(query vector)，一系列键(key vector)、值对向量(value vector)，然后转化成输出向量。输出向量是一系列值向量的加权和，是与查询向量对应的隐层表示。每个值向量的权重由查询向量和对应键向量的相关性决定。</p>
 <p>每个输入通过3个转换矩阵，分别映射成查询向量、键值对向量。之后它们的运作方式如上图左边所示。查询向量和键向量做点积，然后除以一个常数进行缩放，经过Softmax 函数得到查询向量和键向量的权重，最后乘以与键向量对应的值向量并累加起来作为查询向量的表示。</p>
