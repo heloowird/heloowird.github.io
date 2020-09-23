@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gj114q8tvgj20sd0c20vv.jpg">
-<meta property="og:updated_time" content="2020-09-23T16:34:40.926Z">
+<meta property="og:updated_time" content="2020-09-23T16:41:09.796Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度文本匹配算法综述">
 <meta name="twitter:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
@@ -413,18 +413,18 @@
 <h3 id="文本匹配模型"><a href="#文本匹配模型" class="headerlink" title="文本匹配模型"></a>文本匹配模型</h3><p>在深度学习之前，文本匹配任务和其他NLP、图像方面一样，主要是基于特征的建模。基于TF-IDF，BM25等特征的计算文本相似度。浅层语义模型和主题模型很好利用了词共现信息来理解文本。如主题模型中，一个文本由不同权重的主题表示。传统方法对于词的语义信息以及语法信息的建模能力不足，往往很难胜任偏语义理解的任务。深度学习一开始在图像理解任务中表现远超传统基于人工特征的方法，进一步研究发现DNN善于捕捉不同的层次特征，几乎不需要繁杂且强依赖经验的特征工程。</p>
 <p>深度文本匹配模型可以分为两种基于表示（representation）的匹配和基于交互（interaction）的匹配。基于表示的匹配侧重于文本或句子的表示，两个文本分别通过DNN特征提取，最终映射到向量空间，最后计算两个向量的相似度。而基于交互的匹配认为基于表示的匹配丢失了低层次的匹配特征，而这种特征对于文本匹配任务是有正向作用的。所以基于交互的匹配会基于两个文本低层次交互匹配特征的基础上，通过DNN抽象更高层次的匹配特征，进而取得更好的匹配效果。</p>
 <p>总的来说，<strong>基于表示的匹配模型结构简单，适用于大规模召回，在工业界应用广泛；基于交互的匹配模型建模更加精细，适用于精排阶段</strong>。下面看看各个模型的结构。</p>
-<h3 id="基于表示的文本匹配"><a href="#基于表示的文本匹配" class="headerlink" title="基于表示的文本匹配"></a>基于表示的文本匹配</h3><h4 id="语义匹配"><a href="#语义匹配" class="headerlink" title="语义匹配"></a>语义匹配</h4><p>基于表示的匹配模型沿用孪生神经网络（Siamese Network）架构，共享网络权重的形式让模型更加简洁。如果不共享网络权重，则为伪孪生神经网络，在多模态学习经常用到，如图文匹配任务。</p>
+<h3 id="基于表示的文本匹配"><a href="#基于表示的文本匹配" class="headerlink" title="基于表示的文本匹配"></a>基于表示的文本匹配</h3><h4 id="语义匹配"><a href="#语义匹配" class="headerlink" title="语义匹配"></a>语义匹配</h4><p>基于表示的匹配模型沿用孪生神经网络（Siamese Network）架构，共享网络权重的形式让模型更加简洁。如果不共享网络权重，则为伪孪生神经网络，在多模态学习经常用到，如图文匹配任务。这类模型应用起来都比较简单。</p>
 <h5 id="DSSM-Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data"><a href="#DSSM-Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data" class="headerlink" title="DSSM - Learning Deep Structured Semantic Models for Web Search using Clickthrough Data"></a>DSSM - Learning Deep Structured Semantic Models for Web Search using Clickthrough Data</h5><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx1.sinaimg.cn/mw690/70863da0ly1gj114q8tvgj20sd0c20vv.jpg" class="full-image" alt="DSSM模型结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
 <p>DSSM，俗称“双塔模型”，微软2013年出品，很早地将DNN引入到实际应用中，后续在工业界广泛应用。本文中双塔模型仅用于网页搜索的排序阶段，相比传统排序方法，有4-5个点的显著提升。而在实际应用中，改变负样本集合，也可以将训练得到的模型用于召回阶段。</p>
 <p>DSSM模型采用了3层全连接网络对Query和文档分别进行编码，然后计算Query和给定文档的<code>cosine</code>相似度。推理阶段，直接作为文档和Query的相关性得分，用于排序。训练阶段，根据相关性得分计算各个文档在给定Query下的条件概率，然后计算最大化点击文档似然，一般会取<code>负log</code>作为Loss函数。</p>
 <p>训练细节：</p>
 <ul>
 <li>作为排序任务，一个训练样本由1个点击文档和4个展示未点击文档组成；</li>
-<li>使用字符n-gram来哈希词，将500k维单词空间向量降至30k维字符trigrams空间向量。一个好的词哈希需要平衡降维和冲突。</li>
+<li>使用字符n-gram来哈希词，将500k维词空间向量降至30k维字符trigrams空间向量。一个好的词哈希需要平衡降维和冲突。</li>
 <li>词哈希的另一个好处是很好解决了OOV问题。</li>
 </ul>
 <p>文章提到一个点，不同负样本采样策略对最终排序效果没什么影响。这个和Loss函数有些关系，如果使用Max Margin Loss，适当增加困难负样本会提升排序效果。</p>
-<p>总的来说，文章提出了一个简洁且使用的文本匹配框架，只需要将文本表示为语义空间下的低维稠密向量，使用相似性度量指导训练，从而得到较好的文本语义表示。从文本映射到语义空间有很多方法，后续论文在此基础上做了很多改进工作。</p>
+<p>总的来说，<strong>DSSM提出了一个简洁且使用的文本匹配框架，只需要将文本表示为语义空间下的低维稠密向量，使用相似性度量指导训练，从而得到较好的文本语义表示。</strong>从文本映射到语义空间有很多方法，后续论文在此基础上做了很多改进工作。</p>
 <h3 id="基于交互的文本匹配"><a href="#基于交互的文本匹配" class="headerlink" title="基于交互的文本匹配"></a>基于交互的文本匹配</h3><h4 id="语义匹配-1"><a href="#语义匹配-1" class="headerlink" title="语义匹配"></a>语义匹配</h4><h5 id="DeepMatch-A-Deep-Architecture-for-Matching-Short-Texts"><a href="#DeepMatch-A-Deep-Architecture-for-Matching-Short-Texts" class="headerlink" title="DeepMatch - A Deep Architecture for Matching Short Texts"></a>DeepMatch - A Deep Architecture for Matching Short Texts</h5><h6 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h6><h6 id="模型特点"><a href="#模型特点" class="headerlink" title="模型特点"></a>模型特点</h6><h4 id="相关性匹配"><a href="#相关性匹配" class="headerlink" title="相关性匹配"></a>相关性匹配</h4><h5 id="DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval"><a href="#DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval" class="headerlink" title="DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval"></a>DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval</h5><h6 id="模型结构-1"><a href="#模型结构-1" class="headerlink" title="模型结构"></a>模型结构</h6><h6 id="模型特点-1"><a href="#模型特点-1" class="headerlink" title="模型特点"></a>模型特点</h6>
       
     </div>
