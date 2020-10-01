@@ -96,7 +96,7 @@
 <meta property="og:description" content="论文题目Universal Language Model Fine-tuning for Text Classification(ULMFiT)
 背景介绍迁移学习对CV领域有着巨大影响，然而现存NLP领域的相关方法需要针对特定任务做相应修改，并从头开始训练。所以，本文提出了一种有效的文本分类的迁移学习方法—通用语言模型微调方法（Universal Language Model Fine-tunin">
 <meta property="og:image" content="http://wx4.sinaimg.cn/mw690/70863da0ly1g5nqtvhpo8j20zy0evdmj.jpg">
-<meta property="og:updated_time" content="2019-08-06T14:45:39.224Z">
+<meta property="og:updated_time" content="2020-10-01T00:22:01.600Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP论文阅读- ULMFiT">
 <meta name="twitter:description" content="论文题目Universal Language Model Fine-tuning for Text Classification(ULMFiT)
@@ -395,7 +395,7 @@
 <p>三步使用了相同的主框架：首先是embedding层，然后接三层LSTM层，最后接一个Softmax层。</p>
 <p>在目标分类任务微调中，为解决分类问题，加了两个全连接层：第一个全连接为bn+dropout+relu；第二个全连接层为bn+dropout+softmax，输出各个类别的概率。</p>
 <p>另外：第一个全连接的输入除了LSTM最后一层的最后一个隐层状态，还分别拼接了最后一层各个隐层状态经max-pool和mean-pool后的结果，尽可能地保真文档的信息。</p>
-<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>使用大规模通用领域语料预训练语言模型，文中用到的通用语料为Wikitext-103。使用具体的语言模型为：通过上文，预测下一个词。在大规模通用预训练时，可以在不同层提取不同级别的通用特征，期待和CV领域的IMAGENET模型类似。</p>
+<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>使用大规模通用领域语料预训练语言模型，文中用到的通用语料为Wikitext-103。使用具体的语言模型为：通过上文，预测下一个词，即从左到右建模。在大规模通用预训练时，不同模型层次提取不同级别的通用特征，这点期待和CV领域的IMAGENET模型达到l类似的效果。</p>
 <p>使用目标任务的语料微调语言模型。目标任务物料与通用语料的分布通常是不一样，所以需要针对目标任务预料语义特性，进行参数微调。这里使用了两个trick：</p>
 <ul>
 <li>每层学习到的特征不一样，需要进行不同程度的微调：越低层网络学习到的特征越基础，微调幅度应越小。所以每层设置不同的初始学习率。最后一层学习率为$\eta ^{l}$，则前一层学习率为的$\eta ^{l-1} = \eta^{l}/2.6$，依次类推.</li>

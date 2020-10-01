@@ -106,7 +106,7 @@
 
 特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周">
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1g90ttnthl2j20zg0pnqca.jpg">
-<meta property="og:updated_time" content="2020-07-03T15:07:10.771Z">
+<meta property="og:updated_time" content="2020-10-01T00:21:42.943Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP论文阅读- ELMo">
 <meta name="twitter:description" content="论文题目Deep Contextualized Word Representations (ELMo)
@@ -413,9 +413,9 @@
 <p>对于下游任务来说，ELMo 将每个token的表示集合$R_{k}$ 转换成一个向量，即$\textbf{ELMo}_{k} = E\left(R_{k};\Theta ^{task}\right)$。</p>
 <p>最简单地，当仅选择ELMo 最后一个biLSTM　层的输出: $\textbf{ELMo}_{k} = \textbf{h}_{k,j}^{LM}$。</p>
 <p>普遍来说$E$是一个根据不同任务对双向语言模型不同层进行加权的函数。<br>\begin{equation}<br>\textbf{ELMo}_{k}^{task} = E\left(R_{k};\Theta ^{task}\right) = \gamma^{task} \sum_{j=0}^{L}s_{j}^{task}\textbf{h}_{k,j}^{LM}<br>\end{equation}</p>
-<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>文章对char n-gram进行CNN编码，然后接两层highway层和一个投影层，将其映射成定长512维向量，然后经过两层隐藏单元为4196、输出维度为512的biLSTM层，从第一个biLSTM到第二个biLSTM加一个残差连接。相比固定词表的模式，char CNN 可以很好解决oov 问题。</p>
-<p>将双向语言模型在大规模语料中训练好后，把每个单词对应模型中的各层表示记录下来，然后让下游监督任务学习这些表示的线性组合。一般可以将$\textbf{x}_{k}$ 和$\textbf{ELMo}_{k}$ concat 起来，输入到监督任务中，接监督任务的RNN、CNN 或者全连接。在某些任务中，再次把$\textbf{ELMo}_{k}$ 和监督任务监督任务的输出层concat 起来可以提升监督任务的效果。</p>
-<p>另外, 文章发现对ELMo加入dropout 正则或者weight 加L2 loss，效果更佳。 同时，在多数下游任务中，进一步finetune 双向语言模型，效果也有提升。</p>
+<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>文章对Char n-gram进行CNN编码，然后接两层Highway层和一个投影层，将其映射成定长512维向量，然后经过两层隐藏单元为4196、输出维度为512的BiLSTM层，从第一个BiLSTM到第二个biLSTM加一个残差连接。相比固定词表的模式，Char CNN 可以很好解决oov 问题。</p>
+<p>将双向语言模型在大规模语料中训练好后，把每个单词对应模型中的各层表示记录下来，然后让下游监督任务学习这些表示的线性组合。一般可以将$\textbf{x}_{k}$ 和$\textbf{ELMo}_{k}$ 拼接起来作为接下来监督任务的输入，监督任务一般采用RNN、CNN 或者全连接层。在某些任务中，再次把$\textbf{ELMo}_{k}$ 和监督任务监督任务的输出层拼接起来可以提升监督任务的效果。</p>
+<p>另外, 文章发现对ELMo加入Rropout 正则或者权重入L2 正则，效果更佳。 同时，在多数下游任务中，进一步Finetune 双向语言模型，效果也有提升。</p>
 <h4 id="模型分析"><a href="#模型分析" class="headerlink" title="模型分析"></a>模型分析</h4><p>ELMo 认为语言模型不同层可以捕获不同级别的语言特性。高级别表示层可以获得语境相关的语义，而低级别表示层能够学习语法层面的信息。结合起来，可以很好的表示词。ELMo 相比ULMFiT，训练过程操作性更好。同时为使用复杂语言模型来获得词向量提供了新思路。</p>
 <p>参考资料：</p>
 <ol>
