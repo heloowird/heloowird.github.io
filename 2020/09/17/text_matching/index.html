@@ -95,8 +95,9 @@
 <meta property="og:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gj114q8tvgj20sd0c20vv.jpg">
 <meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gjg12ttq0hj20qf0bhn32.jpg">
+<meta property="og:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gjh5rjb7ovj20de0kjwhj.jpg">
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gjg12ohj5rj20sz0ek429.jpg">
-<meta property="og:updated_time" content="2020-10-07T14:11:34.116Z">
+<meta property="og:updated_time" content="2020-10-07T15:31:27.196Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度文本匹配算法综述">
 <meta name="twitter:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
@@ -435,13 +436,25 @@
 </ul>
 <span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx2.sinaimg.cn/mw690/70863da0ly1gjg12ttq0hj20qf0bhn32.jpg" class="full-image" alt="DeepMatch模型架构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
 <p>DeepMatch的架构如上图所示。首先，文章使用话题模型（LDA）来捕捉词之间的相关特征，并且利用不同话题分辨率（话题数越多，话题分辨率越高）来建立隐层连接关系。具体地：话题模型认为一个文档由若干话题组成（话题个数为超参数），一个话题又由若干单词组成。同一个词可能出现在多个话题中，但是概率不一样。低分辨率层某个主题的词可以通过共现关系连接到高分辨率层某个主题下，这样就起到了将专有话题转化为通用话题的效果。这些连接指导了神经网络不同层间神经单元的稀疏连接，起到抽象表示的作用，即图中的<code>p-layer</code>。然后，经过两个<code>p-layer</code>之后，接了一个全连接层；最后输入到匹配打分函数，计算文本的匹配度。</p>
-<p>总的来说，DeepMatch提出了基于交互的匹配模型的两个重要部件—-局部化和层次化，后续的论文对这个两个地方提出了不同的建模方法，局部化有词向量的余弦相似度，词共现矩阵，pair-wise的各种交互表示。层次化抽象采用了CNN，LSTM，Attention等方法。</p>
-<h5 id="MatchPyramid-Text-matching-as-image-recognition-2016"><a href="#MatchPyramid-Text-matching-as-image-recognition-2016" class="headerlink" title="MatchPyramid - Text matching as image recognition (2016)"></a>MatchPyramid - Text matching as image recognition (2016)</h5><h5 id="ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017"><a href="#ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017" class="headerlink" title="ESIM - Enhanced LSTM for Natural Language Inference (2017)"></a>ESIM - Enhanced LSTM for Natural Language Inference (2017)</h5><h4 id="相关性匹配"><a href="#相关性匹配" class="headerlink" title="相关性匹配"></a>相关性匹配</h4><p>相关性匹配主要指文本检索（Ad-hoc Retrival）相关任务。给定关键词组合，搜索相关文档，计算关键词组合和文档之间的相关性。</p>
+<p>总的来说，DeepMatch提出了基于交互的匹配模型的两个重要部件—-局部化和层次化，后续的论文对这个两个地方提出了不同的建模方法，局部化有词向量的余弦相似度，词共现矩阵，词向量Pair-wise基本操作等交互表示。层次化抽象采用了CNN，LSTM，Attention等方法。</p>
+<h5 id="MatchPyramid-Text-matching-as-image-recognition-2016"><a href="#MatchPyramid-Text-matching-as-image-recognition-2016" class="headerlink" title="MatchPyramid - Text matching as image recognition (2016)"></a>MatchPyramid - Text matching as image recognition (2016)</h5><p>论文题目简明扼要地点出了文章的核心点， 把文本匹配当作图像识别任务来处理，提出了MatchPyramid模型，如下图。既然看成是图像识别任务，那么需要解决两个问题：</p>
+<ol>
+<li>如何把两个文本转化成图片；</li>
+<li>如何像图像分类过程中捕捉边、角等特征来提取文本对的短语和句子匹配特征。</li>
+</ol>
+<span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx3.sinaimg.cn/mw690/70863da0ly1gjh5rjb7ovj20de0kjwhj.jpg" class="full-image" alt="MatchPyramid模型架构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<p>对于第一个问题，文章采用两个文本的单词的笛卡尔积形式来表示，每个像素(i, j))的值由第一个文本中第i个词和第二个文本中第j个词的关系确定。词的关系可以用两个词是否相同（指示函数），词向量余弦相似度，词向量点积来表示。其中余弦相似度可以看作是一个软指示函数或者语义指示函数，衡量两个词在语义层面的相似程度；点积可以看作是词向量各个维度作用的均值。</p>
+<p>接下来在第二个问题上，文章采用了两个（卷积+池化）来捕捉短语和句子层面的特征表示。第一个卷积层使用8个3×3的卷积核来提取n-gram特征或者n-term特征，接一个动态最大池化保留显著特征，动态池化可以将变长的句子转化成定长的向量。第二个卷积层采用16个2×4×4的3D卷积核以获取更高级别的特征表示，后接一个普通最大池化。</p>
+<p>MatchPyramid模型主要结构基本介绍完，剩下的使用MLP来计算最后的匹配得分。使用softmax计算文本对类别以及交叉熵来训练。</p>
+<p>MatchPyramid实验有一定的启发性。在释义识别任务中，指示函数表现比余弦函数效果要好，说明释义识别任务比较看作词匹配信息。无论在释义识别还是论文引用匹配任务中，点积函数的效果都要比余弦函数的好，因为实验发现词的点积越大，词的语义信息越丰富；而余弦函数相当于归一化的点积，从而减弱了这部分信息。</p>
+<p>另外，MatchPyramid是不是可以使用多个表示函数，从而构建一幅多通道图像呢？后面有文章基于个点进行了优化。</p>
+<h5 id="ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017"><a href="#ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017" class="headerlink" title="ESIM - Enhanced LSTM for Natural Language Inference (2017)"></a>ESIM - Enhanced LSTM for Natural Language Inference (2017)</h5><h4 id="相关性匹配"><a href="#相关性匹配" class="headerlink" title="相关性匹配"></a>相关性匹配</h4><p>相关性匹配主要指文本检索（Ad-hoc Retrival）相关任务。给定关键词组合，搜索相关文档，计算关键词组合和文档之间的相关性。</p>
 <h5 id="DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval-2016"><a href="#DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval-2016" class="headerlink" title="DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval (2016)"></a>DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval (2016)</h5><p>2016年由中科院郭嘉丰老师团队提出。DRMM详细分析和比较了语义匹配和相关性匹配各自的特点，并针对相关性匹配的三个特点进行建模，并在检索任务上取得了SOTA。本文是如何针对准确匹配、关键词重要性以及文档多样性建模的呢？先看看模型结构：<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx1.sinaimg.cn/mw690/70863da0ly1gjg12ohj5rj20sz0ek429.jpg" class="full-image" alt="DRMM模型结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
 <p>对于query中的每个词，计算其与文档所有词的相似度，然后根据相似度区间统计直方图。为了凸显准确匹配，特地将1作为一个区间，如果两个词完全匹配，其cosine相似度就是1。每个区间的统计值可以是单词计数、归一化、计数的log值。经过这一步之后，可以把关键词和文档的相似度映射成一个直方图统计特征。</p>
 <p>有了基础交互特征，接下来利用全连接前馈网络来学习层次化匹配特征。和其他语义匹配模型不同，文本检索任务不用考虑文档的全局语义，对位置不敏感，所以无须使用CNN来抽取层次化特征。同时也不需要K-max Pooling，这样做会截断信号，偏向于长文档。</p>
 <p>另外文章还提出了一个Term Gating Network，这个主要是针对query中各个词的重要度进行建模。一种最直接的想法是，用词逆文档频率（IDF）来表示，另一种使用词向量作为输入，单层网络+softmax计算各个词的重要性。前者参数个数为1，后者和词向量维度相同。</p>
 <p>文本检索本质是排序问题，文章采用triplet loss。实验发现采用log计数+IDF效果最好；词向量固定，维度不宜过小或者过大。</p>
+<p>总的来说，文章很好分析了语义匹配和相关性匹配的异同，并针对相关性匹配的三个要素建模，在检索任务上取得了很好的效果。</p>
 
       
     </div>
