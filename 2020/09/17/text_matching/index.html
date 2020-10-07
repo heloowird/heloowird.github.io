@@ -96,7 +96,7 @@
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gj114q8tvgj20sd0c20vv.jpg">
 <meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gjg12ttq0hj20qf0bhn32.jpg">
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gjg12ohj5rj20sz0ek429.jpg">
-<meta property="og:updated_time" content="2020-10-06T15:28:24.371Z">
+<meta property="og:updated_time" content="2020-10-07T14:11:34.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度文本匹配算法综述">
 <meta name="twitter:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
@@ -434,7 +434,7 @@
 <li>层次化，即在局部关系的底层特征空间基础上，运用非线性变化不同层次的抽象和组合，最终得到文本的全局匹配信息，供输出层使用。</li>
 </ul>
 <span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx2.sinaimg.cn/mw690/70863da0ly1gjg12ttq0hj20qf0bhn32.jpg" class="full-image" alt="DeepMatch模型架构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-<p>DeepMatch的架构如上图所示。首先，文章使用话题模型（LDA）来捕捉词之间的相关特征，并且利用不同话题分辨率（话题数越多，话题分辨率越高）来建立隐层连接关系。具体地：低分辨率层的词可以通过共现关系连接到高分辨率层，起到了将专有话题转化为通用话题的效果。这些连接指导了神经网络不同层间神经单元的稀疏连接，起到抽象表示的作用，即图中的<code>p-layer</code>。然后，经过两个<code>p-layer</code>之后，接了一个全连接层；最后输入到匹配打分函数，计算文本的匹配度。</p>
+<p>DeepMatch的架构如上图所示。首先，文章使用话题模型（LDA）来捕捉词之间的相关特征，并且利用不同话题分辨率（话题数越多，话题分辨率越高）来建立隐层连接关系。具体地：话题模型认为一个文档由若干话题组成（话题个数为超参数），一个话题又由若干单词组成。同一个词可能出现在多个话题中，但是概率不一样。低分辨率层某个主题的词可以通过共现关系连接到高分辨率层某个主题下，这样就起到了将专有话题转化为通用话题的效果。这些连接指导了神经网络不同层间神经单元的稀疏连接，起到抽象表示的作用，即图中的<code>p-layer</code>。然后，经过两个<code>p-layer</code>之后，接了一个全连接层；最后输入到匹配打分函数，计算文本的匹配度。</p>
 <p>总的来说，DeepMatch提出了基于交互的匹配模型的两个重要部件—-局部化和层次化，后续的论文对这个两个地方提出了不同的建模方法，局部化有词向量的余弦相似度，词共现矩阵，pair-wise的各种交互表示。层次化抽象采用了CNN，LSTM，Attention等方法。</p>
 <h5 id="MatchPyramid-Text-matching-as-image-recognition-2016"><a href="#MatchPyramid-Text-matching-as-image-recognition-2016" class="headerlink" title="MatchPyramid - Text matching as image recognition (2016)"></a>MatchPyramid - Text matching as image recognition (2016)</h5><h5 id="ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017"><a href="#ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017" class="headerlink" title="ESIM - Enhanced LSTM for Natural Language Inference (2017)"></a>ESIM - Enhanced LSTM for Natural Language Inference (2017)</h5><h4 id="相关性匹配"><a href="#相关性匹配" class="headerlink" title="相关性匹配"></a>相关性匹配</h4><p>相关性匹配主要指文本检索（Ad-hoc Retrival）相关任务。给定关键词组合，搜索相关文档，计算关键词组合和文档之间的相关性。</p>
 <h5 id="DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval-2016"><a href="#DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval-2016" class="headerlink" title="DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval (2016)"></a>DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval (2016)</h5><p>2016年由中科院郭嘉丰老师团队提出。DRMM详细分析和比较了语义匹配和相关性匹配各自的特点，并针对相关性匹配的三个特点进行建模，并在检索任务上取得了SOTA。本文是如何针对准确匹配、关键词重要性以及文档多样性建模的呢？先看看模型结构：<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx1.sinaimg.cn/mw690/70863da0ly1gjg12ohj5rj20sz0ek429.jpg" class="full-image" alt="DRMM模型结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
