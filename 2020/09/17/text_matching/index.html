@@ -89,17 +89,18 @@
 
 <meta name="description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度文本匹配算法综述">
+<meta property="og:title" content="文本匹配论文">
 <meta property="og:url" content="https://heloowird.github.io/2020/09/17/text_matching/index.html">
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gj114q8tvgj20sd0c20vv.jpg">
 <meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gjg12ttq0hj20qf0bhn32.jpg">
 <meta property="og:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gjh5rjb7ovj20de0kjwhj.jpg">
+<meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gk9ptjdruxj20dh0hf769.jpg">
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gjg12ohj5rj20sz0ek429.jpg">
-<meta property="og:updated_time" content="2020-10-07T15:31:27.196Z">
+<meta property="og:updated_time" content="2020-11-01T14:10:30.649Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度文本匹配算法综述">
+<meta name="twitter:title" content="文本匹配论文">
 <meta name="twitter:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
 <meta name="twitter:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gj114q8tvgj20sd0c20vv.jpg">
 
@@ -135,7 +136,7 @@
 
 
 
-  <title> 深度文本匹配算法综述 | Heloowird </title>
+  <title> 文本匹配论文 | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -298,7 +299,7 @@
             
             
               
-                深度文本匹配算法综述
+                文本匹配论文
               
             
           </h1>
@@ -353,7 +354,7 @@
 
           
           
-             <span id="/2020/09/17/text_matching/" class="leancloud_visitors" data-flag-title="深度文本匹配算法综述">
+             <span id="/2020/09/17/text_matching/" class="leancloud_visitors" data-flag-title="文本匹配论文">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -426,7 +427,7 @@
 <li>使用字符n-gram来哈希词，将500k维词空间向量降至30k维字符trigrams空间向量。一个好的词哈希需要平衡降维和冲突。</li>
 <li>词哈希的另一个好处是很好解决了OOV问题。</li>
 </ul>
-<p>文章提到一个点，不同负样本采样策略对最终排序效果没什么影响。这个和Loss函数有些关系，如果使用Max Margin Loss，适当增加困难负样本会提升排序效果。</p>
+<p>文章提到一个点，不同负样本采样策略对最终排序效果没什么影响。个人觉得适当增加困难样本对排序效果有一定帮助。这个和Loss函数有些关系，如果使用Max Margin Loss，适当增加困难负样本会提升排序效果。</p>
 <p>总的来说，<strong>DSSM提出了一个简洁且使用的文本匹配框架，只需要将文本表示为语义空间下的低维稠密向量，使用相似性度量指导训练，从而得到较好的文本语义表示。</strong>从文本映射到语义空间有很多方法，后续论文在此基础上做了很多改进工作。</p>
 <h3 id="基于交互的文本匹配"><a href="#基于交互的文本匹配" class="headerlink" title="基于交互的文本匹配"></a>基于交互的文本匹配</h3><p>从上文可知，基于表示的匹配模型简单，却忽视了文本浅层特征的交互。基于交互的文本匹配致力于挖掘文本之间交互作用。常见交互特征有词之间语义相似度、是否匹配等。在交互特征基础上，抽取层次匹配特征，得到两文本匹配固定维度的表示，最后通过相似度或相关性函数来度量文本的关系。</p>
 <h4 id="语义匹配-1"><a href="#语义匹配-1" class="headerlink" title="语义匹配"></a>语义匹配</h4><h5 id="DeepMatch-A-Deep-Architecture-for-Matching-Short-Texts-2013"><a href="#DeepMatch-A-Deep-Architecture-for-Matching-Short-Texts-2013" class="headerlink" title="DeepMatch - A Deep Architecture for Matching Short Texts (2013)"></a>DeepMatch - A Deep Architecture for Matching Short Texts (2013)</h5><p>DeepMatch是较早提出的基于交互的匹配模型，也是比较早借鉴图像领域已有的经验应用到文本上。基于交互文本匹配框架基本沿用了局部化和层次化两大步：</p>
@@ -448,7 +449,12 @@
 <p>MatchPyramid模型主要结构基本介绍完，剩下的使用MLP来计算最后的匹配得分。使用softmax计算文本对类别以及交叉熵来训练。</p>
 <p>MatchPyramid实验有一定的启发性。在释义识别任务中，指示函数表现比余弦函数效果要好，说明释义识别任务比较看作词匹配信息。无论在释义识别还是论文引用匹配任务中，点积函数的效果都要比余弦函数的好，因为实验发现词的点积越大，词的语义信息越丰富；而余弦函数相当于归一化的点积，从而减弱了这部分信息。</p>
 <p>另外，MatchPyramid是不是可以使用多个表示函数，从而构建一幅多通道图像呢？后面有文章基于个点进行了优化。</p>
-<h5 id="ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017"><a href="#ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017" class="headerlink" title="ESIM - Enhanced LSTM for Natural Language Inference (2017)"></a>ESIM - Enhanced LSTM for Natural Language Inference (2017)</h5><h4 id="相关性匹配"><a href="#相关性匹配" class="headerlink" title="相关性匹配"></a>相关性匹配</h4><p>相关性匹配主要指文本检索（Ad-hoc Retrival）相关任务。给定关键词组合，搜索相关文档，计算关键词组合和文档之间的相关性。</p>
+<h5 id="ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017"><a href="#ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017" class="headerlink" title="ESIM - Enhanced LSTM for Natural Language Inference (2017)"></a>ESIM - Enhanced LSTM for Natural Language Inference (2017)</h5><p>ESIM是一个基于LSTM的文本匹配模型。ESIM的网络结构如下：<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx2.sinaimg.cn/mw690/70863da0ly1gk9ptjdruxj20dh0hf769.jpg" class="full-image" alt="ESIM模型架构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
+<p>ESIM使用BiLSTM对输入进行编码，可以得到各个词的隐层或输出层表示。输入编码完成之后为交互层，即文中的局部推理建模(Local Inference Modeling)。这里的BiLSTM也可以替换为句法TreeLSTM。句法信息有助于理解句子的结构，对NLI任务有一定帮助。</p>
+<p>交互层的核心是注意力机制。对于句子的每个词，计算该词与另一个句子所有词的语义相关程度。计算方法为：该词隐层表示作为query，另一个句子的每个词隐层作为key和value对；然后计算query和key的点乘作为该词与另一个句子各个词的非归一化权重；经归一化后乘以各自的value；这样就得到该词与另一个句子的语义相关信息。使用注意力的方法需要计算任意词与另一个句子各个词的加权语义，即交互信息，维度和该词隐层表示一样。同样，另一个句子每个词可采用同样的方式进行交互处理。最后将每个词的原始隐层，与另一个句子的加权语义信息，以及它们之间的逐元素相乘和做差拼接起来作为组合层的输入。</p>
+<p>组合层仍采用BiLSTM或者TreeLSTM来进一步增强交互信息。预测层使用池化思想，将不同时间步的交互信息转化成定长向量，用到了平均池化和最大池化，然后将两个句子池化后向量拼接起来，丢个下一个MLP分类器。</p>
+<p>整个模型结构相对简单，不涉及复杂的网络结构。最后实验结果表明单纯使用BiLSTM在SNLI任务上就超过了之前的模型，加入语法TreeLSTM效果更绝对提升了6个百分点。后面细化实验证明了各个部件对整体效果均有正向作用。</p>
+<h4 id="相关性匹配"><a href="#相关性匹配" class="headerlink" title="相关性匹配"></a>相关性匹配</h4><p>相关性匹配主要指文本检索（Ad-hoc Retrival）相关任务。给定关键词组合，搜索相关文档，计算关键词组合和文档之间的相关性。</p>
 <h5 id="DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval-2016"><a href="#DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval-2016" class="headerlink" title="DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval (2016)"></a>DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval (2016)</h5><p>2016年由中科院郭嘉丰老师团队提出。DRMM详细分析和比较了语义匹配和相关性匹配各自的特点，并针对相关性匹配的三个特点进行建模，并在检索任务上取得了SOTA。本文是如何针对准确匹配、关键词重要性以及文档多样性建模的呢？先看看模型结构：<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx1.sinaimg.cn/mw690/70863da0ly1gjg12ohj5rj20sz0ek429.jpg" class="full-image" alt="DRMM模型结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span></p>
 <p>对于query中的每个词，计算其与文档所有词的相似度，然后根据相似度区间统计直方图。为了凸显准确匹配，特地将1作为一个区间，如果两个词完全匹配，其cosine相似度就是1。每个区间的统计值可以是单词计数、归一化、计数的log值。经过这一步之后，可以把关键词和文档的相似度映射成一个直方图统计特征。</p>
 <p>有了基础交互特征，接下来利用全连接前馈网络来学习层次化匹配特征。和其他语义匹配模型不同，文本检索任务不用考虑文档的全局语义，对位置不敏感，所以无须使用CNN来抽取层次化特征。同时也不需要K-max Pooling，这样做会截断信号，偏向于长文档。</p>
