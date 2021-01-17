@@ -89,7 +89,7 @@
 
 <meta name="description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
 <meta property="og:type" content="article">
-<meta property="og:title" content="文本匹配论文">
+<meta property="og:title" content="文本匹配深度模型综述">
 <meta property="og:url" content="https://heloowird.github.io/2020/09/17/text_matching/index.html">
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
@@ -98,9 +98,9 @@
 <meta property="og:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gjh5rjb7ovj20de0kjwhj.jpg">
 <meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gk9ptjdruxj20dh0hf769.jpg">
 <meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gjg12ohj5rj20sz0ek429.jpg">
-<meta property="og:updated_time" content="2020-11-01T14:10:30.649Z">
+<meta property="og:updated_time" content="2021-01-17T15:24:29.885Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="文本匹配论文">
+<meta name="twitter:title" content="文本匹配深度模型综述">
 <meta name="twitter:description" content="文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。自然语言推理任务：给定一个前提条件（premise），判断另一个假设（hypothesis）与之相">
 <meta name="twitter:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1gj114q8tvgj20sd0c20vv.jpg">
 
@@ -136,7 +136,7 @@
 
 
 
-  <title> 文本匹配论文 | Heloowird </title>
+  <title> 文本匹配深度模型综述 | Heloowird </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -299,7 +299,7 @@
             
             
               
-                文本匹配论文
+                文本匹配深度模型综述
               
             
           </h1>
@@ -354,7 +354,7 @@
 
           
           
-             <span id="/2020/09/17/text_matching/" class="leancloud_visitors" data-flag-title="文本匹配论文">
+             <span id="/2020/09/17/text_matching/" class="leancloud_visitors" data-flag-title="文本匹配深度模型综述">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -416,7 +416,7 @@
 <p>对于侧重点1，自然语言推理和问答中主要衡量语义相似度，释义识别中的两个文本是对同一观点的不同表达，基本没有词或者短语上的共现。而文本检索中文档中是否包含检索词仍然是最重要的特征。侧重点2说明：相比文本检索多个关键词的相互独立，语义匹配更依赖词之间的组合信息。侧重点3认为语义匹配通常是考虑整个文本的全局所表达的含义；而检索任务中，文档存在单主题反复论述和多主题一起表达等假设，所以相关性匹配只需要考虑检索词命中文档部分主题。不同NLP任务的侧重方面不同，在文本建模时需要考虑对这些特征的表示和抽象。</p>
 <h3 id="文本匹配模型"><a href="#文本匹配模型" class="headerlink" title="文本匹配模型"></a>文本匹配模型</h3><p>在深度学习之前，文本匹配任务和其他NLP、图像方面一样，主要是基于特征的建模。基于TF-IDF，BM25等特征的计算文本相似度。浅层语义模型和主题模型很好利用了词共现信息来理解文本。如主题模型中，一个文本由不同权重的主题表示。传统方法对于词的语义信息以及语法信息的建模能力不足，往往很难胜任偏语义理解的任务。深度学习一开始在图像理解任务中表现远超传统基于人工特征的方法，进一步研究发现DNN善于捕捉不同的层次特征，几乎不需要繁杂且强依赖经验的特征工程。</p>
 <p>深度文本匹配模型可以分为两种基于表示（representation）的匹配和基于交互（interaction）的匹配。基于表示的匹配侧重于文本或句子的表示，两个文本分别通过DNN特征提取，最终映射到向量空间，最后计算两个向量的相似度。而基于交互的匹配认为基于表示的匹配丢失了低层次的匹配特征，而这种特征对于文本匹配任务是有正向作用的。所以基于交互的匹配会基于两个文本低层次交互匹配特征的基础上，通过DNN抽象更高层次的匹配特征，进而取得更好的匹配效果。</p>
-<p>总的来说，<strong>基于表示的匹配模型结构简单，适用于大规模召回，在工业界应用广泛；基于交互的匹配模型建模更加精细，适用于精排阶段</strong>。下面看看各个模型的结构。</p>
+<p>总的来说，<strong>基于表示的匹配模型结构简单，适用于大规模召回，在工业界应用广泛；基于交互的匹配模型建模更加精细，适用于精排阶段</strong>。下面看看一些经典模型的结构。</p>
 <h3 id="基于表示的文本匹配"><a href="#基于表示的文本匹配" class="headerlink" title="基于表示的文本匹配"></a>基于表示的文本匹配</h3><h4 id="语义匹配"><a href="#语义匹配" class="headerlink" title="语义匹配"></a>语义匹配</h4><p>基于表示的匹配模型沿用孪生神经网络（Siamese Network）架构，共享网络权重的形式让模型更加简洁。如果不共享网络权重，则为伪孪生神经网络，在多模态学习经常用到，如图文匹配任务。这类模型应用起来都比较简单。</p>
 <h5 id="DSSM-Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data-2013"><a href="#DSSM-Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data-2013" class="headerlink" title="DSSM - Learning Deep Structured Semantic Models for Web Search using Clickthrough Data (2013)"></a>DSSM - Learning Deep Structured Semantic Models for Web Search using Clickthrough Data (2013)</h5><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx1.sinaimg.cn/mw690/70863da0ly1gj114q8tvgj20sd0c20vv.jpg" class="full-image" alt="DSSM模型结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
 <p>DSSM，俗称“双塔模型”，微软2013年出品，很早地将DNN引入到实际应用中，后续在工业界广泛应用。本文中双塔模型仅用于网页搜索的排序阶段，相比传统排序方法，有4-5个点的显著提升。而在实际应用中，改变负样本集合，也可以将训练得到的模型用于召回阶段。</p>
@@ -461,6 +461,8 @@
 <p>另外文章还提出了一个Term Gating Network，这个主要是针对query中各个词的重要度进行建模。一种最直接的想法是，用词逆文档频率（IDF）来表示，另一种使用词向量作为输入，单层网络+softmax计算各个词的重要性。前者参数个数为1，后者和词向量维度相同。</p>
 <p>文本检索本质是排序问题，文章采用triplet loss。实验发现采用log计数+IDF效果最好；词向量固定，维度不宜过小或者过大。</p>
 <p>总的来说，文章很好分析了语义匹配和相关性匹配的异同，并针对相关性匹配的三个要素建模，在检索任务上取得了很好的效果。</p>
+<h3 id="文本匹配总结"><a href="#文本匹配总结" class="headerlink" title="文本匹配总结"></a>文本匹配总结</h3><p>基于表示的匹配模型结构简单，适用于大规模召回，在工业界应用广泛；基于交互的匹配模型建模更加精细，适用于精排阶段。</p>
+<p>从匹配角度出发，文本匹配可以推广到搜索推荐领域，两个文本就演变成query 和文档、用户标签和感兴趣的内容。</p>
 
       
     </div>
@@ -641,7 +643,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#文本匹配任务"><span class="nav-number">1.</span> <span class="nav-text">文本匹配任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本匹配模型"><span class="nav-number">2.</span> <span class="nav-text">文本匹配模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于表示的文本匹配"><span class="nav-number">3.</span> <span class="nav-text">基于表示的文本匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#语义匹配"><span class="nav-number">3.1.</span> <span class="nav-text">语义匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DSSM-Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data-2013"><span class="nav-number">3.1.1.</span> <span class="nav-text">DSSM - Learning Deep Structured Semantic Models for Web Search using Clickthrough Data (2013)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于交互的文本匹配"><span class="nav-number">4.</span> <span class="nav-text">基于交互的文本匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#语义匹配-1"><span class="nav-number">4.1.</span> <span class="nav-text">语义匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DeepMatch-A-Deep-Architecture-for-Matching-Short-Texts-2013"><span class="nav-number">4.1.1.</span> <span class="nav-text">DeepMatch - A Deep Architecture for Matching Short Texts (2013)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MatchPyramid-Text-matching-as-image-recognition-2016"><span class="nav-number">4.1.2.</span> <span class="nav-text">MatchPyramid - Text matching as image recognition (2016)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017"><span class="nav-number">4.1.3.</span> <span class="nav-text">ESIM - Enhanced LSTM for Natural Language Inference (2017)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关性匹配"><span class="nav-number">4.2.</span> <span class="nav-text">相关性匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval-2016"><span class="nav-number">4.2.1.</span> <span class="nav-text">DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval (2016)</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#文本匹配任务"><span class="nav-number">1.</span> <span class="nav-text">文本匹配任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本匹配模型"><span class="nav-number">2.</span> <span class="nav-text">文本匹配模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于表示的文本匹配"><span class="nav-number">3.</span> <span class="nav-text">基于表示的文本匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#语义匹配"><span class="nav-number">3.1.</span> <span class="nav-text">语义匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DSSM-Learning-Deep-Structured-Semantic-Models-for-Web-Search-using-Clickthrough-Data-2013"><span class="nav-number">3.1.1.</span> <span class="nav-text">DSSM - Learning Deep Structured Semantic Models for Web Search using Clickthrough Data (2013)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于交互的文本匹配"><span class="nav-number">4.</span> <span class="nav-text">基于交互的文本匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#语义匹配-1"><span class="nav-number">4.1.</span> <span class="nav-text">语义匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DeepMatch-A-Deep-Architecture-for-Matching-Short-Texts-2013"><span class="nav-number">4.1.1.</span> <span class="nav-text">DeepMatch - A Deep Architecture for Matching Short Texts (2013)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MatchPyramid-Text-matching-as-image-recognition-2016"><span class="nav-number">4.1.2.</span> <span class="nav-text">MatchPyramid - Text matching as image recognition (2016)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017"><span class="nav-number">4.1.3.</span> <span class="nav-text">ESIM - Enhanced LSTM for Natural Language Inference (2017)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关性匹配"><span class="nav-number">4.2.</span> <span class="nav-text">相关性匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DRMM-A-Deep-Relevance-Matching-Model-for-Ad-hoc-Retrieval-2016"><span class="nav-number">4.2.1.</span> <span class="nav-text">DRMM - A Deep Relevance Matching Model for Ad-hoc Retrieval (2016)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本匹配总结"><span class="nav-number">5.</span> <span class="nav-text">文本匹配总结</span></a></li></ol></div>
             
 
           </div>
@@ -664,7 +666,7 @@
         <div class="copyright" >
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
