@@ -6,15 +6,15 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,40 +66,39 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="machine learning," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="machine learning,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
+<meta name="description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。 在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
+<meta name="keywords" content="machine learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
 <meta property="og:url" content="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
-<meta property="og:updated_time" content="2017-04-09T06:55:17.000Z">
+<meta property="og:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。 在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2026-06-14T03:07:02.866Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
-<meta name="twitter:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。
-在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
+<meta name="twitter:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。 在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
 
 
 
@@ -127,7 +126,7 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/">
 
 
 
@@ -167,7 +166,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Heloowird</span>
         <span class="logo-line-after"><i></i></span>
@@ -197,7 +196,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -207,7 +206,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -217,7 +216,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -227,7 +226,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -237,7 +236,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -276,14 +275,14 @@
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content="">
+    <meta itemprop="description" content>
     <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Heloowird">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
+      <img style="display:none;" itemprop="url image" alt="Heloowird" src>
     </span>
   </span>
 
@@ -322,7 +321,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -382,7 +381,7 @@
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。</p>
 <p>在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏。为什么不使用0-1分类误差或者均方差呢？</p>
-<h3 id="交叉熵误差和0-1分类误差"><a href="#交叉熵误差和0-1分类误差" class="headerlink" title="交叉熵误差和0-1分类误差"></a>交叉熵误差和0-1分类误差</h3><p>为说明这个问题，可以先从一个例子出发。例如预测某天天气情况（下雨、晴天、阴天），需要收集湿度、温度、云种等数据。在多分类且类别互斥问题中，通常选用<em>softmax函数</em><sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="external">1</a>]</sup>作为神经网络输出层的激活函数。现在假设有3个样本，在神经网络分类模型某个训练阶段前向传播过程中最后输出层的输出结果如下：</p>
+<h3 id="交叉熵误差和0-1分类误差"><a href="#交叉熵误差和0-1分类误差" class="headerlink" title="交叉熵误差和0-1分类误差"></a>交叉熵误差和0-1分类误差</h3><p>为说明这个问题，可以先从一个例子出发。例如预测某天天气情况（下雨、晴天、阴天），需要收集湿度、温度、云种等数据。在多分类且类别互斥问题中，通常选用<em>softmax函数</em><sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="noopener">1</a>]</sup>作为神经网络输出层的激活函数。现在假设有3个样本，在神经网络分类模型某个训练阶段前向传播过程中最后输出层的输出结果如下：</p>
 <div class="table-container">
 <table>
 <thead>
@@ -441,23 +440,23 @@
 </table>
 </div>
 <p>我们发现，模型的分类误差依然为1/3=0.33。直观上看，第二次模型比第一次更好：前两个预测正确样本的预测标签概率更接近1，同时最后一个样本虽然依然被错误分类，但是预测下雨的概率增大。所以，很容易看出0-1误差太过笼统，不适合作为模型的训练误差。</p>
-<p>而使用交叉熵损失函数来度量训练误差，上例第一个模型中第一个样本的误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-((ln(0.3)*0) + (ln(0.3)*0) + (ln(0.4)*1)) = -ln(0.4)</div></pre></td></tr></table></figure></p>
-<p>具体的交叉熵计算公式参见<sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="external">1</a>]</sup>。因此，第一个模型的平均交叉熵误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(ln(0.4) + ln(0.4) + ln(0.1)) / 3 = 1.38</div></pre></td></tr></table></figure></p>
-<p>同样的，第二个模型的平均交叉熵误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(ln(0.7) + ln(0.7) + ln(0.3)) / 3 = 0.64</div></pre></td></tr></table></figure></p>
+<p>而使用交叉熵损失函数来度量训练误差，上例第一个模型中第一个样本的误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-((ln(0.3)*0) + (ln(0.3)*0) + (ln(0.4)*1)) = -ln(0.4)</span><br></pre></td></tr></table></figure></p>
+<p>具体的交叉熵计算公式参见<sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归" target="_blank" rel="noopener">1</a>]</sup>。因此，第一个模型的平均交叉熵误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-(ln(0.4) + ln(0.4) + ln(0.1)) / 3 = 1.38</span><br></pre></td></tr></table></figure></p>
+<p>同样的，第二个模型的平均交叉熵误差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-(ln(0.7) + ln(0.7) + ln(0.3)) / 3 = 0.64</span><br></pre></td></tr></table></figure></p>
 <p>可以看到，第二个模型的平均交叉熵误差比第一个模型的误差更小。交叉熵损失函数考虑了样本预测结果接近正确标签的程度，预测结果越接近正确标签，模型误差越小。</p>
-<p>再看看均方差，第一个模型第一个样本的训练均方差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.3 - 0)^2 + (0.3 - 0)^2 + (0.4 - 1)^2 = 0.09 + 0.09 + 0.36 = 0.54</div></pre></td></tr></table></figure></p>
-<p>第一个模型的均方差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.54 + 0.54 + 1.34) / 3 = 0.81</div></pre></td></tr></table></figure></p>
-<p>第二个模型的均方差比第一个模型的更小，为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(0.14 + 0.14 + 0.74) / 3 = 0.34</div></pre></td></tr></table></figure></p>
+<p>再看看均方差，第一个模型第一个样本的训练均方差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(0.3 - 0)^2 + (0.3 - 0)^2 + (0.4 - 1)^2 = 0.09 + 0.09 + 0.36 = 0.54</span><br></pre></td></tr></table></figure></p>
+<p>第一个模型的均方差为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(0.54 + 0.54 + 1.34) / 3 = 0.81</span><br></pre></td></tr></table></figure></p>
+<p>第二个模型的均方差比第一个模型的更小，为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(0.14 + 0.14 + 0.74) / 3 = 0.34</span><br></pre></td></tr></table></figure></p>
 <p>从误差数值变化来看，均方差和交叉熵误差一样，从第一个模型到第二个更好的模型时，误差有明显的下降。在衡量模型好坏方面差别似乎不大，但均方差更强调预测错误的样本。</p>
 <p>以上通过具体例子可以看到，在训练神经网络分类模型训练过程中，交叉熵误差比0-1分类误差更好；但是很难说服我们交叉熵误差比均方差更好。</p>
-<h3 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h3><p>从均方差公式来看:<br>\begin{equation} \label{1}<br>L(y, x) = {\frac 12}{(y - a)^2}<br>\end{equation}<br>其中$x$为输入，$y$为label，$a$为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>在训练神经网络时，根据梯度下降算法，最后一层参数$w$ 和$b$的更新公式为：<br>\begin{equation} \label{2}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot {\frac {\partial L} {\partial w}} \\\\<br>b \leftarrow b - \eta \cdot {\frac {\partial L} {\partial b}}<br>\end{cases}<br>\end{equation}<br>根据链式求导法则：<br>\begin{equation} \label{3}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = -(y -a) \cdot {\sigma}’(z) \cdot x \\\\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = -(y -a) \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>而$\sigma’(z)$由不同激活函数决定：<br>\begin{equation} \label{4}<br>\begin{cases}<br>{\sigma}’(z) = \sigma(z) \cdot (1-\sigma(z)) &amp;\text{if } \sigma(z) = \frac {1}{1+e^{-z}} \\\\<br>{\sigma}’(z_k) = \sigma(z_k) \cdot (1-\sigma(z_k)) &amp;\text{if } \sigma(z) = softmax(z)<br>\end{cases}<br>\end{equation}<br>所以参数最终更新公式为：<br>\begin{equation} \label{5}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z)) \cdot x \\\\<br>b \leftarrow b - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))<br>\end{cases}<br>\end{equation}<br>当预测值接近真实值(即$\sigma(z)$ 或者$(1-\sigma(z))$接近$0$时，更新项$\eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))$接近0，梯度出现“消失”现象。举例来说，当输出值$a$为$0.9$时，$a \cdot (1-a) = 0.09$，使得$w$和$b$的更新项变得很小，导致参数几乎不更新。</p>
-<p>而交叉熵损失误差恰好可以避免这一点。为简单起见，以二分类为例，交叉熵损失函数为：<br>\begin{equation} \label{6}<br>L(y, x) = -(y \cdot lna + (1-y) \cdot ln(1-a))<br>\end{equation}<br>同样$x$为输入，$y$为label，$a$为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>那么，根据链式求导法则，$w$和$b$的更新公式为：<br>\begin{equation} \label{7}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot x \\\\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>根据公式\eqref{4}，消去$a \cdot (1-a)$，得：<br>\begin{equation} \label{8}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot x \\\\<br>b \leftarrow b - \eta \cdot (a-y)<br>\end{cases}<br>\end{equation}<br>比较公式\eqref{5}和公式\eqref{8}易知，引发“梯度消失”的项已经消除，当输出值$a$为$0.9$时，$0.09$这项乘式因子变为1，故$w$和$b$更新更快。</p>
+<h3 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h3><p>从均方差公式来看:<br>\begin{equation} \label{1}<br>L(y, x) = {\frac 12}{(y - a)^2}<br>\end{equation}<br>其中$x$为输入，$y$为label，$a$为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>在训练神经网络时，根据梯度下降算法，最后一层参数$w$ 和$b$的更新公式为：<br>\begin{equation} \label{2}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot {\frac {\partial L} {\partial w}} \\<br>b \leftarrow b - \eta \cdot {\frac {\partial L} {\partial b}}<br>\end{cases}<br>\end{equation}<br>根据链式求导法则：<br>\begin{equation} \label{3}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = -(y -a) \cdot {\sigma}’(z) \cdot x \\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = -(y -a) \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>而$\sigma’(z)$由不同激活函数决定：<br>\begin{equation} \label{4}<br>\begin{cases}<br>{\sigma}’(z) = \sigma(z) \cdot (1-\sigma(z)) &amp;\text{if } \sigma(z) = \frac {1}{1+e^{-z}} \\<br>{\sigma}’(z_k) = \sigma(z_k) \cdot (1-\sigma(z_k)) &amp;\text{if } \sigma(z) = softmax(z)<br>\end{cases}<br>\end{equation}<br>所以参数最终更新公式为：<br>\begin{equation} \label{5}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z)) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))<br>\end{cases}<br>\end{equation}<br>当预测值接近真实值(即$\sigma(z)$ 或者$(1-\sigma(z))$接近$0$时，更新项$\eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))$接近0，梯度出现“消失”现象。举例来说，当输出值$a$为$0.9$时，$a \cdot (1-a) = 0.09$，使得$w$和$b$的更新项变得很小，导致参数几乎不更新。</p>
+<p>而交叉熵损失误差恰好可以避免这一点。为简单起见，以二分类为例，交叉熵损失函数为：<br>\begin{equation} \label{6}<br>L(y, x) = -(y \cdot lna + (1-y) \cdot ln(1-a))<br>\end{equation}<br>同样$x$为输入，$y$为label，$a$为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>那么，根据链式求导法则，$w$和$b$的更新公式为：<br>\begin{equation} \label{7}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot x \\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>根据公式\eqref{4}，消去$a \cdot (1-a)$，得：<br>\begin{equation} \label{8}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y)<br>\end{cases}<br>\end{equation}<br>比较公式\eqref{5}和公式\eqref{8}易知，引发“梯度消失”的项已经消除，当输出值$a$为$0.9$时，$0.09$这项乘式因子变为1，故$w$和$b$更新更快。</p>
 <p>综上所知，使用交叉熵误差使得整个梯度下降算法对参数更新方式比均方差的更加有效率。</p>
 <h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏，而不使用0-1分类误差或者均方差。以上的误差均为训练过程中对模型好坏的度量。而在测试过程中，通常使用0-1误差，即分类准确率指标，更贴近应用层面。</p>
 <p>参考资料：</p>
 <ol>
-<li><a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" target="_blank" rel="external">UFLDL Softmax回归</a></li>
-<li><a href="https://jamesmccaffrey.wordpress.com/2013/11/05/why-you-should-use-cross-entropy-error-instead-of-classification-error-or-mean-squared-error-for-neural-network-classifier-training/" target="_blank" rel="external">Why You Should Use Cross-Entropy Error Instead Of Classification Error Or Mean Squared Error For Neural Network Classifier Training</a></li>
+<li><a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" target="_blank" rel="noopener">UFLDL Softmax回归</a></li>
+<li><a href="https://jamesmccaffrey.wordpress.com/2013/11/05/why-you-should-use-cross-entropy-error-instead-of-classification-error-or-mean-squared-error-for-neural-network-classifier-training/" target="_blank" rel="noopener">Why You Should Use Cross-Entropy Error Instead Of Classification Error Or Mean Squared Error For Neural Network Classifier Training</a></li>
 </ol>
 
       
@@ -555,7 +554,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -566,9 +565,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460"
-               alt="Heloowird" />
+          <img class="site-author-image" itemprop="image" src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460" alt="Heloowird">
           <p class="site-author-name" itemprop="name">Heloowird</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
@@ -663,10 +660,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

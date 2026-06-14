@@ -6,15 +6,15 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,40 +66,39 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="shell,python,simple-http-server," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="python,shell,simple-http-server,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。
-Linux上内置Python，而Pytho">
+<meta name="description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。 Linux上内置Python，而Pytho">
+<meta name="keywords" content="python,shell,simple-http-server">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Shell 脚本管理Python 内置的HTTPServer 服务">
 <meta property="og:url" content="https://heloowird.github.io/2016/07/21/manager_python_http_server/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。
-Linux上内置Python，而Pytho">
-<meta property="og:updated_time" content="2019-02-14T15:57:36.293Z">
+<meta property="og:description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。 Linux上内置Python，而Pytho">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2026-06-14T03:07:02.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Shell 脚本管理Python 内置的HTTPServer 服务">
-<meta name="twitter:description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。
-Linux上内置Python，而Pytho">
+<meta name="twitter:description" content="前言在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。 Linux上内置Python，而Pytho">
 
 
 
@@ -127,7 +126,7 @@ Linux上内置Python，而Pytho">
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2016/07/21/manager_python_http_server/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2016/07/21/manager_python_http_server/">
 
 
 
@@ -167,7 +166,7 @@ Linux上内置Python，而Pytho">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Heloowird</span>
         <span class="logo-line-after"><i></i></span>
@@ -197,7 +196,7 @@ Linux上内置Python，而Pytho">
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -207,7 +206,7 @@ Linux上内置Python，而Pytho">
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -217,7 +216,7 @@ Linux上内置Python，而Pytho">
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -227,7 +226,7 @@ Linux上内置Python，而Pytho">
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -237,7 +236,7 @@ Linux上内置Python，而Pytho">
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -276,14 +275,14 @@ Linux上内置Python，而Pytho">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content="">
+    <meta itemprop="description" content>
     <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Heloowird">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
+      <img style="display:none;" itemprop="url image" alt="Heloowird" src>
     </span>
   </span>
 
@@ -322,7 +321,7 @@ Linux上内置Python，而Pytho">
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -381,7 +380,7 @@ Linux上内置Python，而Pytho">
 
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在日常工作中，需要向其他人展示静态页面、或分享文件。使用Apache作为web服务器来展示、共享这些静态页面或者文件会存在一些不便：一般会在多台Linux机器上同时工作，需搭建多个Apache，需花费一定的时间；同时会有多个文件或者Demo存在不同的工作目录下，如果使用Apache，需要拷贝到指定目录下（或者配置目录为web根目录），不够方便、快捷。</p>
-<p>Linux上内置Python，而Python自带一个SimpleHTTPServer类，只需要运行下面的一行代码便可启动一个web服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python -m SimpleHTTPServer [port]</div></pre></td></tr></table></figure></p>
+<p>Linux上内置Python，而Python自带一个SimpleHTTPServer类，只需要运行下面的一行代码便可启动一个web服务器：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> python -m SimpleHTTPServer [port]</span><br></pre></td></tr></table></figure></p>
 <p>在浏览器上输入<code>http://[机器名]:[port]</code>，便可以访问到该目录下的所有文件。运行该命令的目录为web服务器的根目录，只需要保证对外共享的静态页面、或文件放在该目录下，其他人就可以通过HTTP方式访问。如果不指定port，会默认使用8000。所以，在不同工作目录下，只需以不同的端口启动HTTPServer即可。</p>
 <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>当一台机器上启动多个SimpleHTTTPServer时，会碰到若干问题：忘记哪些端口已经使用过，或者忘记哪个目录已经处于共享状态，同时对一些很久以前启动的HTTP服务需要停掉以减轻机器负荷等。因此，本文旨在介绍如何使用Shell脚本来管理一台机器上多个HTTPServer。</p>
 <p>根据上述罗列的问题，分别对应三个功能：</p>
@@ -393,8 +392,8 @@ Linux上内置Python，而Pytho">
 <h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>首先启动web服务比较简单，直接使用上述命令，在末尾加上<code>&amp;</code>以保持web服务后台运行。在此之前，需要判断指定端口是否占用。使用<code>netstat</code>获得端口使用信息，然后使用<code>grep</code>进行查询指定端口是否已经在使用。</p>
 <p>其次列出web服务的各项信息，方便找出哪些端口占用、哪些目录已经共享，同时列出进程号，为停止某个web服务做准备。这里使用<code>ps</code>命令，找出所有名字中含有“SimpleHTTPServer”的进程。在Linux中，一切皆以文件的形式进行管理，进程也不例外，只需要使用<code>ls －l /proc/[id]</code>就可以找出启动该进程的目录，也就是web服务的根目录。</p>
 <p>最后是停掉web服务。根据上文所描述的列出web服务信息，可以轻易某个web服务找到对应进程id，然后通过<code>kill [id]</code>即可关闭对应的web服务。关闭所有的web服务，只是重复上述过程即可，直到没有可以kill掉的进程为止。</p>
-<p>代码结构主要包括3个脚本：启动web服务对应start_http.sh，显示web服务对应list_http.sh，停止web服务对应stop_http.sh。为了方便，可以使用<code>alias</code>设置别名。在<code>.bashrc</code>或者<code>.bash_profile</code>文件中里面添如下面配置，然后source修过后的文件生效。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">alias start_http=&apos;sh [the_absolute_path_of_your_shell_dir]/start_http.sh&apos;</div><div class="line">alias list_http=&apos;sh [the_absolute_path_of_your_shell_dir]/list_http.sh&apos;</div><div class="line">alias stop_http=&apos;sh [the_absolute_path_of_your_shell_dir]/stop_http.sh&apos;</div></pre></td></tr></table></figure></p>
-<h3 id="后语"><a href="#后语" class="headerlink" title="后语"></a>后语</h3><p>我在工作中使用这套脚本来管理Linux机器上的多个web服务，用起来很省心、顺手，特此分享出来。详细代码在<a href="https://github.com/heloowird/manager_http_server" target="_blank" rel="external">github</a>，欢迎试用。</p>
+<p>代码结构主要包括3个脚本：启动web服务对应start_http.sh，显示web服务对应list_http.sh，停止web服务对应stop_http.sh。为了方便，可以使用<code>alias</code>设置别名。在<code>.bashrc</code>或者<code>.bash_profile</code>文件中里面添如下面配置，然后source修过后的文件生效。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias start_http='sh [the_absolute_path_of_your_shell_dir]/start_http.sh'</span><br><span class="line">alias list_http='sh [the_absolute_path_of_your_shell_dir]/list_http.sh'</span><br><span class="line">alias stop_http='sh [the_absolute_path_of_your_shell_dir]/stop_http.sh'</span><br></pre></td></tr></table></figure></p>
+<h3 id="后语"><a href="#后语" class="headerlink" title="后语"></a>后语</h3><p>我在工作中使用这套脚本来管理Linux机器上的多个web服务，用起来很省心、顺手，特此分享出来。详细代码在<a href="https://github.com/heloowird/manager_http_server" target="_blank" rel="noopener">github</a>，欢迎试用。</p>
 
       
     </div>
@@ -418,9 +417,9 @@ Linux上内置Python，而Pytho">
       
         <div class="post-tags">
           
-            <a href="/tags/shell/" rel="tag"># shell</a>
-          
             <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/shell/" rel="tag"># shell</a>
           
             <a href="/tags/simple-http-server/" rel="tag"># simple-http-server</a>
           
@@ -495,7 +494,7 @@ Linux上内置Python，而Pytho">
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -506,9 +505,7 @@ Linux上内置Python，而Pytho">
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460"
-               alt="Heloowird" />
+          <img class="site-author-image" itemprop="image" src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460" alt="Heloowird">
           <p class="site-author-name" itemprop="name">Heloowird</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
@@ -603,10 +600,10 @@ Linux上内置Python，而Pytho">
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

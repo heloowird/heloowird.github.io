@@ -6,15 +6,15 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,47 +66,43 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="nlp," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="nlp,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="论文题目Attention Is All You Need (Transformer)
-背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。
-另一方面，注意力机制已经成了序">
+<meta name="description" content="论文题目Attention Is All You Need (Transformer) 背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。 另一方面，注意力机制已经成了序">
+<meta name="keywords" content="nlp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NLP论文阅读- Transformer">
 <meta property="og:url" content="https://heloowird.github.io/2020/03/08/nlp_pr_transformer/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="论文题目Attention Is All You Need (Transformer)
-背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。
-另一方面，注意力机制已经成了序">
-<meta property="og:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg">
-<meta property="og:image" content="https://wx2.sinaimg.cn/mw690/70863da0ly1gfxanjnen4j20md0caq52.jpg">
-<meta property="og:image" content="https://wx4.sinaimg.cn/mw690/70863da0ly1gge59l3742j20jn04r3z4.jpg">
-<meta property="og:updated_time" content="2020-07-04T13:34:39.648Z">
+<meta property="og:description" content="论文题目Attention Is All You Need (Transformer) 背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。 另一方面，注意力机制已经成了序">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://heloowird.github.io/images/blog_img/transformer-model-arch.png">
+<meta property="og:image" content="https://heloowird.github.io/images/blog_img/transformer-multihead-attention.png">
+<meta property="og:image" content="https://heloowird.github.io/images/blog_img/why_self_attention_in_transformer.png">
+<meta property="og:updated_time" content="2026-06-14T03:07:02.869Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP论文阅读- Transformer">
-<meta name="twitter:description" content="论文题目Attention Is All You Need (Transformer)
-背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。
-另一方面，注意力机制已经成了序">
-<meta name="twitter:image" content="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg">
+<meta name="twitter:description" content="论文题目Attention Is All You Need (Transformer) 背景介绍RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态h(t) 依赖前一个隐层状态h(t-1) 和当前输入x(t) 。这种结构性问题导致RNN 训练时难以并行。 另一方面，注意力机制已经成了序">
+<meta name="twitter:image" content="https://heloowird.github.io/images/blog_img/transformer-model-arch.png">
 
 
 
@@ -134,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2020/03/08/nlp_pr_transformer/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2020/03/08/nlp_pr_transformer/">
 
 
 
@@ -174,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Heloowird</span>
         <span class="logo-line-after"><i></i></span>
@@ -204,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -214,7 +210,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -224,7 +220,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -234,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -244,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -283,14 +279,14 @@
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content="">
+    <meta itemprop="description" content>
     <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Heloowird">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
+      <img style="display:none;" itemprop="url image" alt="Heloowird" src>
     </span>
   </span>
 
@@ -329,7 +325,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -391,9 +387,9 @@
 <h4 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h4><p>RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态<code>h(t)</code> 依赖前一个隐层状态<code>h(t-1)</code> 和当前输入<code>x(t)</code> 。这种结构性问题导致RNN 训练时难以并行。</p>
 <p>另一方面，注意力机制已经成了序列建模和转换模型的必备部分，可以不受距离限制地建模输入和输出之间的依赖关系。现在绝大部分的注意力机制和RNN 捆绑一起使用。</p>
 <p>考虑到以上两点，Transformer 避开了RNN 结构，并且完全使用依赖注意力机制来捕捉输入和输出之间的全局依赖信息。Transformer 在8块P100上12个小时内就可以达到新的SOTA。</p>
-<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx3.sinaimg.cn/mw690/70863da0ly1gfsshhd9wpj20ij0mggpb.jpg" class="full-image" alt="Transformer 模型架构图"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/transformer-model-arch.png" class="full-image" alt="Transformer 模型架构图"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
 <p>模型分成三部分，输入层，编/解码层，预测输出层。编/解码层具有相似结构，区别在于解码层的基础构件多了一个多头自注意力子层。网络基础构件分为有两个，一个为多头自注意力子层，另一个为前向全连接子层。两层之间使用残差连接和层归一化，即：$LayerNorm(x + Sublayer(x))$，其中$Sublayer$为自注意力子层或者前向全连接层。编码层使用了6 个（多头自注意力子层+ 前向连接子层），解码层使用了6 个（2 个多头自注意力子层+ 前向连接子层）。下面详细介绍各个部分。</p>
-<h5 id="自注意力"><a href="#自注意力" class="headerlink" title="自注意力"></a>自注意力</h5><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx2.sinaimg.cn/mw690/70863da0ly1gfxanjnen4j20md0caq52.jpg" class="full-image" alt="多头注意力"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<h5 id="自注意力"><a href="#自注意力" class="headerlink" title="自注意力"></a>自注意力</h5><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/transformer-multihead-attention.png" class="full-image" alt="多头注意力"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
 <p>注意力函数将输入向量映射成查询向量(query vector)，一系列键(key vector)、值对向量(value vector)，然后转化成输出向量。输出向量是一系列值向量的加权和，是与查询向量对应的隐层表示。每个值向量的权重由查询向量和对应键向量的相关性决定。</p>
 <p>每个输入通过3个转换矩阵，分别映射成查询向量、键值对向量。之后它们的运作方式如上图左边所示。查询向量和键向量做点积，然后除以一个常数进行缩放，经过Softmax 函数得到查询向量和键向量的权重，最后乘以与键向量对应的值向量并累加起来作为查询向量的表示。</p>
 <p>对于输出层，当前输出只和前面的输出有关。需要使用掩盖的方式来屏蔽后面输入的影响，通常会把Softmax 的输入设置成负无穷，权重接近为0，即忽略相应输入的值向量对当前输出的影响。所以就有了$Mask(opt.)$。</p>
@@ -409,12 +405,12 @@
 <li>使用残差Dropout，即任意子层（前向全连接和自注意力）的输出应用Dropout。Embedding层和位置编码相加之后也应用Dropout；</li>
 <li>使用注意力Dropout，即使用Softmax计算完权重后，应用Dropout，然后再乘以值向量。</li>
 </ol>
-<h4 id="为什么使用自注意力"><a href="#为什么使用自注意力" class="headerlink" title="为什么使用自注意力"></a>为什么使用自注意力</h4><p>对比RNN和CNN可从3个指标进行考虑：每层的总计算量，并行计算量（最小串行操作数），输入输出序列任意位置的最大路径长度。前面两个指标好理解，第三个指标可以理解为输入和输出的连结复杂度。输入输出序列任意两个位置连结起来越短，越容易捕捉到长距离依赖关系。自注意力层任意位置是直接相连的，所以最大路径长度为$O(1)$。3个指标的对比如下图所示。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx4.sinaimg.cn/mw690/70863da0ly1gge59l3742j20jn04r3z4.jpg" class="full-image" alt="不同网络结构的3个指标比较"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span> </p>
+<h4 id="为什么使用自注意力"><a href="#为什么使用自注意力" class="headerlink" title="为什么使用自注意力"></a>为什么使用自注意力</h4><p>对比RNN和CNN可从3个指标进行考虑：每层的总计算量，并行计算量（最小串行操作数），输入输出序列任意位置的最大路径长度。前面两个指标好理解，第三个指标可以理解为输入和输出的连结复杂度。输入输出序列任意两个位置连结起来越短，越容易捕捉到长距离依赖关系。自注意力层任意位置是直接相连的，所以最大路径长度为$O(1)$。3个指标的对比如下图所示。<br><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/why_self_attention_in_transformer.png" class="full-image" alt="不同网络结构的3个指标比较"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span> </p>
 <p>其中<code>n</code>为输入或输出长度，<code>d</code>为隐层向量维度。可以看出，相比于RNN，自注意力结构的每层总计算量更小，因为<code>n</code>通常比<code>d</code>小。另外，自注意力结构的串行操作数和最路径长度更小。相比于CNN，CNN的每层总计算量比RNN更大，多了卷积核大小的倍数。最大路径长度仍然比自注意力结构更大，意味着捕获长距离依赖关系能力更差。</p>
 <p>总的来说，自注意力结构计算量更小，并行度好，且捕捉长距离依赖关系能力更强。还有一个好处是，模型解释能力更好，利用自注意力权重，方便可视化输入和输出的依赖关系的强度。</p>
 <p>参考资料：</p>
 <ol>
-<li><a href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank" rel="external">Attention Is All You Need</a></li>
+<li><a href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank" rel="noopener">Attention Is All You Need</a></li>
 </ol>
 
       
@@ -512,7 +508,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -523,9 +519,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460"
-               alt="Heloowird" />
+          <img class="site-author-image" itemprop="image" src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460" alt="Heloowird">
           <p class="site-author-name" itemprop="name">Heloowird</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
@@ -620,10 +614,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

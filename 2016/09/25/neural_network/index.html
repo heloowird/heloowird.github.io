@@ -6,15 +6,15 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,43 +66,42 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="machine learning," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="machine learning,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
-原理先看看神经网络的">
+<meta name="description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。 原理先看看神经网络的">
+<meta name="keywords" content="machine learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="神经网络的基本原理和数学推导">
 <meta property="og:url" content="https://heloowird.github.io/2016/09/25/neural_network/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
-原理先看看神经网络的">
-<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg">
-<meta property="og:image" content="http://wx2.sinaimg.cn/mw690/70863da0gy1fvt2rb11bmj20hl0e03zy.jpg">
-<meta property="og:updated_time" content="2018-10-01T14:15:48.444Z">
+<meta property="og:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。 原理先看看神经网络的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://heloowird.github.io/images/blog_img/neural-network-node-weight.jpg">
+<meta property="og:image" content="https://heloowird.github.io/images/blog_img/neural-network-architecture.jpg">
+<meta property="og:updated_time" content="2026-06-14T03:24:19.796Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="神经网络的基本原理和数学推导">
-<meta name="twitter:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。
-原理先看看神经网络的">
-<meta name="twitter:image" content="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg">
+<meta name="twitter:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。 原理先看看神经网络的">
+<meta name="twitter:image" content="https://heloowird.github.io/images/blog_img/neural-network-node-weight.jpg">
 
 
 
@@ -130,7 +129,7 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2016/09/25/neural_network/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2016/09/25/neural_network/">
 
 
 
@@ -170,7 +169,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Heloowird</span>
         <span class="logo-line-after"><i></i></span>
@@ -200,7 +199,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -210,7 +209,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -220,7 +219,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -230,7 +229,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -240,7 +239,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -279,14 +278,14 @@
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content="">
+    <meta itemprop="description" content>
     <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Heloowird">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
+      <img style="display:none;" itemprop="url image" alt="Heloowird" src>
     </span>
   </span>
 
@@ -325,7 +324,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -384,22 +383,22 @@
 
       
         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>先看看神经网络的基本概念－节点和权重。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx1.sinaimg.cn/mw690/70863da0gy1fvt2r6e9uuj20g20dqjry.jpg" class="full-image" alt="节点和连接权重" title="节点和连接权重"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>其中$x_0$, $x_1$, $x_2$ 为标量，分别表示该层各个节点的输出，如果该层为输入层，则为输入特征，$X$为特征的行向量形式。$w_0$, $w_1$, $w_2$ 同为标量，表示当前节点到与之相连节点的权重，该参数控制着节点对与之连接节点的影响程度，是需要学习的参数，$W$ 为权重的行向量形式，在这里为$(w_0、w_1、w_2)$。$b$ 为bias(偏置)，可理解为线性变换中y轴方向的偏移，也是需要学习的参数。$g(x)$ 为激活函数，一般为非线性函数，是神经网络的核心部分。常用的激活函数有sigmoid，tanh，softmax，relu函数等，作用为对线性输入进行非线性转换，起到特征组合与变换的效果。则图中的红色节点的输出$a$ 为：<br>\begin{equation} \label{1}<br>z = W \cdot X^T + b = w_0 \cdot x_0 + w_1 \cdot x_1 + w_2 \cdot x_2 + b<br>\end{equation}<br>\begin{equation} \label{2}<br>a = g(z)<br>\end{equation}</p>
-<p>有了节点，通过组合和连接方式，就可以组成基本的神经网络，如下图所示。<br><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="http://wx2.sinaimg.cn/mw690/70863da0gy1fvt2rb11bmj20hl0e03zy.jpg" class="full-image" alt="神经网络" title="神经网络"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>神经网络包含不同的层(Layer)，不同的层又由多个节点组成。层是一个逻辑单元，是同等位置节点形成的，因为层与层之间的连接实际为不同层节点之间的连接。图中的神经网络由三层组成，分别为输入层，隐藏层和输出层。以神经网络进行二分类任务为例，训练样本为$(X_i, y_i)$, $i = 1,2,…,N$; $y_i \in \{0, 1\}$; 其中$X_i$ 为第$i$ 个训练数据的特征向量，$y_i$ 是第$i$ 个训练数据的真实label值。那么，输入层输入的数据为$X_i$，依次计算隐藏层各个节点的值，最后输出层会计算出一个预测值$\hat{y_i}$，这个预测值与真实label值${y_i}$可能存在一定的差距。而神经网络的终极目标是使得尽可能多的训练数据的预测值越来越接近其真实label值。用数学的语言来说：$\min \frac{1}{N}{\sum_{1}^{N}(\left | \hat{y_i} - {y_i} \right | )}$ 。一般地，$\left | \hat{y_i} - {y_i} \right |$ 可以用其他损失函数代替，如平方损失函数$(\hat{y_i} - {y_i})^2$。这里损失函数不作为重点，具体可参考<a href="http://heloowird.com/2017/03/08/diff_errors_of_neural_network/" target="_blank" rel="external">这里</a>。为了求导方便，加上$\frac{1}{2}$ ，所以，最后的损失函数（或者代价函数）为<br>\begin{equation} \label{3}<br>L(w, b) = \min_{w, b}\frac{1}{N}{\sum_{1}^{N}\frac{1}{2}(\hat{y_i} - {y_i})^2}<br>\end{equation}</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>先看看神经网络的基本概念－节点和权重。<br><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/neural-network-node-weight.jpg" class="full-image" alt="节点和连接权重" title="节点和连接权重"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>其中$x_0$, $x_1$, $x_2$ 为标量，分别表示该层各个节点的输出，如果该层为输入层，则为输入特征，$X$为特征的行向量形式。$w_0$, $w_1$, $w_2$ 同为标量，表示当前节点到与之相连节点的权重，该参数控制着节点对与之连接节点的影响程度，是需要学习的参数，$W$ 为权重的行向量形式，在这里为$(w_0、w_1、w_2)$。$b$ 为bias(偏置)，可理解为线性变换中y轴方向的偏移，也是需要学习的参数。$g(x)$ 为激活函数，一般为非线性函数，是神经网络的核心部分。常用的激活函数有sigmoid，tanh，softmax，relu函数等，作用为对线性输入进行非线性转换，起到特征组合与变换的效果。则图中的红色节点的输出$a$ 为：<br>\begin{equation} \label{1}<br>z = W \cdot X^T + b = w_0 \cdot x_0 + w_1 \cdot x_1 + w_2 \cdot x_2 + b<br>\end{equation}<br>\begin{equation} \label{2}<br>a = g(z)<br>\end{equation}</p>
+<p>有了节点，通过组合和连接方式，就可以组成基本的神经网络，如下图所示。<br><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/neural-network-architecture.jpg" class="full-image" alt="神经网络" title="神经网络"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>神经网络包含不同的层(Layer)，不同的层又由多个节点组成。层是一个逻辑单元，是同等位置节点形成的，因为层与层之间的连接实际为不同层节点之间的连接。图中的神经网络由三层组成，分别为输入层，隐藏层和输出层。以神经网络进行二分类任务为例，训练样本为$(X<em>i, y_i)$, $i = 1,2,…,N$; $y_i \in {0, 1}$; 其中$X_i$ 为第$i$ 个训练数据的特征向量，$y_i$ 是第$i$ 个训练数据的真实label值。那么，输入层输入的数据为$X_i$，依次计算隐藏层各个节点的值，最后输出层会计算出一个预测值$\hat{y_i}$，这个预测值与真实label值${y_i}$可能存在一定的差距。而神经网络的终极目标是使得尽可能多的训练数据的预测值越来越接近其真实label值。用数学的语言来说：$\min \frac{1}{N}{\sum</em>{1}^{N}(\left | \hat{y<em>i} - {y_i} \right | )}$ 。一般地，$\left | \hat{y_i} - {y_i} \right |$ 可以用其他损失函数代替，如平方损失函数$(\hat{y_i} - {y_i})^2$。这里损失函数不作为重点，具体可参考<a href="http://heloowird.com/2017/03/08/diff_errors_of_neural_network/" target="_blank" rel="noopener">这里</a>。为了求导方便，加上$\frac{1}{2}$ ，所以，最后的损失函数（或者代价函数）为<br>\begin{equation} \label{3}<br>L(w, b) = \min</em>{w, b}\frac{1}{N}{\sum_{1}^{N}\frac{1}{2}(\hat{y_i} - {y_i})^2}<br>\end{equation}</p>
 <p>接下来如何让预测值越来越接近真实值呢？我们知道，特征是固定，调节的是参数$w$ 和$b$。如果$w$ 和$b$ 分别改变$\Delta w$ 和$\Delta b$，那么预测值$\hat{y}$ 会慢慢地接近$y$。那$\Delta w$ 和$\Delta b$ 如何得到呢？<br>令$\theta = (w, b)$，$f$为损失函数， 则$L(\theta) = f(\theta)$的泰勒一阶展开式为：<br>\begin{equation} \label{4}<br>f(\theta) \approx f({\theta}_0) + \frac{\partial f({\theta}_0)}{\partial {\theta}_0} \cdot (\theta - {\theta}_0)<br>\end{equation}</p>
 <p>要使得$f(\theta) &lt; f({\theta}_0)$, 可让：<br>\begin{equation} \label{5}<br>\theta - {\theta}_0 = - \alpha \cdot \frac{\partial f(\theta)}{\partial \theta} \text{;    }(\alpha &gt; 0)<br>\end{equation}</p>
-<p>使用随机梯度下降时，$\theta$ 替换为第t次更新后的参数${\theta}_{t+1}$，${\theta}_0$ 替换为第t次更新前的参数${\theta}_{t}$ 。每次参数更新方法为：<br>\begin{equation} \label{6}<br>{\theta}_{t+1} = \theta_{t} - \alpha \cdot \frac{\partial f(\theta_{t})}{\partial \theta_{t}}<br>\end{equation}</p>
-<h3 id="参数更新推导"><a href="#参数更新推导" class="headerlink" title="参数更新推导"></a>参数更新推导</h3><p>神经网络有很多层参数，需要对每层参数都进行更新操作。为了方便说明每层参数的更新方式，我们对神经网络前向传播公式\eqref{1} 和公式\eqref{2} 重新定义：<br>\begin{equation} \label{7}<br>z_{j}^{(l+1)} = W^{(l)} \cdot a^{(l)T} + b^{(l)} = (\sum_{i} w_{ij}^{(l)} \cdot a_i^{(l)}) + b_j^{(l+1)}<br>\end{equation}<br>\begin{equation} \label{8}<br>a_{j}^{(l+1)} = g(z_{j}^{(l+1)})<br>\end{equation}<br>其中$a_{j}^{l}$ 表示第$l$ 层第$j$ 个节点，$w_{ij}^{(l)}$ 表示连接第$l$ 层第$i$ 个节点到第$(l+1)$ 层第$j$ 个节点的权重。$b_j^{(l+1)}$ 为第$(l+1)$ 层第$j$ 个节点的偏置。<br>在图2中，为了更新参数，需要分别计算$\frac{\partial L}{\partial w_{ij}^{(1)}}$ 和$\frac{\partial L}{\partial w_{ij}^{(2)}}$。因为$w_{ij}^{(2)}$ 离L较近，我们先求$\frac{\partial L}{\partial w_{ij}^{(2)}}$，根据链式求导法则：</p>
+<p>使用随机梯度下降时，$\theta$ 替换为第t次更新后的参数${\theta}<em>{t+1}$，${\theta}_0$ 替换为第t次更新前的参数${\theta}</em>{t}$ 。每次参数更新方法为：<br>\begin{equation} \label{6}<br>{\theta}<em>{t+1} = \theta</em>{t} - \alpha \cdot \frac{\partial f(\theta<em>{t})}{\partial \theta</em>{t}}<br>\end{equation}</p>
+<h3 id="参数更新推导"><a href="#参数更新推导" class="headerlink" title="参数更新推导"></a>参数更新推导</h3><p>神经网络有很多层参数，需要对每层参数都进行更新操作。为了方便说明每层参数的更新方式，我们对神经网络前向传播公式\eqref{1} 和公式\eqref{2} 重新定义：<br>\begin{equation} \label{7}<br>z<em>{j}^{(l+1)} = W^{(l)} \cdot a^{(l)T} + b^{(l)} = (\sum</em>{i} w<em>{ij}^{(l)} \cdot a_i^{(l)}) + b_j^{(l+1)}<br>\end{equation}<br>\begin{equation} \label{8}<br>a</em>{j}^{(l+1)} = g(z<em>{j}^{(l+1)})<br>\end{equation}<br>其中$a</em>{j}^{l}$ 表示第$l$ 层第$j$ 个节点，$w<em>{ij}^{(l)}$ 表示连接第$l$ 层第$i$ 个节点到第$(l+1)$ 层第$j$ 个节点的权重。$b_j^{(l+1)}$ 为第$(l+1)$ 层第$j$ 个节点的偏置。<br>在图2中，为了更新参数，需要分别计算$\frac{\partial L}{\partial w</em>{ij}^{(1)}}$ 和$\frac{\partial L}{\partial w<em>{ij}^{(2)}}$。因为$w</em>{ij}^{(2)}$ 离L较近，我们先求$\frac{\partial L}{\partial w_{ij}^{(2)}}$，根据链式求导法则：</p>
 <script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot \frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} \cdot \frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}}</script><p>根据公式\eqref{8}，得：</p>
 <script type="math/tex; mode=display">\frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} ＝ g'(z_{j}^{(3)})</script><p>根据公式\eqref{7}，得：</p>
-<script type="math/tex; mode=display">\frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}} ＝ a_{i}^{(2)}</script><p>所以：<br>\begin{equation} \label{9}<br>\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot g’(z_{j}^{(3)}) \cdot a_{i}^{(2)}<br>\end{equation}<br>同样地，通过$L$ 对$w_{ij}^{(1)}$ 进行链式求导得：</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot \frac{\partial a_{j}^{(2)}}{\partial z_{j}^{(2)}} \cdot \frac{\partial z_{j}^{(2)}}{\partial w_{ij}^{(1)}}</script><p>化简得：<br>\begin{equation} \label{10}<br>\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot g’(z_{j}^{(2)}) \cdot a_{i}^{(1)}<br>\end{equation}<br>仔细对比公式\eqref{9} 和公式\eqref{10}，我们发现，等式右边前两项具有相同形式，令$\delta_{j} = \frac{\partial L}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot \frac{\partial a_{j}}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot g’(z_{j})$，所以公式\eqref{9} 和公式\eqref{10}可统一表示为：<br>\begin{equation} \label{11}<br>\frac{\partial L}{\partial w_{ij}^{(l)}} = \delta_{j}^{(l+1)} \cdot a_{i}^{(l)}<br>\end{equation}</p>
-<p>这里主要是$\frac{\partial L}{\partial a_{j}^{(2)}}$稍微复杂些，如果再回过头看看公式\eqref{7}，$a_{j}^{(2)}$和$z_{i}^{(3)}$是有联系的，有：<br>\begin{equation} \label{12}<br>\frac{\partial L}{\partial a_{j}^{(l)}} ＝ \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot \frac{\partial z_{i}^{(l+1)}}{\partial a_{j}^{(l)}} = \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot w_{ji} ＝ \sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}<br>\end{equation}<br>两边同时乘以$g’(z_{j})$，则：<br>\begin{equation} \label{13}<br>\delta_{j}^{(l)} ＝ (\sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}) \cdot g’(z_{j}^{l})<br>\end{equation}<br>综上推导，神经网络反向传播时，可以依靠公式\eqref{13}，将训练误差依次传递到前面的层；然后利用公式\eqref{11}对各层的参数进行更新。经过反复训练，最终可以得到一个有效的分类器。详细实现代码在<a href="https://github.com/heloowird/ann" target="_blank" rel="external">github</a>，欢迎试用。</p>
+<script type="math/tex; mode=display">\frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}} ＝ a_{i}^{(2)}</script><p>所以：<br>\begin{equation} \label{9}<br>\frac{\partial L}{\partial w<em>{ij}^{(2)}} = \frac{\partial L}{\partial a</em>{j}^{(3)}} \cdot g’(z<em>{j}^{(3)}) \cdot a</em>{i}^{(2)}<br>\end{equation}<br>同样地，通过$L$ 对$w_{ij}^{(1)}$ 进行链式求导得：</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot \frac{\partial a_{j}^{(2)}}{\partial z_{j}^{(2)}} \cdot \frac{\partial z_{j}^{(2)}}{\partial w_{ij}^{(1)}}</script><p>化简得：<br>\begin{equation} \label{10}<br>\frac{\partial L}{\partial w<em>{ij}^{(1)}} ＝ \frac{\partial L}{\partial a</em>{j}^{(2)}} \cdot g’(z<em>{j}^{(2)}) \cdot a</em>{i}^{(1)}<br>\end{equation}<br>仔细对比公式\eqref{9} 和公式\eqref{10}，我们发现，等式右边前两项具有相同形式，令$\delta<em>{j} = \frac{\partial L}{\partial z</em>{j}} = \frac{\partial L}{\partial a<em>{j}} \cdot \frac{\partial a</em>{j}}{\partial z<em>{j}} = \frac{\partial L}{\partial a</em>{j}} \cdot g’(z<em>{j})$，所以公式\eqref{9} 和公式\eqref{10}可统一表示为：<br>\begin{equation} \label{11}<br>\frac{\partial L}{\partial w</em>{ij}^{(l)}} = \delta<em>{j}^{(l+1)} \cdot a</em>{i}^{(l)}<br>\end{equation}</p>
+<p>这里主要是$\frac{\partial L}{\partial a<em>{j}^{(2)}}$稍微复杂些，如果再回过头看看公式\eqref{7}，$a</em>{j}^{(2)}$和$z<em>{i}^{(3)}$是有联系的，有：<br>\begin{equation} \label{12}<br>\frac{\partial L}{\partial a</em>{j}^{(l)}} ＝ \sum<em>{i}\frac{\partial L}{\partial z</em>{i}^{l+1}} \cdot \frac{\partial z<em>{i}^{(l+1)}}{\partial a</em>{j}^{(l)}} = \sum<em>{i}\frac{\partial L}{\partial z</em>{i}^{l+1}} \cdot w<em>{ji} ＝ \sum</em>{i}\delta<em>{i}^{(l+1)} \cdot w</em>{ji}<br>\end{equation}<br>两边同时乘以$g’(z<em>{j})$，则：<br>\begin{equation} \label{13}<br>\delta</em>{j}^{(l)} ＝ (\sum<em>{i}\delta</em>{i}^{(l+1)} \cdot w<em>{ji}) \cdot g’(z</em>{j}^{l})<br>\end{equation}<br>综上推导，神经网络反向传播时，可以依靠公式\eqref{13}，将训练误差依次传递到前面的层；然后利用公式\eqref{11}对各层的参数进行更新。经过反复训练，最终可以得到一个有效的分类器。详细实现代码在<a href="https://github.com/heloowird/ann" target="_blank" rel="noopener">github</a>，欢迎试用。</p>
 <p>参考资料：</p>
 <ol>
 <li><a href="http://blog.csdn.net/zhongkejingwang/
- article/details/44514073" target="_blank" rel="external">BP神经网络的数学原理及其算法实现</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/22473137" target="_blank" rel="external">神经网络反向传播的数学原理</a></li>
+ article/details/44514073" target="_blank" rel="noopener">BP神经网络的数学原理及其算法实现</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/22473137" target="_blank" rel="noopener">神经网络反向传播的数学原理</a></li>
 </ol>
 
       
@@ -497,7 +496,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -508,9 +507,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460"
-               alt="Heloowird" />
+          <img class="site-author-image" itemprop="image" src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460" alt="Heloowird">
           <p class="site-author-name" itemprop="name">Heloowird</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
@@ -605,10 +602,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

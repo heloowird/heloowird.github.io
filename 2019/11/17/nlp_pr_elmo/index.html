@@ -6,15 +6,15 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,57 +66,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="nlp," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="nlp,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="论文题目Deep Contextualized Word Representations (ELMo)
-背景介绍预训练词向量是神经网络语言理解的基础模块。然而，如何得到高质量的词向量仍是一项挑战。获取高质量的词向量需要解决两个问题：
-
-词语本身复杂的特性，如语法和语义 
-语境变化引发词语用法的改变，如一词多义
-
-特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周">
+<meta name="description" content="论文题目Deep Contextualized Word Representations (ELMo) 背景介绍预训练词向量是神经网络语言理解的基础模块。然而，如何得到高质量的词向量仍是一项挑战。获取高质量的词向量需要解决两个问题：  词语本身复杂的特性，如语法和语义  语境变化引发词语用法的改变，如一词多义  特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周">
+<meta name="keywords" content="nlp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NLP论文阅读- ELMo">
 <meta property="og:url" content="https://heloowird.github.io/2019/11/17/nlp_pr_elmo/index.html">
 <meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="论文题目Deep Contextualized Word Representations (ELMo)
-背景介绍预训练词向量是神经网络语言理解的基础模块。然而，如何得到高质量的词向量仍是一项挑战。获取高质量的词向量需要解决两个问题：
-
-词语本身复杂的特性，如语法和语义 
-语境变化引发词语用法的改变，如一词多义
-
-特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周">
-<meta property="og:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1g90ttnthl2j20zg0pnqca.jpg">
-<meta property="og:updated_time" content="2020-10-01T00:28:31.223Z">
+<meta property="og:description" content="论文题目Deep Contextualized Word Representations (ELMo) 背景介绍预训练词向量是神经网络语言理解的基础模块。然而，如何得到高质量的词向量仍是一项挑战。获取高质量的词向量需要解决两个问题：  词语本身复杂的特性，如语法和语义  语境变化引发词语用法的改变，如一词多义  特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://heloowird.github.io/images/blog_img/elmo-arch.png">
+<meta property="og:updated_time" content="2026-06-14T03:07:02.868Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP论文阅读- ELMo">
-<meta name="twitter:description" content="论文题目Deep Contextualized Word Representations (ELMo)
-背景介绍预训练词向量是神经网络语言理解的基础模块。然而，如何得到高质量的词向量仍是一项挑战。获取高质量的词向量需要解决两个问题：
-
-词语本身复杂的特性，如语法和语义 
-语境变化引发词语用法的改变，如一词多义
-
-特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周">
-<meta name="twitter:image" content="https://wx1.sinaimg.cn/mw690/70863da0ly1g90ttnthl2j20zg0pnqca.jpg">
+<meta name="twitter:description" content="论文题目Deep Contextualized Word Representations (ELMo) 背景介绍预训练词向量是神经网络语言理解的基础模块。然而，如何得到高质量的词向量仍是一项挑战。获取高质量的词向量需要解决两个问题：  词语本身复杂的特性，如语法和语义  语境变化引发词语用法的改变，如一词多义  特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周">
+<meta name="twitter:image" content="https://heloowird.github.io/images/blog_img/elmo-arch.png">
 
 
 
@@ -144,7 +128,7 @@
 
 
 
-  <link rel="canonical" href="https://heloowird.github.io/2019/11/17/nlp_pr_elmo/"/>
+  <link rel="canonical" href="https://heloowird.github.io/2019/11/17/nlp_pr_elmo/">
 
 
 
@@ -184,7 +168,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Heloowird</span>
         <span class="logo-line-after"><i></i></span>
@@ -214,7 +198,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -224,7 +208,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -234,7 +218,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -244,7 +228,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -254,7 +238,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -293,14 +277,14 @@
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content="">
+    <meta itemprop="description" content>
     <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Heloowird">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src="">
+      <img style="display:none;" itemprop="url image" alt="Heloowird" src>
     </span>
   </span>
 
@@ -339,7 +323,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -405,21 +389,21 @@
 </ol>
 <p>特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周围几个词，仅是语言模型训练过程中的副产物，词向量相对单薄。而ELMo 根据整个句子来决定词的表示，ELMo 是整个双向语言模型中间层表示的融合产物，除了语义语法信息，还可缓解一词多义问题。</p>
 <p>ELMo 全称是<strong>E</strong>mbeddings from <strong>L</strong>anguage <strong>Mo</strong>dels。其实Word2vec 也是来源于语言模型，只不过和ELMo 相比，没有尽可能多地利用语言模型的各中间部分的信息。下面具体看看ELMo 是如何利用双向语言模型各层结果的。</p>
-<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="https://wx1.sinaimg.cn/mw690/70863da0ly1g90ttnthl2j20zg0pnqca.jpg" class="full-image" alt="ELMo预训练双向语言模型架构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-<p>如图所示，预训练双向语言模型自底而上分别是句子原始输入(input tokens)；输入表示层(token representation layer $L_{o}$)；双向LSTM 层(context-sensitive representation layer $L_{1}$)；双向LSTM 层(context-sensitive representation layer $L_{2}$)。</p>
-<p>原始输入为句子的切分片段$t_{k}$，如词、词片段(word piece)。输入表示层一般直接使用embedding 或者使用字符级CNN 进行编码，得到$\textbf{x}_{k}^{LM}$。这部分是上下文无关的，仅与$t_{k}$有关。</p>
-<p>接下来是双向LSTM层。对于任意词$t_{k}$，在已知前面词和后面词的情况下，分别从两个方向预测词${t}_{k}$的概率，并输出该词的前向表示$\overrightarrow{\textbf{h}}_{k,j}^{LM}$ 和后向表示$\overleftarrow{\textbf{h}}_{k,j}^{LM}$。文章使用双向LSTM 层不同方向的参数是共享的。图中仅使用了2 层BiLSTM，理论上是可以使用任意个。</p>
-<p>有了各层表示之后，对于每个token $t_{k}$，有2L+1个表示集合：<br>\begin{equation}<br>\begin{aligned}<br>R_{k} &amp;= \left \{ \textbf{x}_{k}^{LM}, \overrightarrow{\textbf{h}}_{k,j}^{LM}, \overleftarrow{\textbf{h}}_{k,j}^{LM}  | j= 1, …, L \right \} \\<br>&amp;= \left \{ \textbf{h}_{k,j}^{LM}|j=1, …, L \right \}<br>\end{aligned}<br>\end{equation}<br>其中$\textbf{h}_{k,0}^{LM}$ 为输入表示层。对于每个biLSTM层$\left(j&gt;0\right)$，$\textbf{h}_{k,j}^{LM} = \left[\overrightarrow{\textbf{h}}_{k,j}^{LM}, \overleftarrow{\textbf{h}}_{k,j}^{LM}\right]$。</p>
-<p>对于下游任务来说，ELMo 将每个token的表示集合$R_{k}$ 转换成一个向量，即$\textbf{ELMo}_{k} = E\left(R_{k};\Theta ^{task}\right)$。</p>
-<p>最简单地，当仅选择ELMo 最后一个biLSTM　层的输出: $\textbf{ELMo}_{k} = \textbf{h}_{k,j}^{LM}$。</p>
-<p>普遍来说$E$是一个根据不同任务对双向语言模型不同层进行加权的函数。<br>\begin{equation}<br>\textbf{ELMo}_{k}^{task} = E\left(R_{k};\Theta ^{task}\right) = \gamma^{task} \sum_{j=0}^{L}s_{j}^{task}\textbf{h}_{k,j}^{LM}<br>\end{equation}</p>
+<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/elmo-arch.png" class="full-image" alt="ELMo预训练双向语言模型架构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<p>如图所示，预训练双向语言模型自底而上分别是句子原始输入(input tokens)；输入表示层(token representation layer $L<em>{o}$)；双向LSTM 层(context-sensitive representation layer $L</em>{1}$)；双向LSTM 层(context-sensitive representation layer $L_{2}$)。</p>
+<p>原始输入为句子的切分片段$t<em>{k}$，如词、词片段(word piece)。输入表示层一般直接使用embedding 或者使用字符级CNN 进行编码，得到$\textbf{x}</em>{k}^{LM}$。这部分是上下文无关的，仅与$t_{k}$有关。</p>
+<p>接下来是双向LSTM层。对于任意词$t<em>{k}$，在已知前面词和后面词的情况下，分别从两个方向预测词${t}</em>{k}$的概率，并输出该词的前向表示$\overrightarrow{\textbf{h}}<em>{k,j}^{LM}$ 和后向表示$\overleftarrow{\textbf{h}}</em>{k,j}^{LM}$。文章使用双向LSTM 层不同方向的参数是共享的。图中仅使用了2 层BiLSTM，理论上是可以使用任意个。</p>
+<p>有了各层表示之后，对于每个token $t<em>{k}$，有2L+1个表示集合：<br>\begin{equation}<br>\begin{aligned}<br>R</em>{k} &amp;= \left { \textbf{x}<em>{k}^{LM}, \overrightarrow{\textbf{h}}</em>{k,j}^{LM}, \overleftarrow{\textbf{h}}<em>{k,j}^{LM}  | j= 1, …, L \right } \<br>&amp;= \left { \textbf{h}</em>{k,j}^{LM}|j=1, …, L \right }<br>\end{aligned}<br>\end{equation}<br>其中$\textbf{h}<em>{k,0}^{LM}$ 为输入表示层。对于每个biLSTM层$\left(j&gt;0\right)$，$\textbf{h}</em>{k,j}^{LM} = \left[\overrightarrow{\textbf{h}}<em>{k,j}^{LM}, \overleftarrow{\textbf{h}}</em>{k,j}^{LM}\right]$。</p>
+<p>对于下游任务来说，ELMo 将每个token的表示集合$R<em>{k}$ 转换成一个向量，即$\textbf{ELMo}</em>{k} = E\left(R_{k};\Theta ^{task}\right)$。</p>
+<p>最简单地，当仅选择ELMo 最后一个biLSTM　层的输出: $\textbf{ELMo}<em>{k} = \textbf{h}</em>{k,j}^{LM}$。</p>
+<p>普遍来说$E$是一个根据不同任务对双向语言模型不同层进行加权的函数。<br>\begin{equation}<br>\textbf{ELMo}<em>{k}^{task} = E\left(R</em>{k};\Theta ^{task}\right) = \gamma^{task} \sum<em>{j=0}^{L}s</em>{j}^{task}\textbf{h}_{k,j}^{LM}<br>\end{equation}</p>
 <h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>文章对Char n-gram进行CNN编码，然后接两层Highway层和一个投影层，将其映射成定长512维向量，然后经过两层隐藏单元为4196、输出维度为512的BiLSTM层，从第一个BiLSTM到第二个biLSTM加一个残差连接。相比固定词表的模式，Char CNN 可以很好解决oov 问题。</p>
-<p>将双向语言模型在大规模语料中训练好后，把每个单词对应模型中的各层表示记录下来，然后让下游监督任务学习这些表示的线性组合。一般可以将$\textbf{x}_{k}$ 和$\textbf{ELMo}_{k}$ 拼接起来作为接下来监督任务的输入，监督任务一般采用RNN、CNN 或者全连接层进行训练。在某些任务中，再次把$\textbf{ELMo}_{k}$ 和监督任务监督任务的输出层拼接起来可以提升监督任务的效果。</p>
+<p>将双向语言模型在大规模语料中训练好后，把每个单词对应模型中的各层表示记录下来，然后让下游监督任务学习这些表示的线性组合。一般可以将$\textbf{x}<em>{k}$ 和$\textbf{ELMo}</em>{k}$ 拼接起来作为接下来监督任务的输入，监督任务一般采用RNN、CNN 或者全连接层进行训练。在某些任务中，再次把$\textbf{ELMo}_{k}$ 和监督任务监督任务的输出层拼接起来可以提升监督任务的效果。</p>
 <p>另外, 文章发现对ELMo加入Dropout 正则或者权重L2 正则，效果更佳。 同时，在多数下游任务中，进一步Finetune 双向语言模型，效果也有提升。</p>
 <h4 id="模型分析"><a href="#模型分析" class="headerlink" title="模型分析"></a>模型分析</h4><p>ELMo 认为语言模型不同层可以捕获不同级别的语言特性。高级别表示层可以获得语境相关的语义，而低级别表示层能够学习语法层面的信息。结合起来，可以很好的表示词。ELMo 相比ULMFiT，训练过程操作性更好。同时为使用复杂语言模型来获得词向量提供了新思路。</p>
 <p>参考资料：</p>
 <ol>
-<li><a href="https://arxiv.org/abs/1802.05365" target="_blank" rel="external">Deep Contextualized Word Representations</a></li>
+<li><a href="https://arxiv.org/abs/1802.05365" target="_blank" rel="noopener">Deep Contextualized Word Representations</a></li>
 </ol>
 
       
@@ -517,7 +501,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -528,9 +512,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460"
-               alt="Heloowird" />
+          <img class="site-author-image" itemprop="image" src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460" alt="Heloowird">
           <p class="site-author-name" itemprop="name">Heloowird</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
@@ -625,10 +607,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
