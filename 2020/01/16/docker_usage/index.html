@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="基本概念 镜像(image) 容器(container)  粗浅的理解: 镜像相当于一个类, 容器就是根据这个类创建的对象。详细参考Docker从入门到实践 镜像又分为远程镜像和本地镜像。这两个和git类似, 一个是远程, 一个是本地。 实践指南 帮助命令 12345查看docker使用说明 docker --help查看具体command 使用说明docker command --help  常">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2026-06-14T03:07:02.867Z">
+<meta property="og:updated_time" content="2026-06-14T11:47:37.138Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 使用最佳指南">
 <meta name="twitter:description" content="基本概念 镜像(image) 容器(container)  粗浅的理解: 镜像相当于一个类, 容器就是根据这个类创建的对象。详细参考Docker从入门到实践 镜像又分为远程镜像和本地镜像。这两个和git类似, 一个是远程, 一个是本地。 实践指南 帮助命令 12345查看docker使用说明 docker --help查看具体command 使用说明docker command --help  常">
@@ -350,7 +350,9 @@
 
           
           
-             <span id="/2020/01/16/docker_usage/" class="leancloud_visitors" data-flag-title="Docker 使用最佳指南">
+
+          
+             <span data-pageview-url="/2020/01/16/docker_usage/" class="cloudflare-pageviews" data-pageview-title="Docker 使用最佳指南">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -358,7 +360,7 @@
                
                  <span class="post-meta-item-text">阅读次数 </span>
                
-                 <span class="leancloud-visitors-count"></span>
+                 <span class="cloudflare-pageviews-count"></span>
              </span>
           
 
@@ -390,7 +392,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">查看docker使用说明 </span><br><span class="line">docker --help</span><br><span class="line"></span><br><span class="line">查看具体command 使用说明</span><br><span class="line">docker command --help</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>常用命令集合</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"># 1. 列出本地docker 镜像</span><br><span class="line">docker image ls</span><br><span class="line"></span><br><span class="line"># 2. 查看正在运行的容器</span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"># 3. 查看所有容器, 包括killed 状态的容器</span><br><span class="line">docker ps -a</span><br><span class="line"></span><br><span class="line"># 4. 启动一个新的容器</span><br><span class="line">docker run --it --name &#123;container_name&#125; -v &#123;host_absolute_path&#125;:&#123;docker_absoulute_path&#125; [&#123;image_repo:image_tag&#125;|&#123;image_id&#125;]</span><br><span class="line"></span><br><span class="line"># container_name 参数必须是唯一的, 不能和本地的其他容器名字同名. 在docker 其它命令中, 可以使用container_id 的地方也都可以使用container_name 代替, 方便记忆.</span><br><span class="line"># -v 用于指定挂载目录, 将宿主机器的目录映射到容器目录, 容器挂载目录下的所有数据实际存储在宿主机器目录下.</span><br><span class="line"># 本地docker 镜像既可以使用image_repo:image_tag, 可以通过image_id 来唯一标识</span><br><span class="line"># 一般地, 安装的软件放在非挂载目录下, 其他数据和开发脚本等最好放在挂载目录下。安装软件的命令可以写入新的docker file 或者临时的install_list.sh , 存在挂载目录下, 方便创建新的镜像/重新安装软件。</span><br><span class="line"># 重要: 启动之后, 推荐使用ctrl+p+q 快捷键, 让容器运行运行于后台。ctrl+p+q 的作用是让运行当前容器的线程脱离当前shell 的主线程, 当当前shell退出时, 容器仍保持后台运行。</span><br><span class="line"># 使用ctrl+p+q 让容器运行后台的前提是, docker run 启动时必须加上-i 参数</span><br><span class="line"></span><br><span class="line"># 5. 重新连接后台运行的容器</span><br><span class="line">#  方法一: 可用于连接killed 容器</span><br><span class="line">docker start -i &#123;container_name|container_id&#125;</span><br><span class="line"></span><br><span class="line">#  方法二: 推荐</span><br><span class="line">docker exec -it &#123;container_name|container_id&#125; [zsh|/bin/bash]</span><br><span class="line"></span><br><span class="line"># 方法一可以连接killed 容器, 缺点是exit 之后容器会进入killed 状态; 方法二只能连接运行状态的容器, exit 之后不会影响容器状态。</span><br><span class="line"></span><br><span class="line"># 方法一有一个重要的作用: 清理通过方法二启动但未exit 的进程。一般地, 方法二连接了一个容器, 当网断了该进程就会一直运行于后台, 长此以往就会有很多进程在后台连接该容器, 这样比较浪费机器资源. 通过docker top &#123;container_name|container_id&#125; 查看该容器相关的进程, 如果发现很多连接进程, 可以采取以下方法:</span><br><span class="line">#     1). 使用方法一连接容器, exit, 会使容器处于killed状态, 间接kill 掉与之连接的进程;</span><br><span class="line">#     2). 使用方法二连接容器, ctrl+p+q 使容器运行于后台即可;</span><br><span class="line">#     3). docker top &#123;container_name|container_id&#125; 查看容器相关进程。</span><br><span class="line"></span><br><span class="line"># 6. 查看正在运行容器的宿主机器进程</span><br><span class="line">docker top &#123;container_name|container_id&#125;</span><br><span class="line"># 同一个container 的父进程是一样的。</span><br><span class="line"></span><br><span class="line"># 7. 删除容器(慎用)</span><br><span class="line">docker rm &#123;container_name|container_id&#125;</span><br><span class="line"></span><br><span class="line"># 一般地, 如果启动容器后, 如果安装了安装耗时长且必备的软件, 建议创建一个新的dockerfile, 构建一个新的镜像</span><br><span class="line"># 如果安装一些小或者临时性的软件, 可以通过install_list.sh 记录下, 启动新的容器时, 可以sh install_list.sh 来快速安装, 如pip .</span><br><span class="line"># 可用于清理killed容器</span><br><span class="line"></span><br><span class="line"># 8. 建议把常用docker 相关命令通过alias 管理起来, 方便快速使用, 举个栗子:</span><br><span class="line">alias run_dc=&apos;docker run -it --name $(whoami) -v [your_machine_dir]:[your_docer_dir] image_id&apos;</span><br><span class="line">alias list_dc=&apos;docker ps | grep $(whoami) | awk &apos;\&apos;&apos;ENGIN&#123;print &quot;CONTANINER_ID\tIMAGE&quot;&#125; &#123;print $1&quot;\t&quot;$2&#125;&apos;\&apos;&apos;&apos;</span><br><span class="line">alias list_dead_dc=&apos;docker ps -a | grep &quot;Exited&quot; | grep $(whoami) | awk &apos;\&apos;&apos;ENGIN&#123;print &quot;CONTANINER_ID\tIMAGE&quot;&#125; &#123;print $1&quot;\t&quot;$2&#125;&apos;\&apos;&apos;&apos;</span><br><span class="line">alias start_dc=&apos;docker start -i $(whoami)&apos;</span><br><span class="line">alias connect_dc=&apos;docker exit -it $(list_dc | awk &apos;\&apos;&apos;NR==2&#123;print $1&#125;&apos;\&apos;&apos;) env LANG=C.UTF-8 /bin/bash&apos;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"># 1. 列出本地docker 镜像</span><br><span class="line">docker image ls</span><br><span class="line"></span><br><span class="line"># 2. 查看正在运行的容器</span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"># 3. 查看所有容器, 包括killed 状态的容器</span><br><span class="line">docker ps -a</span><br><span class="line"></span><br><span class="line"># 4. 启动一个新的容器</span><br><span class="line">docker run --it --name &#123;container_name&#125; -v &#123;host_absolute_path&#125;:&#123;docker_absoulute_path&#125; [&#123;image_repo:image_tag&#125;|&#123;image_id&#125;]</span><br><span class="line"></span><br><span class="line"># container_name 参数必须是唯一的, 不能和本地的其他容器名字同名. 在docker 其它命令中, 可以使用container_id 的地方也都可以使用container_name 代替, 方便记忆.</span><br><span class="line"># -v 用于指定挂载目录, 将宿主机器的目录映射到容器目录, 容器挂载目录下的所有数据实际存储在宿主机器目录下.</span><br><span class="line"># 本地docker 镜像既可以使用image_repo:image_tag, 可以通过image_id 来唯一标识</span><br><span class="line"># 一般地, 安装的软件放在非挂载目录下, 其他数据和开发脚本等最好放在挂载目录下。安装软件的命令可以写入新的docker file 或者临时的install_list.sh , 存在挂载目录下, 方便创建新的镜像/重新安装软件。</span><br><span class="line"># 重要: 启动之后, 推荐使用ctrl+p+q 快捷键, 让容器运行运行于后台。ctrl+p+q 的作用是让运行当前容器的线程脱离当前shell 的主线程, 当当前shell退出时, 容器仍保持后台运行。</span><br><span class="line"># 使用ctrl+p+q 让容器运行后台的前提是, docker run 启动时必须加上-i 参数</span><br><span class="line"></span><br><span class="line"># 5. 重新连接后台运行的容器</span><br><span class="line">#  方法一: 可用于连接killed 容器</span><br><span class="line">docker start -i &#123;container_name|container_id&#125;</span><br><span class="line"></span><br><span class="line">#  方法二: 推荐</span><br><span class="line">docker exec -it &#123;container_name|container_id&#125; [zsh|/bin/bash]</span><br><span class="line"></span><br><span class="line"># 方法一可以连接killed 容器, 缺点是exit 之后容器会进入killed 状态; 方法二只能连接运行状态的容器, exit 之后不会影响容器状态。</span><br><span class="line"></span><br><span class="line"># 方法一有一个重要的作用: 清理通过方法二启动但未exit 的进程。一般地, 方法二连接了一个容器, 当网断了该进程就会一直运行于后台, 长此以往就会有很多进程在后台连接该容器, 这样比较浪费机器资源. 通过docker top &#123;container_name|container_id&#125; 查看该容器相关的进程, 如果发现很多连接进程, 可以采取以下方法:</span><br><span class="line">#     1). 使用方法一连接容器, exit, 会使容器处于killed状态, 间接kill 掉与之连接的进程;</span><br><span class="line">#     2). 使用方法二连接容器, ctrl+p+q 使容器运行于后台即可;</span><br><span class="line">#     3). docker top &#123;container_name|container_id&#125; 查看容器相关进程。</span><br><span class="line"></span><br><span class="line"># 6. 查看正在运行容器的宿主机器进程</span><br><span class="line">docker top &#123;container_name|container_id&#125;</span><br><span class="line"># 同一个container 的父进程是一样的。</span><br><span class="line"></span><br><span class="line"># 7. 删除容器(慎用)</span><br><span class="line">docker rm &#123;container_name|container_id&#125;</span><br><span class="line"></span><br><span class="line"># 一般地, 如果启动容器后, 如果安装了安装耗时长且必备的软件, 建议创建一个新的dockerfile, 构建一个新的镜像</span><br><span class="line"># 如果安装一些小或者临时性的软件, 可以通过install_list.sh 记录下, 启动新的容器时, 可以sh install_list.sh 来快速安装, 如pip .</span><br><span class="line"># 可用于清理killed容器</span><br><span class="line"></span><br><span class="line"># 8. 建议把常用docker 相关命令通过alias 管理起来, 方便快速使用, 举个栗子:</span><br><span class="line">alias run_dc=&apos;docker run -it --name `whoami` -v [your_machine_dir]:[your_docker_dir] image_id&apos;</span><br><span class="line">alias list_dc=&apos;docker ps --format &quot;table &#123;&#123;.ID&#125;&#125;\t&#123;&#123;.Image&#125;&#125;\t&#123;&#123;.Names&#125;&#125;&quot; | grep `whoami`&apos;</span><br><span class="line">alias list_dead_dc=&apos;docker ps -a --filter status=exited --format &quot;table &#123;&#123;.ID&#125;&#125;\t&#123;&#123;.Image&#125;&#125;\t&#123;&#123;.Names&#125;&#125;&quot; | grep `whoami`&apos;</span><br><span class="line">alias start_dc=&apos;docker start -i `whoami`&apos;</span><br><span class="line">alias connect_dc=&apos;docker exec -it `list_dc | sed -n &quot;2p&quot; | cut -d &quot; &quot; -f 1` env LANG=C.UTF-8 /bin/bash&apos;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>自定义镜像<br>参考<a href="https://yeasy.gitbooks.io/docker_practice/image/build.html" target="_blank" rel="noopener">使用Dockerfile 定制镜像</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># base image</span><br><span class="line">FROM base_image_repo:base_image_tag</span><br><span class="line"></span><br><span class="line"># set argument</span><br><span class="line">ARG OPENFST_VERSION=&quot;openfst-1.7.2&quot;</span><br><span class="line">ARG SRILM_VERSION=&quot;srilm-1.7.2&quot;</span><br><span class="line"></span><br><span class="line"># set work directory</span><br><span class="line">WORKDIR /root</span><br><span class="line"></span><br><span class="line"># copy your script</span><br><span class="line">COPY . .</span><br><span class="line"></span><br><span class="line"># install your software</span><br><span class="line">RUN set -ex \</span><br><span class="line">    &amp;&amp; apt-get update \</span><br><span class="line">    &amp;&amp; apt-get install -y git g++ make autoconf-archive libtool gfortran automake autoconf python-setuptools python-dev fontconfig \ </span><br><span class="line">    &amp;&amp; cd /root \</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
@@ -765,115 +767,76 @@
         }
       });
     </script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
   
 
 
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("Vf92KouHR84z9fW8bDJL0mDK-gzGzoHsz", "nRwBltvat2tBbhvyjmq2oohn");</script>
+
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
+    (function() {
+      var apiUrl = 'https://blog-page-views.heloowird.workers.dev'.replace(/\/+$/, '');
+      var selector = '.cloudflare-pageviews';
+      var countSelector = '.cloudflare-pageviews-count';
 
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
+      function request(path, body) {
+        return fetch(apiUrl + path, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        }).then(function(response) {
+          if (!response.ok) throw new Error('Page view request failed');
+          return response.json();
         });
-    }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
       }
-    });
+
+      function setCount(element, count) {
+        var target = element.querySelector(countSelector);
+        if (target) target.textContent = count || 0;
+      }
+
+      function collectEntries(elements) {
+        return Array.prototype.map.call(elements, function(element) {
+          return {
+            element: element,
+            url: element.getAttribute('data-pageview-url'),
+            title: element.getAttribute('data-pageview-title') || ''
+          };
+        }).filter(function(entry) {
+          return entry.url;
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var entries = collectEntries(document.querySelectorAll(selector));
+        if (!entries.length) return;
+
+        if (entries.length === 1 && document.body.className.indexOf('page-post-detail') !== -1) {
+          request('/api/views/hit', {
+            url: entries[0].url,
+            title: entries[0].title
+          }).then(function(data) {
+            setCount(entries[0].element, data.time);
+          }).catch(function(error) {
+            console.log(error.message);
+          });
+          return;
+        }
+
+        request('/api/views/query', {
+          urls: entries.map(function(entry) { return entry.url; })
+        }).then(function(data) {
+          var counts = data.counts || {};
+          entries.forEach(function(entry) {
+            setCount(entry.element, counts[entry.url]);
+          });
+        }).catch(function(error) {
+          console.log(error.message);
+        });
+      });
+    })();
   </script>
 
 

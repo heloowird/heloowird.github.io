@@ -350,7 +350,9 @@
 
           
           
-             <span id="/2020/01/11/spelling_correction/" class="leancloud_visitors" data-flag-title="拼写纠错概述">
+
+          
+             <span data-pageview-url="/2020/01/11/spelling_correction/" class="cloudflare-pageviews" data-pageview-title="拼写纠错概述">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -358,7 +360,7 @@
                
                  <span class="post-meta-item-text">阅读次数 </span>
                
-                 <span class="leancloud-visitors-count"></span>
+                 <span class="cloudflare-pageviews-count"></span>
              </span>
           
 
@@ -392,17 +394,17 @@
 <li>纠错候选排序（排序）</li>
 </ul>
 <p>对于非单词拼写错误，可以通过字典进行检测。如果待纠错词不在字典中，那么这个词是需要纠错的。而对于实单词错误，无法通过字典形式检测。</p>
-<p>正确单词和待纠错单词通常有着相似的字符序列。所以使用编辑距离来产生纠错候选。对待纠错单词，通过变换可以得到编辑距离为$n$ 的单词候选，判断新单词候选是否在字典中，若在则成为带纠错单词的纠错候选，添加到候选集合$C$ 中。$n$ 通常取1-2 。</p>
-<p>最后，如何排序上一步生成的纠错候选。已知用户错误拼写记为$x$ ，第$i$ 个纠错候选单词为$w<em>i$ ，那么$p(w_i|x)$ 为$w_i$错输成$x$ 的概率，作为各个$w_i$ 的权重。对于同一个$x$ ，$p(w_i|x)$ 越大， $w_i$ 越有可能是$x$ 的正确单词。所以有：<br>\begin{equation}<br>\begin{aligned}<br>\hat{w}=\arg\max</em>{w \in C}p(x|w)p(w)<br>\end{aligned}<br>\end{equation}</p>
+<p>正确单词和待纠错单词通常有着相似的字符序列。所以使用编辑距离来产生纠错候选。对待纠错单词，通过变换可以得到编辑距离为<script type="math/tex">n</script> 的单词候选，判断新单词候选是否在字典中，若在则成为带纠错单词的纠错候选，添加到候选集合<script type="math/tex">C</script> 中。<script type="math/tex">n</script> 通常取1-2 。</p>
+<p>最后，如何排序上一步生成的纠错候选。已知用户错误拼写记为@@MATHJAX<em>SEGMENT_3@@ ，第<script type="math/tex">i</script> 个纠错候选单词为<script type="math/tex">w_i</script> ，那么<script type="math/tex">p(w_i|x)</script> 为<script type="math/tex">w_i</script>错输成<script type="math/tex">x</script> 的概率，作为各个<script type="math/tex">w_i</script> 的权重。对于同一个<script type="math/tex">x</script> ，<script type="math/tex">p(w_i|x)</script> 越大， <script type="math/tex">w_i</script> 越有可能是<script type="math/tex">x</script> 的正确单词。所以有：<br>\begin{equation}<br>\begin{aligned}<br>\hat{w}=\arg\max</em>{w \in C}p(x|w)p(w)<br>\end{aligned}<br>\end{equation}</p>
 <h4 id="噪声信道模型-Noisy-Channel-Model"><a href="#噪声信道模型-Noisy-Channel-Model" class="headerlink" title="噪声信道模型(Noisy Channel Model)"></a>噪声信道模型(Noisy Channel Model)</h4><p>根据贝叶斯公式：<br>\begin{equation}<br>\begin{aligned}<br>p(w|x) = \frac{p(x|w) * p(w)}{p(x)}<br>\end{aligned}<br>\end{equation}</p>
-<p>对于所有的纠错候选词$w$ ，$x$ 是一样的。所以$p(x)$ 可以去掉。得：<br>\begin{equation}<br>\begin{aligned}<br>p(w|x) = p(x|w) * p(w)<br>\end{aligned}<br>\end{equation}</p>
-<p>$p(x|w)$ 为$w$ 错输成$x$ 的概率，亦称作似然或者$w$ 转化成$x$ 的信道模型。$p(w)$ 为纠错候选的先验概率，从语料中统计得到，p(w) 可以是unigram 、bigram 或者trigram 。</p>
-<p>影响$p(x|w)$ 的因素有很多。一般我们转化为字符错误类型。错误类型分为：增、删、改以及交换（Damerau-Levenshtein)。通过统计字符四种错误类型的混淆矩阵来近似$p(x|w)$ 。举个例子：$p(acress|across)$ 可以使用大语料中字符o 被e 替换的概率$p(e|o)$ 代替。</p>
-<h4 id="实单词拼写错误"><a href="#实单词拼写错误" class="headerlink" title="实单词拼写错误"></a>实单词拼写错误</h4><p>实单词拼写错误依然遵循通用框架的后两步。 首先，通过编辑距离召回候选，然后根据先验概率和信道噪声模型进行排序。 在召回候选时，一般编辑距离小于等于1，这里和非单词错误不一样，需要纠错单词本身也是候选词之一。信道噪声模型首先要考虑需要纠错的单词其实是没有错误，即$p(w|w)$ 的概率$\alpha$ 会根据不同任务设定不同的值。通常为$.95$。那么，剩下的候选词分摊$1-\alpha$ 。<br>\begin{equation}<br>\begin{aligned}<br>p(x|w) = \begin{cases}<br>\alpha &amp;  \text{if }  x=w \<br>\frac{1-\alpha}{\left | C(x) \right |} &amp; \text{if } x\subset C(x) \<br>0 &amp; \text{otherwise }<br>\end{cases}<br>\end{aligned}<br>\end{equation}<br>除了使用均匀分布，更精确的做法是：按照字符混淆矩阵的概率分配。先验概率$p(w)$ 依然采用语言模型，bigram 或者trigram。</p>
+<p>对于所有的纠错候选词<script type="math/tex">w</script> ，<script type="math/tex">x</script> 是一样的。所以<script type="math/tex">p(x)</script> 可以去掉。得：<br>\begin{equation}<br>\begin{aligned}<br>p(w|x) = p(x|w) * p(w)<br>\end{aligned}<br>\end{equation}</p>
+<p><script type="math/tex">p(x|w)</script> 为<script type="math/tex">w</script> 错输成<script type="math/tex">x</script> 的概率，亦称作似然或者<script type="math/tex">w</script> 转化成<script type="math/tex">x</script> 的信道模型。<script type="math/tex">p(w)</script> 为纠错候选的先验概率，从语料中统计得到，p(w) 可以是unigram 、bigram 或者trigram 。</p>
+<p>影响<script type="math/tex">p(x|w)</script> 的因素有很多。一般我们转化为字符错误类型。错误类型分为：增、删、改以及交换（Damerau-Levenshtein)。通过统计字符四种错误类型的混淆矩阵来近似<script type="math/tex">p(x|w)</script> 。举个例子：<script type="math/tex">p(acress|across)</script> 可以使用大语料中字符o 被e 替换的概率<script type="math/tex">p(e|o)</script> 代替。</p>
+<h4 id="实单词拼写错误"><a href="#实单词拼写错误" class="headerlink" title="实单词拼写错误"></a>实单词拼写错误</h4><p>实单词拼写错误依然遵循通用框架的后两步。 首先，通过编辑距离召回候选，然后根据先验概率和信道噪声模型进行排序。 在召回候选时，一般编辑距离小于等于1，这里和非单词错误不一样，需要纠错单词本身也是候选词之一。信道噪声模型首先要考虑需要纠错的单词其实是没有错误，即<script type="math/tex">p(w|w)</script> 的概率<script type="math/tex">\alpha</script> 会根据不同任务设定不同的值。通常为<script type="math/tex">.95</script>。那么，剩下的候选词分摊<script type="math/tex">1-\alpha</script> 。<br>\begin{equation}<br>\begin{aligned}<br>p(x|w) = \begin{cases}<br>\alpha &amp;  \text{if }  x=w \<br>\frac{1-\alpha}{\left | C(x) \right |} &amp; \text{if } x\subset C(x) \<br>0 &amp; \text{otherwise }<br>\end{cases}<br>\end{aligned}<br>\end{equation}<br>除了使用均匀分布，更精确的做法是：按照字符混淆矩阵的概率分配。先验概率<script type="math/tex">p(w)</script> 依然采用语言模型，bigram 或者trigram。</p>
 <h4 id="改进点"><a href="#改进点" class="headerlink" title="改进点"></a>改进点</h4><ul>
 <li>不再假设一句话只有一处错误。对每个单词进行检查。如果仅使用简单的纠错模型，会造成很多误纠错。特别是不常见的单词。<ul>
 <li>使用不纠错白名单</li>
-<li>使用$logP(w|x) - log(x|x) &gt; \theta$ 代替$logP(w|x) - log(x|x) &gt; 0$</li>
+<li>使用<script type="math/tex">logP(w|x) - log(x|x) > \theta</script> 代替<script type="math/tex">logP(w|x) - log(x|x) > 0</script></li>
 <li>使用额外分类器决定是否纠错是否可靠</li>
 </ul>
 </li>
@@ -779,115 +781,76 @@
         }
       });
     </script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
   
 
 
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("Vf92KouHR84z9fW8bDJL0mDK-gzGzoHsz", "nRwBltvat2tBbhvyjmq2oohn");</script>
+
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
+    (function() {
+      var apiUrl = 'https://blog-page-views.heloowird.workers.dev'.replace(/\/+$/, '');
+      var selector = '.cloudflare-pageviews';
+      var countSelector = '.cloudflare-pageviews-count';
 
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
+      function request(path, body) {
+        return fetch(apiUrl + path, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        }).then(function(response) {
+          if (!response.ok) throw new Error('Page view request failed');
+          return response.json();
         });
-    }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
       }
-    });
+
+      function setCount(element, count) {
+        var target = element.querySelector(countSelector);
+        if (target) target.textContent = count || 0;
+      }
+
+      function collectEntries(elements) {
+        return Array.prototype.map.call(elements, function(element) {
+          return {
+            element: element,
+            url: element.getAttribute('data-pageview-url'),
+            title: element.getAttribute('data-pageview-title') || ''
+          };
+        }).filter(function(entry) {
+          return entry.url;
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var entries = collectEntries(document.querySelectorAll(selector));
+        if (!entries.length) return;
+
+        if (entries.length === 1 && document.body.className.indexOf('page-post-detail') !== -1) {
+          request('/api/views/hit', {
+            url: entries[0].url,
+            title: entries[0].title
+          }).then(function(data) {
+            setCount(entries[0].element, data.time);
+          }).catch(function(error) {
+            console.log(error.message);
+          });
+          return;
+        }
+
+        request('/api/views/query', {
+          urls: entries.map(function(entry) { return entry.url; })
+        }).then(function(data) {
+          var counts = data.counts || {};
+          entries.forEach(function(entry) {
+            setCount(entry.element, counts[entry.url]);
+          });
+        }).catch(function(error) {
+          console.log(error.message);
+        });
+      });
+    })();
   </script>
 
 

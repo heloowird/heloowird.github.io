@@ -352,7 +352,9 @@
 
           
           
-             <span id="/2019/08/04/nlp_pr_ulmfit/" class="leancloud_visitors" data-flag-title="NLP论文阅读- ULMFiT">
+
+          
+             <span data-pageview-url="/2019/08/04/nlp_pr_ulmfit/" class="cloudflare-pageviews" data-pageview-title="NLP论文阅读- ULMFiT">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -360,7 +362,7 @@
                
                  <span class="post-meta-item-text">阅读次数 </span>
                
-                 <span class="leancloud-visitors-count"></span>
+                 <span class="cloudflare-pageviews-count"></span>
              </span>
           
 
@@ -397,7 +399,7 @@
 <h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>使用大规模通用领域语料预训练语言模型，文中用到的通用语料为Wikitext-103。使用具体的语言模型为：通过上文，预测下一个词，即从左到右建模。在大规模通用预训练时，不同模型层次提取不同级别的通用特征，这点期待和CV领域的IMAGENET模型达到l类似的效果。</p>
 <p>使用目标任务的语料微调语言模型。目标任务物料与通用语料的分布通常是不一样，所以需要针对目标任务预料语义特性，进行参数微调。这里使用了两个trick：</p>
 <ul>
-<li>每层学习到的特征不一样，需要进行不同程度的微调：越低层网络学习到的特征越基础，微调幅度应越小。所以每层设置不同的初始学习率。最后一层学习率为$\eta ^{l}$，则前一层学习率为的$\eta ^{l-1} = \eta^{l}/2.6$，依次类推.</li>
+<li>每层学习到的特征不一样，需要进行不同程度的微调：越低层网络学习到的特征越基础，微调幅度应越小。所以每层设置不同的初始学习率。最后一层学习率为<script type="math/tex">\eta ^{l}</script>，则前一层学习率为的<script type="math/tex">\eta ^{l-1} = \eta^{l}/2.6</script>，依次类推.</li>
 <li>开始时，学习率随着每次迭代逐渐增加至最大学习率，然后随着训练迭代依次递减。学习率随着迭代次数呈斜三角形分布。</li>
 </ul>
 <p>最后一步是在目标文本分类任务上进行参数微调。在此步中微调程度把握至关重要，过大幅度的微调会导致忽略从语言模型中学习到的知识；过小幅度微调又影响收敛速度，且易过拟合。所以，这里又使用一个技巧：逐层微调。具体来说：从LSTM最后一层开始，每遍训练将该层添加到微调集合，其它层固定，直到所有层完全解冻。</p>
@@ -782,115 +784,76 @@
         }
       });
     </script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
   
 
 
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("Vf92KouHR84z9fW8bDJL0mDK-gzGzoHsz", "nRwBltvat2tBbhvyjmq2oohn");</script>
+
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
+    (function() {
+      var apiUrl = 'https://blog-page-views.heloowird.workers.dev'.replace(/\/+$/, '');
+      var selector = '.cloudflare-pageviews';
+      var countSelector = '.cloudflare-pageviews-count';
 
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
+      function request(path, body) {
+        return fetch(apiUrl + path, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        }).then(function(response) {
+          if (!response.ok) throw new Error('Page view request failed');
+          return response.json();
         });
-    }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
       }
-    });
+
+      function setCount(element, count) {
+        var target = element.querySelector(countSelector);
+        if (target) target.textContent = count || 0;
+      }
+
+      function collectEntries(elements) {
+        return Array.prototype.map.call(elements, function(element) {
+          return {
+            element: element,
+            url: element.getAttribute('data-pageview-url'),
+            title: element.getAttribute('data-pageview-title') || ''
+          };
+        }).filter(function(entry) {
+          return entry.url;
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var entries = collectEntries(document.querySelectorAll(selector));
+        if (!entries.length) return;
+
+        if (entries.length === 1 && document.body.className.indexOf('page-post-detail') !== -1) {
+          request('/api/views/hit', {
+            url: entries[0].url,
+            title: entries[0].title
+          }).then(function(data) {
+            setCount(entries[0].element, data.time);
+          }).catch(function(error) {
+            console.log(error.message);
+          });
+          return;
+        }
+
+        request('/api/views/query', {
+          urls: entries.map(function(entry) { return entry.url; })
+        }).then(function(data) {
+          var counts = data.counts || {};
+          entries.forEach(function(entry) {
+            setCount(entry.element, counts[entry.url]);
+          });
+        }).catch(function(error) {
+          console.log(error.message);
+        });
+      });
+    })();
   </script>
 
 

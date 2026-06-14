@@ -97,7 +97,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://heloowird.github.io/images/blog_img/neural-network-node-weight.jpg">
 <meta property="og:image" content="https://heloowird.github.io/images/blog_img/neural-network-architecture.jpg">
-<meta property="og:updated_time" content="2026-06-14T03:24:19.796Z">
+<meta property="og:updated_time" content="2026-06-14T11:20:45.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="神经网络的基本原理和数学推导">
 <meta name="twitter:description" content="简介目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。 原理先看看神经网络的">
@@ -353,7 +353,9 @@
 
           
           
-             <span id="/2016/09/25/neural_network/" class="leancloud_visitors" data-flag-title="神经网络的基本原理和数学推导">
+
+          
+             <span data-pageview-url="/2016/09/25/neural_network/" class="cloudflare-pageviews" data-pageview-title="神经网络的基本原理和数学推导">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -361,7 +363,7 @@
                
                  <span class="post-meta-item-text">阅读次数 </span>
                
-                 <span class="leancloud-visitors-count"></span>
+                 <span class="cloudflare-pageviews-count"></span>
              </span>
           
 
@@ -383,17 +385,13 @@
 
       
         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>目前，基于神经网络的深度学习方法在图像、语音、文本等应用领域取得了一系列令人兴奋的成果。2015年ImageNet比赛中图像识别错误率为3.56%，远超过人类水平(5.1%)；在语音识别方面，语音识别已经智能手机的标配，可基本听懂人们的指令；在文本方面，机器翻译也取得不错的效果…等等。然而在深入理解复杂的深度学习方法之前，弄懂基本神经网络的运行原理是首要且不可或缺的步骤。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>先看看神经网络的基本概念－节点和权重。<br><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/neural-network-node-weight.jpg" class="full-image" alt="节点和连接权重" title="节点和连接权重"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>其中$x_0$, $x_1$, $x_2$ 为标量，分别表示该层各个节点的输出，如果该层为输入层，则为输入特征，$X$为特征的行向量形式。$w_0$, $w_1$, $w_2$ 同为标量，表示当前节点到与之相连节点的权重，该参数控制着节点对与之连接节点的影响程度，是需要学习的参数，$W$ 为权重的行向量形式，在这里为$(w_0、w_1、w_2)$。$b$ 为bias(偏置)，可理解为线性变换中y轴方向的偏移，也是需要学习的参数。$g(x)$ 为激活函数，一般为非线性函数，是神经网络的核心部分。常用的激活函数有sigmoid，tanh，softmax，relu函数等，作用为对线性输入进行非线性转换，起到特征组合与变换的效果。则图中的红色节点的输出$a$ 为：<br>\begin{equation} \label{1}<br>z = W \cdot X^T + b = w_0 \cdot x_0 + w_1 \cdot x_1 + w_2 \cdot x_2 + b<br>\end{equation}<br>\begin{equation} \label{2}<br>a = g(z)<br>\end{equation}</p>
-<p>有了节点，通过组合和连接方式，就可以组成基本的神经网络，如下图所示。<br><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/neural-network-architecture.jpg" class="full-image" alt="神经网络" title="神经网络"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>神经网络包含不同的层(Layer)，不同的层又由多个节点组成。层是一个逻辑单元，是同等位置节点形成的，因为层与层之间的连接实际为不同层节点之间的连接。图中的神经网络由三层组成，分别为输入层，隐藏层和输出层。以神经网络进行二分类任务为例，训练样本为$(X<em>i, y_i)$, $i = 1,2,…,N$; $y_i \in {0, 1}$; 其中$X_i$ 为第$i$ 个训练数据的特征向量，$y_i$ 是第$i$ 个训练数据的真实label值。那么，输入层输入的数据为$X_i$，依次计算隐藏层各个节点的值，最后输出层会计算出一个预测值$\hat{y_i}$，这个预测值与真实label值${y_i}$可能存在一定的差距。而神经网络的终极目标是使得尽可能多的训练数据的预测值越来越接近其真实label值。用数学的语言来说：$\min \frac{1}{N}{\sum</em>{1}^{N}(\left | \hat{y<em>i} - {y_i} \right | )}$ 。一般地，$\left | \hat{y_i} - {y_i} \right |$ 可以用其他损失函数代替，如平方损失函数$(\hat{y_i} - {y_i})^2$。这里损失函数不作为重点，具体可参考<a href="http://heloowird.com/2017/03/08/diff_errors_of_neural_network/" target="_blank" rel="noopener">这里</a>。为了求导方便，加上$\frac{1}{2}$ ，所以，最后的损失函数（或者代价函数）为<br>\begin{equation} \label{3}<br>L(w, b) = \min</em>{w, b}\frac{1}{N}{\sum_{1}^{N}\frac{1}{2}(\hat{y_i} - {y_i})^2}<br>\end{equation}</p>
-<p>接下来如何让预测值越来越接近真实值呢？我们知道，特征是固定，调节的是参数$w$ 和$b$。如果$w$ 和$b$ 分别改变$\Delta w$ 和$\Delta b$，那么预测值$\hat{y}$ 会慢慢地接近$y$。那$\Delta w$ 和$\Delta b$ 如何得到呢？<br>令$\theta = (w, b)$，$f$为损失函数， 则$L(\theta) = f(\theta)$的泰勒一阶展开式为：<br>\begin{equation} \label{4}<br>f(\theta) \approx f({\theta}_0) + \frac{\partial f({\theta}_0)}{\partial {\theta}_0} \cdot (\theta - {\theta}_0)<br>\end{equation}</p>
-<p>要使得$f(\theta) &lt; f({\theta}_0)$, 可让：<br>\begin{equation} \label{5}<br>\theta - {\theta}_0 = - \alpha \cdot \frac{\partial f(\theta)}{\partial \theta} \text{;    }(\alpha &gt; 0)<br>\end{equation}</p>
-<p>使用随机梯度下降时，$\theta$ 替换为第t次更新后的参数${\theta}<em>{t+1}$，${\theta}_0$ 替换为第t次更新前的参数${\theta}</em>{t}$ 。每次参数更新方法为：<br>\begin{equation} \label{6}<br>{\theta}<em>{t+1} = \theta</em>{t} - \alpha \cdot \frac{\partial f(\theta<em>{t})}{\partial \theta</em>{t}}<br>\end{equation}</p>
-<h3 id="参数更新推导"><a href="#参数更新推导" class="headerlink" title="参数更新推导"></a>参数更新推导</h3><p>神经网络有很多层参数，需要对每层参数都进行更新操作。为了方便说明每层参数的更新方式，我们对神经网络前向传播公式\eqref{1} 和公式\eqref{2} 重新定义：<br>\begin{equation} \label{7}<br>z<em>{j}^{(l+1)} = W^{(l)} \cdot a^{(l)T} + b^{(l)} = (\sum</em>{i} w<em>{ij}^{(l)} \cdot a_i^{(l)}) + b_j^{(l+1)}<br>\end{equation}<br>\begin{equation} \label{8}<br>a</em>{j}^{(l+1)} = g(z<em>{j}^{(l+1)})<br>\end{equation}<br>其中$a</em>{j}^{l}$ 表示第$l$ 层第$j$ 个节点，$w<em>{ij}^{(l)}$ 表示连接第$l$ 层第$i$ 个节点到第$(l+1)$ 层第$j$ 个节点的权重。$b_j^{(l+1)}$ 为第$(l+1)$ 层第$j$ 个节点的偏置。<br>在图2中，为了更新参数，需要分别计算$\frac{\partial L}{\partial w</em>{ij}^{(1)}}$ 和$\frac{\partial L}{\partial w<em>{ij}^{(2)}}$。因为$w</em>{ij}^{(2)}$ 离L较近，我们先求$\frac{\partial L}{\partial w_{ij}^{(2)}}$，根据链式求导法则：</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot \frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} \cdot \frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}}</script><p>根据公式\eqref{8}，得：</p>
-<script type="math/tex; mode=display">\frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} ＝ g'(z_{j}^{(3)})</script><p>根据公式\eqref{7}，得：</p>
-<script type="math/tex; mode=display">\frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}} ＝ a_{i}^{(2)}</script><p>所以：<br>\begin{equation} \label{9}<br>\frac{\partial L}{\partial w<em>{ij}^{(2)}} = \frac{\partial L}{\partial a</em>{j}^{(3)}} \cdot g’(z<em>{j}^{(3)}) \cdot a</em>{i}^{(2)}<br>\end{equation}<br>同样地，通过$L$ 对$w_{ij}^{(1)}$ 进行链式求导得：</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(1)}} ＝ \frac{\partial L}{\partial a_{j}^{(2)}} \cdot \frac{\partial a_{j}^{(2)}}{\partial z_{j}^{(2)}} \cdot \frac{\partial z_{j}^{(2)}}{\partial w_{ij}^{(1)}}</script><p>化简得：<br>\begin{equation} \label{10}<br>\frac{\partial L}{\partial w<em>{ij}^{(1)}} ＝ \frac{\partial L}{\partial a</em>{j}^{(2)}} \cdot g’(z<em>{j}^{(2)}) \cdot a</em>{i}^{(1)}<br>\end{equation}<br>仔细对比公式\eqref{9} 和公式\eqref{10}，我们发现，等式右边前两项具有相同形式，令$\delta<em>{j} = \frac{\partial L}{\partial z</em>{j}} = \frac{\partial L}{\partial a<em>{j}} \cdot \frac{\partial a</em>{j}}{\partial z<em>{j}} = \frac{\partial L}{\partial a</em>{j}} \cdot g’(z<em>{j})$，所以公式\eqref{9} 和公式\eqref{10}可统一表示为：<br>\begin{equation} \label{11}<br>\frac{\partial L}{\partial w</em>{ij}^{(l)}} = \delta<em>{j}^{(l+1)} \cdot a</em>{i}^{(l)}<br>\end{equation}</p>
-<p>这里主要是$\frac{\partial L}{\partial a<em>{j}^{(2)}}$稍微复杂些，如果再回过头看看公式\eqref{7}，$a</em>{j}^{(2)}$和$z<em>{i}^{(3)}$是有联系的，有：<br>\begin{equation} \label{12}<br>\frac{\partial L}{\partial a</em>{j}^{(l)}} ＝ \sum<em>{i}\frac{\partial L}{\partial z</em>{i}^{l+1}} \cdot \frac{\partial z<em>{i}^{(l+1)}}{\partial a</em>{j}^{(l)}} = \sum<em>{i}\frac{\partial L}{\partial z</em>{i}^{l+1}} \cdot w<em>{ji} ＝ \sum</em>{i}\delta<em>{i}^{(l+1)} \cdot w</em>{ji}<br>\end{equation}<br>两边同时乘以$g’(z<em>{j})$，则：<br>\begin{equation} \label{13}<br>\delta</em>{j}^{(l)} ＝ (\sum<em>{i}\delta</em>{i}^{(l+1)} \cdot w<em>{ji}) \cdot g’(z</em>{j}^{l})<br>\end{equation}<br>综上推导，神经网络反向传播时，可以依靠公式\eqref{13}，将训练误差依次传递到前面的层；然后利用公式\eqref{11}对各层的参数进行更新。经过反复训练，最终可以得到一个有效的分类器。详细实现代码在<a href="https://github.com/heloowird/ann" target="_blank" rel="noopener">github</a>，欢迎试用。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>先看看神经网络的基本概念－节点和权重。<br><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/neural-network-node-weight.jpg" class="full-image" alt="节点和连接权重" title="节点和连接权重"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>其中<script type="math/tex">x_0</script>, <script type="math/tex">x_1</script>, <script type="math/tex">x_2</script> 为标量，分别表示该层各个节点的输出，如果该层为输入层，则为输入特征，<script type="math/tex">X</script>为特征的行向量形式。<script type="math/tex">w_0</script>, <script type="math/tex">w_1</script>, <script type="math/tex">w_2</script> 同为标量，表示当前节点到与之相连节点的权重，该参数控制着节点对与之连接节点的影响程度，是需要学习的参数，<script type="math/tex">W</script> 为权重的行向量形式，在这里为<script type="math/tex">(w_0、w_1、w_2)</script>。<script type="math/tex">b</script> 为bias(偏置)，可理解为线性变换中y轴方向的偏移，也是需要学习的参数。<script type="math/tex">g(x)</script> 为激活函数，一般为非线性函数，是神经网络的核心部分。常用的激活函数有sigmoid，tanh，softmax，relu函数等，作用为对线性输入进行非线性转换，起到特征组合与变换的效果。则图中的红色节点的输出<script type="math/tex">a</script> 为：<br>\begin{equation} \label{1}<br>z = W \cdot X^T + b = w_0 \cdot x_0 + w_1 \cdot x_1 + w_2 \cdot x_2 + b<br>\end{equation}<br>\begin{equation} \label{2}<br>a = g(z)<br>\end{equation}</p>
+<p>有了节点，通过组合和连接方式，就可以组成基本的神经网络，如下图所示。<br><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/neural-network-architecture.jpg" class="full-image" alt="神经网络" title="神经网络"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span><br>神经网络包含不同的层(Layer)，不同的层又由多个节点组成。层是一个逻辑单元，是同等位置节点形成的，因为层与层之间的连接实际为不同层节点之间的连接。图中的神经网络由三层组成，分别为输入层，隐藏层和输出层。以神经网络进行二分类任务为例，训练样本为@@MATHJAX<em>SEGMENT_12@@, <script type="math/tex">i = 1,2,...,N</script>; <script type="math/tex">y_i \in \{0, 1\}</script>; 其中<script type="math/tex">X_i</script> 为第<script type="math/tex">i</script> 个训练数据的特征向量，<script type="math/tex">y_i</script> 是第<script type="math/tex">i</script> 个训练数据的真实label值。那么，输入层输入的数据为<script type="math/tex">X_i</script>，依次计算隐藏层各个节点的值，最后输出层会计算出一个预测值<script type="math/tex">\hat{y_i}</script>，这个预测值与真实label值<script type="math/tex">{y_i}</script>可能存在一定的差距。而神经网络的终极目标是使得尽可能多的训练数据的预测值越来越接近其真实label值。用数学的语言来说：<script type="math/tex">\min \frac{1}{N}{\sum_{1}^{N}(\left | \hat{y_i} - {y_i} \right | )}</script> 。一般地，<script type="math/tex">\left | \hat{y_i} - {y_i} \right |</script> 可以用其他损失函数代替，如平方损失函数<script type="math/tex">(\hat{y_i} - {y_i})^2</script>。这里损失函数不作为重点，具体可参考<a href="http://heloowird.com/2017/03/08/diff_errors_of_neural_network/" target="_blank" rel="noopener">这里</a>。为了求导方便，加上<script type="math/tex">\frac{1}{2}</script> ，所以，最后的损失函数（或者代价函数）为<br>\begin{equation} \label{3}<br>L(w, b) = \min</em>{w, b}\frac{1}{N}{\sum_{1}^{N}\frac{1}{2}(\hat{y_i} - {y_i})^2}<br>\end{equation}</p>
+<p>接下来如何让预测值越来越接近真实值呢？我们知道，特征是固定，调节的是参数<script type="math/tex">w</script> 和<script type="math/tex">b</script>。如果<script type="math/tex">w</script> 和<script type="math/tex">b</script> 分别改变<script type="math/tex">\Delta w</script> 和<script type="math/tex">\Delta b</script>，那么预测值<script type="math/tex">\hat{y}</script> 会慢慢地接近<script type="math/tex">y</script>。那<script type="math/tex">\Delta w</script> 和<script type="math/tex">\Delta b</script> 如何得到呢？<br>令<script type="math/tex">\theta = (w, b)</script>，<script type="math/tex">f</script>为损失函数， 则<script type="math/tex">L(\theta) = f(\theta)</script>的泰勒一阶展开式为：<br>\begin{equation} \label{4}<br>f(\theta) \approx f({\theta}_0) + \frac{\partial f({\theta}_0)}{\partial {\theta}_0} \cdot (\theta - {\theta}_0)<br>\end{equation}</p>
+<p>要使得<script type="math/tex">f(\theta) < f({\theta}_0)</script>, 可让：<br>\begin{equation} \label{5}<br>\theta - {\theta}_0 = - \alpha \cdot \frac{\partial f(\theta)}{\partial \theta} \text{;    }(\alpha &gt; 0)<br>\end{equation}</p>
+<p>使用随机梯度下降时，@@MATHJAX<em>SEGMENT_40@@ 替换为第t次更新后的参数<script type="math/tex">{\theta}_{t+1}</script>，<script type="math/tex">{\theta}_0</script> 替换为第t次更新前的参数<script type="math/tex">{\theta}_{t}</script> 。每次参数更新方法为：<br>\begin{equation} \label{6}<br>{\theta}</em>{t+1} = \theta<em>{t} - \alpha \cdot \frac{\partial f(\theta</em>{t})}{\partial \theta_{t}}<br>\end{equation}</p>
+<h3 id="参数更新推导"><a href="#参数更新推导" class="headerlink" title="参数更新推导"></a>参数更新推导</h3><p>神经网络有很多层参数，需要对每层参数都进行更新操作。为了方便说明每层参数的更新方式，我们对神经网络前向传播公式(1) 和公式(2) 重新定义：<br>\begin{equation} \label{7}<br>z<em>{j}^{(l+1)} = W^{(l)} \cdot a^{(l)T} + b^{(l)} = (\sum</em>{i} w<em>{ij}^{(l)} \cdot a_i^{(l)}) + b_j^{(l+1)}<br>\end{equation}<br>\begin{equation} \label{8}<br>a</em>{j}^{(l+1)} = g(z<em>{j}^{(l+1)})<br>\end{equation}<br>其中<script type="math/tex">a_{j}^{l}</script> 表示第<script type="math/tex">l</script> 层第<script type="math/tex">j</script> 个节点，<script type="math/tex">w_{ij}^{(l)}</script> 表示连接第<script type="math/tex">l</script> 层第<script type="math/tex">i</script> 个节点到第<script type="math/tex">(l+1)</script> 层第<script type="math/tex">j</script> 个节点的权重。<script type="math/tex">b_j^{(l+1)}</script> 为第<script type="math/tex">(l+1)</script> 层第<script type="math/tex">j</script> 个节点的偏置。<br>在图2中，为了更新参数，需要分别计算<script type="math/tex">\frac{\partial L}{\partial w_{ij}^{(1)}}</script> 和<script type="math/tex">\frac{\partial L}{\partial w_{ij}^{(2)}}</script>。因为<script type="math/tex">w_{ij}^{(2)}</script> 离L较近，我们先求<script type="math/tex">\frac{\partial L}{\partial w_{ij}^{(2)}}</script>，根据链式求导法则：<br><script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(2)}} = \frac{\partial L}{\partial a_{j}^{(3)}} \cdot \frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} \cdot \frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}}</script><br>根据公式(8)，得：<br><script type="math/tex; mode=display">\frac{\partial a_{j}^{(3)}}{\partial z_{j}^{(3)}} = g'(z_{j}^{(3)})</script><br>根据公式(7)，得：<br><script type="math/tex; mode=display">\frac{\partial z_{j}^{(3)}}{\partial w_{ij}^{(2)}} = a_{i}^{(2)}</script><br>所以：<br>\begin{equation} \label{9}<br>\frac{\partial L}{\partial w</em>{ij}^{(2)}} = \frac{\partial L}{\partial a<em>{j}^{(3)}} \cdot g’(z</em>{j}^{(3)}) \cdot a<em>{i}^{(2)}<br>\end{equation}<br>同样地，通过<script type="math/tex">L</script> 对<script type="math/tex">w_{ij}^{(1)}</script> 进行链式求导得：<br><script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ij}^{(1)}} = \frac{\partial L}{\partial a_{j}^{(2)}} \cdot \frac{\partial a_{j}^{(2)}}{\partial z_{j}^{(2)}} \cdot \frac{\partial z_{j}^{(2)}}{\partial w_{ij}^{(1)}}</script><br>化简得：<br>\begin{equation} \label{10}<br>\frac{\partial L}{\partial w</em>{ij}^{(1)}} = \frac{\partial L}{\partial a<em>{j}^{(2)}} \cdot g’(z</em>{j}^{(2)}) \cdot a<em>{i}^{(1)}<br>\end{equation}<br>仔细对比公式(9) 和公式(10)，我们发现，等式右边前两项具有相同形式，令<script type="math/tex">\delta_{j} = \frac{\partial L}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot \frac{\partial a_{j}}{\partial z_{j}} = \frac{\partial L}{\partial a_{j}} \cdot g'(z_{j})</script>，所以公式(9) 和公式(10)可统一表示为：<br>\begin{equation} \label{11}<br>\frac{\partial L}{\partial w</em>{ij}^{(l)}} = \delta<em>{j}^{(l+1)} \cdot a</em>{i}^{(l)}<br>\end{equation}</p>
+<p>这里主要是@@MATHJAX<em>SEGMENT_66@@稍微复杂些，如果再回过头看看公式(7)，<script type="math/tex">a_{j}^{(2)}</script>和<script type="math/tex">z_{i}^{(3)}</script>是有联系的，有：<br>\begin{equation} \label{12}<br>\frac{\partial L}{\partial a</em>{j}^{(l)}} = \sum<em>{i}\frac{\partial L}{\partial z</em>{i}^{l+1}} \cdot \frac{\partial z<em>{i}^{(l+1)}}{\partial a</em>{j}^{(l)}} = \sum<em>{i}\frac{\partial L}{\partial z</em>{i}^{l+1}} \cdot w<em>{ji} = \sum</em>{i}\delta<em>{i}^{(l+1)} \cdot w</em>{ji}<br>\end{equation}<br>两边同时乘以@@MATHJAX<em>SEGMENT_69@@，则：<br>\begin{equation} \label{13}<br>\delta</em>{j}^{(l)} = (\sum<em>{i}\delta</em>{i}^{(l+1)} \cdot w<em>{ji}) \cdot g’(z</em>{j}^{l})<br>\end{equation}<br>综上推导，神经网络反向传播时，可以依靠公式(13)，将训练误差依次传递到前面的层；然后利用公式(11)对各层的参数进行更新。经过反复训练，最终可以得到一个有效的分类器。详细实现代码在<a href="https://github.com/heloowird/ann" target="_blank" rel="noopener">github</a>，欢迎试用。</p>
 <p>参考资料：</p>
 <ol>
 <li><a href="http://blog.csdn.net/zhongkejingwang/
@@ -765,115 +763,76 @@
         }
       });
     </script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
   
 
 
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("Vf92KouHR84z9fW8bDJL0mDK-gzGzoHsz", "nRwBltvat2tBbhvyjmq2oohn");</script>
+
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
+    (function() {
+      var apiUrl = 'https://blog-page-views.heloowird.workers.dev'.replace(/\/+$/, '');
+      var selector = '.cloudflare-pageviews';
+      var countSelector = '.cloudflare-pageviews-count';
 
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
+      function request(path, body) {
+        return fetch(apiUrl + path, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        }).then(function(response) {
+          if (!response.ok) throw new Error('Page view request failed');
+          return response.json();
         });
-    }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
       }
-    });
+
+      function setCount(element, count) {
+        var target = element.querySelector(countSelector);
+        if (target) target.textContent = count || 0;
+      }
+
+      function collectEntries(elements) {
+        return Array.prototype.map.call(elements, function(element) {
+          return {
+            element: element,
+            url: element.getAttribute('data-pageview-url'),
+            title: element.getAttribute('data-pageview-title') || ''
+          };
+        }).filter(function(entry) {
+          return entry.url;
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var entries = collectEntries(document.querySelectorAll(selector));
+        if (!entries.length) return;
+
+        if (entries.length === 1 && document.body.className.indexOf('page-post-detail') !== -1) {
+          request('/api/views/hit', {
+            url: entries[0].url,
+            title: entries[0].title
+          }).then(function(data) {
+            setCount(entries[0].element, data.time);
+          }).catch(function(error) {
+            console.log(error.message);
+          });
+          return;
+        }
+
+        request('/api/views/query', {
+          urls: entries.map(function(entry) { return entry.url; })
+        }).then(function(data) {
+          var counts = data.counts || {};
+          entries.forEach(function(entry) {
+            setCount(entry.element, counts[entry.url]);
+          });
+        }).catch(function(error) {
+          console.log(error.message);
+        });
+      });
+    })();
   </script>
 
 

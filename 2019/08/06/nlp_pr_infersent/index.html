@@ -355,7 +355,9 @@
 
           
           
-             <span id="/2019/08/06/nlp_pr_infersent/" class="leancloud_visitors" data-flag-title="NLP论文阅读- InferSent">
+
+          
+             <span data-pageview-url="/2019/08/06/nlp_pr_infersent/" class="cloudflare-pageviews" data-pageview-title="NLP论文阅读- InferSent">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -363,7 +365,7 @@
                
                  <span class="post-meta-item-text">阅读次数 </span>
                
-                 <span class="leancloud-visitors-count"></span>
+                 <span class="cloudflare-pageviews-count"></span>
              </span>
           
 
@@ -403,26 +405,26 @@
 <p>NLI任务通常有两种模型结构，一种是分别对每个句子进行编码，另一种是使用特征交叉或注意力机制对句子进行联合编码。前一种方式的副产品是可以学习到良好的句子向量表示，后一种更倾向于直奔主题地解决该任务。</p>
 <p>本文旨在学习通用的句子表示，故选择前种通用训练方式，使用了一个孪生神经网络（Siamese Network）。Siamese也有连体的意思，对神经网络而言，连体就是共享网络权重<sup>[<a href="https://nlp.stanford.edu/projects/snli/" title="SNLI" target="_blank" rel="noopener">3</a>]</sup>，在实际操作中，使用同一模型即可。分为3部分：</p>
 <ol>
-<li>使用同一句子编码器对推理前提句子和推理假设句子做编码，分别得到句子向量$u$和$v$</li>
-<li>匹配部分使用拼接concat($u$, $v$)，逐元素相乘($u * v$)，逐元素差绝对值$(|u - v|)$来抽取相互特征</li>
+<li>使用同一句子编码器对推理前提句子和推理假设句子做编码，分别得到句子向量<script type="math/tex">u</script>和<script type="math/tex">v</script></li>
+<li>匹配部分使用拼接concat(<script type="math/tex">u</script>, <script type="math/tex">v</script>)，逐元素相乘(<script type="math/tex">u * v</script>)，逐元素差绝对值<script type="math/tex">(|u - v|)</script>来抽取相互特征</li>
 <li>经过多个全联接之后，接三分类softmax层</li>
 </ol>
 <p>文中接下来比较了7种句子编码器：LSTM最后隐层，GRU最后隐层，BiGRU最后隐层拼接，BiLSTM+Mean Pooling，BiLSTM+Max Pooling，自注意力网络(Inner-attention)和层次卷积网络(HConvNet)。</p>
 <p>LSTM和GRU按下不表，下面分别介绍BiLSTM+Max Pooling，自注意力网络和层次卷积网络。</p>
 <h5 id="BiLSTM-Max-Pooling"><a href="#BiLSTM-Max-Pooling" class="headerlink" title="BiLSTM + Max Pooling"></a>BiLSTM + Max Pooling</h5><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/bilstm-max.png" class="full-image" alt="BiLSTM-Max网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-<p>先通过BiLSTM对句子进行编码，每个$t$时刻的前后向隐层拼接成$h<em>{t}$；然后将$n$个隐层转化成一个定长向量：具体地，可以$h</em>{t}$对应各个维度上取$n$个数的最大值（max-pooling）或者求平均（mean-pooling），这样就得到一个维度和$h_{t}$一样的向量来表示句子。</p>
+<p>先通过BiLSTM对句子进行编码，每个<script type="math/tex">t</script>时刻的前后向隐层拼接成<script type="math/tex">h_{t}</script>；然后将<script type="math/tex">n</script>个隐层转化成一个定长向量：具体地，可以<script type="math/tex">h_{t}</script>对应各个维度上取<script type="math/tex">n</script>个数的最大值（max-pooling）或者求平均（mean-pooling），这样就得到一个维度和<script type="math/tex">h_{t}</script>一样的向量来表示句子。</p>
 <h5 id="Self-attentive-network"><a href="#Self-attentive-network" class="headerlink" title="Self-attentive network"></a>Self-attentive network</h5><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/self-attention.png" class="full-image" alt="Inner-attention网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
 <p>\begin{equation}<br>\overline{h<em>{i}} = tanh(w</em>{i}h<em>{i}+b</em>{i})<br>\end{equation}<br>\begin{equation}<br>\alpha<em>{i} = \frac{e^{\overline{h}</em>{i}^{T}}u<em>{w}}{\sum</em>{i}e^{\overline{h}<em>{i}^{T}}u</em>{w}}<br>\end{equation}<br>\begin{equation}<br>u = \sum<em>{i}^{n}\alpha</em>{i}h_{i}<br>\end{equation}</p>
-<p>用BiLSTM进行句子编码，拼接前后向隐层状态$h<em>{i}$，经过$(w</em>{i}, b<em>{i})$仿射变换和$tanh$激活函数，得到$\overline{h</em>{i}}$。然后计算$\overline{h<em>{i}}$和上下文向量$u</em>{w}$相似度$\alpha<em>{i}$，后面作为$\overline{h</em>{i}}$的权重；最后各个$\alpha<em>{i}$乘以$h</em>{i}$并累加得到句子向量。</p>
-<p>这里上下文向量$u<em>{w}$没有详细说明。在其引用的文章中，有两种方式计算上下文向量。两种方式通过对隐层状态进行变换得到，但变换方式不一样。文中$u</em>{w}$采用的变换方式<sup>[<a href="https://arxiv.org/pdf/1703.03130.pdf" title="A Structured Self-attentive Sentence Embedding" target="_blank" rel="noopener">4</a>]</sup>如下：<br>\begin{equation}<br>\alpha  = softmax(w<em>{s2}tanh(W</em>{s1}H^{T})<br>\end{equation}<br>\begin{equation}<br>u_{w} = \alpha H^{T}<br>\end{equation}</p>
-<p>当$w<em>{s2}$为矩阵时，会产出多个$u</em>{w}$，即多个上下文向量，因此会生成多个句子表示，拼接起来即为句子向量。</p>
+<p>用BiLSTM进行句子编码，拼接前后向隐层状态<script type="math/tex">h_{i}</script>，经过<script type="math/tex">(w_{i}, b_{i})</script>仿射变换和<script type="math/tex">tanh</script>激活函数，得到<script type="math/tex">\overline{h_{i}}</script>。然后计算<script type="math/tex">\overline{h_{i}}</script>和上下文向量<script type="math/tex">u_{w}</script>相似度<script type="math/tex">\alpha_{i}</script>，后面作为<script type="math/tex">\overline{h_{i}}</script>的权重；最后各个<script type="math/tex">\alpha_{i}</script>乘以<script type="math/tex">h_{i}</script>并累加得到句子向量。</p>
+<p>这里上下文向量@@MATHJAX<em>SEGMENT_22@@没有详细说明。在其引用的文章中，有两种方式计算上下文向量。两种方式通过对隐层状态进行变换得到，但变换方式不一样。文中<script type="math/tex">u_{w}</script>采用的变换方式<sup>[<a href="https://arxiv.org/pdf/1703.03130.pdf" title="A Structured Self-attentive Sentence Embedding" target="_blank" rel="noopener">4</a>]</sup>如下：<br>\begin{equation}<br>\alpha  = softmax(w</em>{s2}tanh(W<em>{s1}H^{T})<br>\end{equation}<br>\begin{equation}<br>u</em>{w} = \alpha H^{T}<br>\end{equation}</p>
+<p>当<script type="math/tex">w_{s2}</script>为矩阵时，会产出多个<script type="math/tex">u_{w}</script>，即多个上下文向量，因此会生成多个句子表示，拼接起来即为句子向量。</p>
 <h5 id="Hierarchical-ConvNet"><a href="#Hierarchical-ConvNet" class="headerlink" title="Hierarchical ConvNet"></a>Hierarchical ConvNet</h5><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/hconv-net.png" class="full-image" alt="层次卷积网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
 <p>层次卷积结构使用了4层卷积层提取不同层次的特征，额外使用3个max-pooling获取不同层次的句子特征，最后把各个层次的特征拼接起来，得到句子向量。</p>
 <h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>训练超参数</p>
 <ul>
 <li>SGD with lr=0.1， weight decay ratio=0.99；每遍训练完成时，若验证集上准确率下降，lr=lr/5</li>
 <li>batch size=64</li>
-<li>当lr&lt;$10^{-5}$，停止训练</li>
+<li>当lr&lt;<script type="math/tex">10^{-5}</script>，停止训练</li>
 <li>全联接选用一个含512隐层单元的隐层</li>
 <li>选用Common Crawl 840B数据集上300维GloVe向量作为固定的词向量</li>
 </ul>
@@ -801,115 +803,76 @@
         }
       });
     </script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
   
 
 
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("Vf92KouHR84z9fW8bDJL0mDK-gzGzoHsz", "nRwBltvat2tBbhvyjmq2oohn");</script>
+
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
+    (function() {
+      var apiUrl = 'https://blog-page-views.heloowird.workers.dev'.replace(/\/+$/, '');
+      var selector = '.cloudflare-pageviews';
+      var countSelector = '.cloudflare-pageviews-count';
 
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
+      function request(path, body) {
+        return fetch(apiUrl + path, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        }).then(function(response) {
+          if (!response.ok) throw new Error('Page view request failed');
+          return response.json();
         });
-    }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
       }
-    });
+
+      function setCount(element, count) {
+        var target = element.querySelector(countSelector);
+        if (target) target.textContent = count || 0;
+      }
+
+      function collectEntries(elements) {
+        return Array.prototype.map.call(elements, function(element) {
+          return {
+            element: element,
+            url: element.getAttribute('data-pageview-url'),
+            title: element.getAttribute('data-pageview-title') || ''
+          };
+        }).filter(function(entry) {
+          return entry.url;
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var entries = collectEntries(document.querySelectorAll(selector));
+        if (!entries.length) return;
+
+        if (entries.length === 1 && document.body.className.indexOf('page-post-detail') !== -1) {
+          request('/api/views/hit', {
+            url: entries[0].url,
+            title: entries[0].title
+          }).then(function(data) {
+            setCount(entries[0].element, data.time);
+          }).catch(function(error) {
+            console.log(error.message);
+          });
+          return;
+        }
+
+        request('/api/views/query', {
+          urls: entries.map(function(entry) { return entry.url; })
+        }).then(function(data) {
+          var counts = data.counts || {};
+          entries.forEach(function(entry) {
+            setCount(entry.element, counts[entry.url]);
+          });
+        }).catch(function(error) {
+          console.log(error.message);
+        });
+      });
+    })();
   </script>
 
 

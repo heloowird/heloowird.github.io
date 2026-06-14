@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="Heloowird">
 <meta property="og:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。 在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2026-06-14T03:07:02.866Z">
+<meta property="og:updated_time" content="2026-06-14T11:20:45.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
 <meta name="twitter:description" content="前言在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。 在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型">
@@ -350,7 +350,9 @@
 
           
           
-             <span id="/2017/03/08/diff_errors_of_neural_network/" class="leancloud_visitors" data-flag-title="使用神经网络解决分类问题时，为什么交叉熵误差更好">
+
+          
+             <span data-pageview-url="/2017/03/08/diff_errors_of_neural_network/" class="cloudflare-pageviews" data-pageview-title="使用神经网络解决分类问题时，为什么交叉熵误差更好">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -358,7 +360,7 @@
                
                  <span class="post-meta-item-text">阅读次数 </span>
                
-                 <span class="leancloud-visitors-count"></span>
+                 <span class="cloudflare-pageviews-count"></span>
              </span>
           
 
@@ -449,8 +451,8 @@
 <p>第二个模型的均方差比第一个模型的更小，为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(0.14 + 0.14 + 0.74) / 3 = 0.34</span><br></pre></td></tr></table></figure></p>
 <p>从误差数值变化来看，均方差和交叉熵误差一样，从第一个模型到第二个更好的模型时，误差有明显的下降。在衡量模型好坏方面差别似乎不大，但均方差更强调预测错误的样本。</p>
 <p>以上通过具体例子可以看到，在训练神经网络分类模型训练过程中，交叉熵误差比0-1分类误差更好；但是很难说服我们交叉熵误差比均方差更好。</p>
-<h3 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h3><p>从均方差公式来看:<br>\begin{equation} \label{1}<br>L(y, x) = {\frac 12}{(y - a)^2}<br>\end{equation}<br>其中$x$为输入，$y$为label，$a$为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>在训练神经网络时，根据梯度下降算法，最后一层参数$w$ 和$b$的更新公式为：<br>\begin{equation} \label{2}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot {\frac {\partial L} {\partial w}} \\<br>b \leftarrow b - \eta \cdot {\frac {\partial L} {\partial b}}<br>\end{cases}<br>\end{equation}<br>根据链式求导法则：<br>\begin{equation} \label{3}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = -(y -a) \cdot {\sigma}’(z) \cdot x \\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = -(y -a) \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>而$\sigma’(z)$由不同激活函数决定：<br>\begin{equation} \label{4}<br>\begin{cases}<br>{\sigma}’(z) = \sigma(z) \cdot (1-\sigma(z)) &amp;\text{if } \sigma(z) = \frac {1}{1+e^{-z}} \\<br>{\sigma}’(z_k) = \sigma(z_k) \cdot (1-\sigma(z_k)) &amp;\text{if } \sigma(z) = softmax(z)<br>\end{cases}<br>\end{equation}<br>所以参数最终更新公式为：<br>\begin{equation} \label{5}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z)) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))<br>\end{cases}<br>\end{equation}<br>当预测值接近真实值(即$\sigma(z)$ 或者$(1-\sigma(z))$接近$0$时，更新项$\eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))$接近0，梯度出现“消失”现象。举例来说，当输出值$a$为$0.9$时，$a \cdot (1-a) = 0.09$，使得$w$和$b$的更新项变得很小，导致参数几乎不更新。</p>
-<p>而交叉熵损失误差恰好可以避免这一点。为简单起见，以二分类为例，交叉熵损失函数为：<br>\begin{equation} \label{6}<br>L(y, x) = -(y \cdot lna + (1-y) \cdot ln(1-a))<br>\end{equation}<br>同样$x$为输入，$y$为label，$a$为最后分类器的输出：$a = \sigma(z), z = wx + b$<br>那么，根据链式求导法则，$w$和$b$的更新公式为：<br>\begin{equation} \label{7}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot x \\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>根据公式\eqref{4}，消去$a \cdot (1-a)$，得：<br>\begin{equation} \label{8}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y)<br>\end{cases}<br>\end{equation}<br>比较公式\eqref{5}和公式\eqref{8}易知，引发“梯度消失”的项已经消除，当输出值$a$为$0.9$时，$0.09$这项乘式因子变为1，故$w$和$b$更新更快。</p>
+<h3 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h3><p>从均方差公式来看:<br>\begin{equation} \label{1}<br>L(y, x) = {\frac 12}{(y - a)^2}<br>\end{equation}<br>其中<script type="math/tex">x</script>为输入，<script type="math/tex">y</script>为label，<script type="math/tex">a</script>为最后分类器的输出：<script type="math/tex">a = \sigma(z), z = wx + b</script><br>在训练神经网络时，根据梯度下降算法，最后一层参数<script type="math/tex">w</script> 和<script type="math/tex">b</script>的更新公式为：<br>\begin{equation} \label{2}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot {\frac {\partial L} {\partial w}} \\<br>b \leftarrow b - \eta \cdot {\frac {\partial L} {\partial b}}<br>\end{cases}<br>\end{equation}<br>根据链式求导法则：<br>\begin{equation} \label{3}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = -(y -a) \cdot {\sigma}’(z) \cdot x \\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = -(y -a) \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>而<script type="math/tex">\sigma'(z)</script>由不同激活函数决定：<br>\begin{equation} \label{4}<br>\begin{cases}<br>{\sigma}’(z) = \sigma(z) \cdot (1-\sigma(z)) &amp;\text{if } \sigma(z) = \frac {1}{1+e^{-z}} \\<br>{\sigma}’(z_k) = \sigma(z_k) \cdot (1-\sigma(z_k)) &amp;\text{if } \sigma(z) = softmax(z)<br>\end{cases}<br>\end{equation}<br>所以参数最终更新公式为：<br>\begin{equation} \label{5}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z)) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))<br>\end{cases}<br>\end{equation}<br>当预测值接近真实值(即<script type="math/tex">\sigma(z)</script> 或者<script type="math/tex">(1-\sigma(z))</script>接近<script type="math/tex">0</script>时，更新项<script type="math/tex">\eta \cdot (a-y) \cdot \sigma(z) \cdot (1-\sigma(z))</script>接近0，梯度出现“消失”现象。举例来说，当输出值<script type="math/tex">a</script>为<script type="math/tex">0.9</script>时，<script type="math/tex">a \cdot (1-a) = 0.09</script>，使得<script type="math/tex">w</script>和<script type="math/tex">b</script>的更新项变得很小，导致参数几乎不更新。</p>
+<p>而交叉熵损失误差恰好可以避免这一点。为简单起见，以二分类为例，交叉熵损失函数为：<br>\begin{equation} \label{6}<br>L(y, x) = -(y \cdot lna + (1-y) \cdot ln(1-a))<br>\end{equation}<br>同样<script type="math/tex">x</script>为输入，<script type="math/tex">y</script>为label，<script type="math/tex">a</script>为最后分类器的输出：<script type="math/tex">a = \sigma(z), z = wx + b</script><br>那么，根据链式求导法则，<script type="math/tex">w</script>和<script type="math/tex">b</script>的更新公式为：<br>\begin{equation} \label{7}<br>\begin{cases}<br>\frac {\partial L} {\partial w} = {\frac {\partial L} {\partial a}} \cdot  {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial w}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot x \\<br>\frac {\partial L} {\partial b} = {\frac {\partial L} {\partial a}} \cdot {\frac {\partial a} {\partial z}} \cdot {\frac {\partial z} {\partial b}} = \frac {a-y} {a \cdot (1-a)} \cdot {\sigma}’(z) \cdot 1<br>\end{cases}<br>\end{equation}<br>根据公式(4)，消去<script type="math/tex">a \cdot (1-a)</script>，得：<br>\begin{equation} \label{8}<br>\begin{cases}<br>w \leftarrow w - \eta \cdot (a-y) \cdot x \\<br>b \leftarrow b - \eta \cdot (a-y)<br>\end{cases}<br>\end{equation}<br>比较公式(5)和公式(8)易知，引发“梯度消失”的项已经消除，当输出值<script type="math/tex">a</script>为<script type="math/tex">0.9</script>时，<script type="math/tex">0.09</script>这项乘式因子变为1，故<script type="math/tex">w</script>和<script type="math/tex">b</script>更新更快。</p>
 <p>综上所知，使用交叉熵误差使得整个梯度下降算法对参数更新方式比均方差的更加有效率。</p>
 <h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏，而不使用0-1分类误差或者均方差。以上的误差均为训练过程中对模型好坏的度量。而在测试过程中，通常使用0-1误差，即分类准确率指标，更贴近应用层面。</p>
 <p>参考资料：</p>
@@ -823,115 +825,76 @@
         }
       });
     </script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
   
 
 
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("Vf92KouHR84z9fW8bDJL0mDK-gzGzoHsz", "nRwBltvat2tBbhvyjmq2oohn");</script>
+
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
+    (function() {
+      var apiUrl = 'https://blog-page-views.heloowird.workers.dev'.replace(/\/+$/, '');
+      var selector = '.cloudflare-pageviews';
+      var countSelector = '.cloudflare-pageviews-count';
 
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
+      function request(path, body) {
+        return fetch(apiUrl + path, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        }).then(function(response) {
+          if (!response.ok) throw new Error('Page view request failed');
+          return response.json();
         });
-    }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
       }
-    });
+
+      function setCount(element, count) {
+        var target = element.querySelector(countSelector);
+        if (target) target.textContent = count || 0;
+      }
+
+      function collectEntries(elements) {
+        return Array.prototype.map.call(elements, function(element) {
+          return {
+            element: element,
+            url: element.getAttribute('data-pageview-url'),
+            title: element.getAttribute('data-pageview-title') || ''
+          };
+        }).filter(function(entry) {
+          return entry.url;
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var entries = collectEntries(document.querySelectorAll(selector));
+        if (!entries.length) return;
+
+        if (entries.length === 1 && document.body.className.indexOf('page-post-detail') !== -1) {
+          request('/api/views/hit', {
+            url: entries[0].url,
+            title: entries[0].title
+          }).then(function(data) {
+            setCount(entries[0].element, data.time);
+          }).catch(function(error) {
+            console.log(error.message);
+          });
+          return;
+        }
+
+        request('/api/views/query', {
+          urls: entries.map(function(entry) { return entry.url; })
+        }).then(function(data) {
+          var counts = data.counts || {};
+          entries.forEach(function(entry) {
+            setCount(entry.element, counts[entry.url]);
+          });
+        }).catch(function(error) {
+          console.log(error.message);
+        });
+      });
+    })();
   </script>
 
 
