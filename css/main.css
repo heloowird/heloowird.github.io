@@ -196,13 +196,13 @@ img {
 
 .site-main {
   flex: 1;
-  padding: 24px 0 44px;
+  padding: 24px 0 20px;
 }
 
 .minimal-post-list {
   width: min(100%, 640px);
-  min-height: 384px;
-  margin: 24px auto 36px;
+  min-height: 320px;
+  margin: 20px auto 24px;
 }
 
 .minimal-post-item {
@@ -634,7 +634,7 @@ img {
   justify-content: center;
   gap: 8px;
   height: 32px;
-  margin-top: 42px;
+  margin-top: 18px;
 }
 
 .pagination .page-number,
@@ -674,7 +674,7 @@ img {
 }
 
 .site-footer {
-  padding: 28px 0 44px;
+  padding: 12px 0 24px;
   color: var(--soft);
   text-align: center;
   font-size: 12px;
@@ -715,7 +715,7 @@ img {
   }
 
   .site-main {
-    padding: 24px 0 32px;
+    padding: 22px 0 18px;
   }
 
   .post-title {
