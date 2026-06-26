@@ -80,7 +80,9 @@
 
 
 
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5.1.0">
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.0">
 
 
 
@@ -102,7 +104,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"remove","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
     motion: true,
     duoshuo: {
@@ -188,52 +190,18 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-blog">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
-            
-            首页
+            Blog
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/heloowird" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
-            
-            关于
+            GitHub
           </a>
         </li>
       
@@ -658,99 +626,6 @@
 
         </div>
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <section class="site-overview sidebar-panel sidebar-panel-active">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image" src="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460" alt="Heloowird">
-          <p class="site-author-name" itemprop="name">Heloowird</p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-        
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">15</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-            <div class="site-state-item site-state-categories">
-              <a href="/categories">
-                <span class="site-state-item-count">3</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">10</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/heloowird" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
-
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
       </div>
     </main>
 
@@ -928,72 +803,6 @@
   
 
   
-
-  <script>
-    (function() {
-      var apiUrl = 'https://blog-page-views.heloowird.workers.dev'.replace(/\/+$/, '');
-      var selector = '.cloudflare-pageviews';
-      var countSelector = '.cloudflare-pageviews-count';
-
-      function request(path, body) {
-        return fetch(apiUrl + path, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(body)
-        }).then(function(response) {
-          if (!response.ok) throw new Error('Page view request failed');
-          return response.json();
-        });
-      }
-
-      function setCount(element, count) {
-        var target = element.querySelector(countSelector);
-        if (target) target.textContent = count || 0;
-      }
-
-      function collectEntries(elements) {
-        return Array.prototype.map.call(elements, function(element) {
-          return {
-            element: element,
-            url: element.getAttribute('data-pageview-url'),
-            title: element.getAttribute('data-pageview-title') || ''
-          };
-        }).filter(function(entry) {
-          return entry.url;
-        });
-      }
-
-      document.addEventListener('DOMContentLoaded', function() {
-        var entries = collectEntries(document.querySelectorAll(selector));
-        if (!entries.length) return;
-
-        if (entries.length === 1 && document.body.className.indexOf('page-post-detail') !== -1) {
-          request('/api/views/hit', {
-            url: entries[0].url,
-            title: entries[0].title
-          }).then(function(data) {
-            setCount(entries[0].element, data.time);
-          }).catch(function(error) {
-            console.log(error.message);
-          });
-          return;
-        }
-
-        request('/api/views/query', {
-          urls: entries.map(function(entry) { return entry.url; })
-        }).then(function(data) {
-          var counts = data.counts || {};
-          entries.forEach(function(entry) {
-            setCount(entry.element, counts[entry.url]);
-          });
-        }).catch(function(error) {
-          console.log(error.message);
-        });
-      });
-    })();
-  </script>
-
-
 
   
 
