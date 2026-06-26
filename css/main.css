@@ -200,7 +200,9 @@ img {
 }
 
 .minimal-post-list {
-  margin: 24px 0 36px;
+  width: min(100%, 640px);
+  min-height: 384px;
+  margin: 24px auto 36px;
 }
 
 .minimal-post-item {
@@ -628,8 +630,10 @@ img {
 
 .pagination {
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 8px;
+  height: 32px;
   margin-top: 42px;
 }
 
