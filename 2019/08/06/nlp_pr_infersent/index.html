@@ -1,639 +1,158 @@
 <!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NLP论文阅读- InferSent | Heloowird</title>
 
 
-
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
 
+  <link rel="shortcut icon" href="/favicon.ico">
 
 
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+<link rel="stylesheet" href="/css/main.css?v=20260626-mathjax">
 
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
-
-
-
-
-  
-  
-  
-  
-
-  
+  <meta name="generator" content="Hexo 8.1.2"></head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+  <div class="brand-block">
+    <a class="brand" href="/" aria-label="Heloowird">
+      <span class="brand-title">Heloowird</span>
+    </a>
     
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
-
-
-  <meta name="keywords" content="nlp,">
-
-
-
-
-
-
-
-
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5.1.0">
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.0">
-
-
-
-
-
-
-<meta name="description" content="论文题目Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent) 背景介绍许多现代NLP系统依赖以无监督方式在大规模语料上训练得到的词向量，但鲜有大文本块（如句子）级别向量取得了成功。一些无监督地学习句子表示的尝试均未达到令人满意的结果，以至没有">
-<meta name="keywords" content="nlp">
-<meta property="og:type" content="article">
-<meta property="og:title" content="NLP论文阅读- InferSent">
-<meta property="og:url" content="https://heloowird.github.io/2019/08/06/nlp_pr_infersent/index.html">
-<meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="论文题目Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent) 背景介绍许多现代NLP系统依赖以无监督方式在大规模语料上训练得到的词向量，但鲜有大文本块（如句子）级别向量取得了成功。一些无监督地学习句子表示的尝试均未达到令人满意的结果，以至没有">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://heloowird.github.io/images/blog_img/infersent-model-arch.png">
-<meta property="og:image" content="https://heloowird.github.io/images/blog_img/bilstm-max.png">
-<meta property="og:image" content="https://heloowird.github.io/images/blog_img/self-attention.png">
-<meta property="og:image" content="https://heloowird.github.io/images/blog_img/hconv-net.png">
-<meta property="og:updated_time" content="2026-06-14T03:07:02.869Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="NLP论文阅读- InferSent">
-<meta name="twitter:description" content="论文题目Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent) 背景介绍许多现代NLP系统依赖以无监督方式在大规模语料上训练得到的词向量，但鲜有大文本块（如句子）级别向量取得了成功。一些无监督地学习句子表示的尝试均未达到令人满意的结果，以至没有">
-<meta name="twitter:image" content="https://heloowird.github.io/images/blog_img/infersent-model-arch.png">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"remove","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="https://heloowird.github.io/2019/08/06/nlp_pr_infersent/">
-
-
-
-
-
-  <title> NLP论文阅读- InferSent | Heloowird </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Heloowird</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-      
-        <p class="site-subtitle"></p>
-      
   </div>
 
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="site-nav" id="site-nav">
+    
+      <a href="/">Blog</a>
+    
+      <a href="https://github.com/heloowird">GitHub</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main" id="main">
+        <article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">NLP论文阅读- InferSent</h1>
+    <div class="post-meta">
+  
+    <time datetime="2019-08-06T14:44:22.000Z">2019-08-06</time>
+  
 </div>
 
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-blog">
-          <a href="/" rel="section">
-            
-            Blog
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-github">
-          <a href="https://github.com/heloowird" rel="section">
-            
-            GitHub
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
-
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2019/08/06/nlp_pr_infersent/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Heloowird">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                NLP论文阅读- InferSent
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-06T22:44:22+08:00">
-                2019-08-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h4 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h4><p>Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent)</p>
+  </header>
+  <div class="post-content">
+    <h4 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h4><p>Supervised Learning of Universal Sentence Representations from Natural Language Inference Data(InferSent)</p>
 <h4 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h4><p>许多现代NLP系统依赖以无监督方式在大规模语料上训练得到的词向量，但鲜有大文本块（如句子）级别向量取得了成功。一些无监督地学习句子表示的尝试均未达到令人满意的结果，以至没有得到大规模应用。</p>
-<p>如何学习句子通用表示，或者说如何找到一个通用的句子编码器—将句子中的多个单词和短语映射到一个固定长度的向量。这个问题可分解为两个子问题：</p>
+<p>如何学习句子通用表示，或者说如何找到一个通用的句子编码器–将句子中的多个单词和短语映射到一个固定长度的向量。这个问题可分解为两个子问题：</p>
 <ul>
 <li>需要找到一个优良的神经网络结构</li>
 <li>在何种任务上，以何种方式训练该网络</li>
 </ul>
 <p>围绕着这两个问题，本文提出了以监督学习方式在Stanford Natural Language Inference数据集学习通用句子表示，并在大部分迁移任务中超过了无监督方法的SkipThought。</p>
-<h5 id="何为SNLI？"><a href="#何为SNLI？" class="headerlink" title="何为SNLI？"></a>何为SNLI？</h5><p>SNLI数据集<sup>[<a href="https://www.jianshu.com/p/92d7f6eaacf5" title="Siamese network 孪生神经网络" target="_blank" rel="noopener">2</a>]</sup>共有57万人工生成的句子对，即推理前提(premise)与推理假设(hypothesis)，人工标注了句子对存在的以下三种逻辑关系标签：</p>
+<h5 id="何为SNLI？"><a href="#何为SNLI？" class="headerlink" title="何为SNLI？"></a>何为SNLI？</h5><p>SNLI数据集<sup>[<a href="https://www.jianshu.com/p/92d7f6eaacf5" title="Siamese network 孪生神经网络">2</a>]</sup>共有57万人工生成的句子对，即推理前提(premise)与推理假设(hypothesis)，人工标注了句子对存在的以下三种逻辑关系标签：</p>
 <ul>
 <li>蕴含（entailment），即由前提可推出假设</li>
 <li>矛盾（contradiction），即前提和假设相矛盾</li>
 <li>中立（neutral ），即无法判断前提和假设的关系</li>
 </ul>
 <p>该语料通常用于自然语言推理 (Natural language inference,NLI)任务，也称为文本蕴含识别(Recognizing Textual Entailment, RTE)。</p>
-<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/infersent-model-arch.png" class="full-image" alt="NLI通用训练框架"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/blog_img/infersent-model-arch.png" alt="NLI通用训练框架" title="NLI通用训练框架"><figcaption>NLI通用训练框架</figcaption></figure>
+
 <p>NLI任务通常有两种模型结构，一种是分别对每个句子进行编码，另一种是使用特征交叉或注意力机制对句子进行联合编码。前一种方式的副产品是可以学习到良好的句子向量表示，后一种更倾向于直奔主题地解决该任务。</p>
-<p>本文旨在学习通用的句子表示，故选择前种通用训练方式，使用了一个孪生神经网络（Siamese Network）。Siamese也有连体的意思，对神经网络而言，连体就是共享网络权重<sup>[<a href="https://nlp.stanford.edu/projects/snli/" title="SNLI" target="_blank" rel="noopener">3</a>]</sup>，在实际操作中，使用同一模型即可。分为3部分：</p>
+<p>本文旨在学习通用的句子表示，故选择前种通用训练方式，使用了一个孪生神经网络（Siamese Network）。Siamese也有连体的意思，对神经网络而言，连体就是共享网络权重<sup>[<a href="https://nlp.stanford.edu/projects/snli/" title="SNLI">3</a>]</sup>，在实际操作中，使用同一模型即可。分为3部分：</p>
 <ol>
-<li>使用同一句子编码器对推理前提句子和推理假设句子做编码，分别得到句子向量<script type="math/tex">u</script>和<script type="math/tex">v</script></li>
-<li>匹配部分使用拼接concat(<script type="math/tex">u</script>, <script type="math/tex">v</script>)，逐元素相乘(<script type="math/tex">u * v</script>)，逐元素差绝对值<script type="math/tex">(|u - v|)</script>来抽取相互特征</li>
+<li>使用同一句子编码器对推理前提句子和推理假设句子做编码，分别得到句子向量\(u\)和\(v\)</li>
+<li>匹配部分使用拼接concat(\(u\), \(v\))，逐元素相乘(\(u * v\))，逐元素差绝对值\((|u - v|)\)来抽取相互特征</li>
 <li>经过多个全联接之后，接三分类softmax层</li>
 </ol>
 <p>文中接下来比较了7种句子编码器：LSTM最后隐层，GRU最后隐层，BiGRU最后隐层拼接，BiLSTM+Mean Pooling，BiLSTM+Max Pooling，自注意力网络(Inner-attention)和层次卷积网络(HConvNet)。</p>
 <p>LSTM和GRU按下不表，下面分别介绍BiLSTM+Max Pooling，自注意力网络和层次卷积网络。</p>
-<h5 id="BiLSTM-Max-Pooling"><a href="#BiLSTM-Max-Pooling" class="headerlink" title="BiLSTM + Max Pooling"></a>BiLSTM + Max Pooling</h5><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/bilstm-max.png" class="full-image" alt="BiLSTM-Max网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-<p>先通过BiLSTM对句子进行编码，每个<script type="math/tex">t</script>时刻的前后向隐层拼接成<script type="math/tex">h_{t}</script>；然后将<script type="math/tex">n</script>个隐层转化成一个定长向量：具体地，可以<script type="math/tex">h_{t}</script>对应各个维度上取<script type="math/tex">n</script>个数的最大值（max-pooling）或者求平均（mean-pooling），这样就得到一个维度和<script type="math/tex">h_{t}</script>一样的向量来表示句子。</p>
-<h5 id="Self-attentive-network"><a href="#Self-attentive-network" class="headerlink" title="Self-attentive network"></a>Self-attentive network</h5><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/self-attention.png" class="full-image" alt="Inner-attention网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-<p>\begin{equation}<br>\overline{h<em>{i}} = tanh(w</em>{i}h<em>{i}+b</em>{i})<br>\end{equation}<br>\begin{equation}<br>\alpha<em>{i} = \frac{e^{\overline{h}</em>{i}^{T}}u<em>{w}}{\sum</em>{i}e^{\overline{h}<em>{i}^{T}}u</em>{w}}<br>\end{equation}<br>\begin{equation}<br>u = \sum<em>{i}^{n}\alpha</em>{i}h_{i}<br>\end{equation}</p>
-<p>用BiLSTM进行句子编码，拼接前后向隐层状态<script type="math/tex">h_{i}</script>，经过<script type="math/tex">(w_{i}, b_{i})</script>仿射变换和<script type="math/tex">tanh</script>激活函数，得到<script type="math/tex">\overline{h_{i}}</script>。然后计算<script type="math/tex">\overline{h_{i}}</script>和上下文向量<script type="math/tex">u_{w}</script>相似度<script type="math/tex">\alpha_{i}</script>，后面作为<script type="math/tex">\overline{h_{i}}</script>的权重；最后各个<script type="math/tex">\alpha_{i}</script>乘以<script type="math/tex">h_{i}</script>并累加得到句子向量。</p>
-<p>这里上下文向量@@MATHJAX<em>SEGMENT_22@@没有详细说明。在其引用的文章中，有两种方式计算上下文向量。两种方式通过对隐层状态进行变换得到，但变换方式不一样。文中<script type="math/tex">u_{w}</script>采用的变换方式<sup>[<a href="https://arxiv.org/pdf/1703.03130.pdf" title="A Structured Self-attentive Sentence Embedding" target="_blank" rel="noopener">4</a>]</sup>如下：<br>\begin{equation}<br>\alpha  = softmax(w</em>{s2}tanh(W<em>{s1}H^{T})<br>\end{equation}<br>\begin{equation}<br>u</em>{w} = \alpha H^{T}<br>\end{equation}</p>
-<p>当<script type="math/tex">w_{s2}</script>为矩阵时，会产出多个<script type="math/tex">u_{w}</script>，即多个上下文向量，因此会生成多个句子表示，拼接起来即为句子向量。</p>
-<h5 id="Hierarchical-ConvNet"><a href="#Hierarchical-ConvNet" class="headerlink" title="Hierarchical ConvNet"></a>Hierarchical ConvNet</h5><span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img referrerpolicy="no-referrer" itemprop="url image" src="/images/blog_img/hconv-net.png" class="full-image" alt="层次卷积网络结构"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<h5 id="BiLSTM-Max-Pooling"><a href="#BiLSTM-Max-Pooling" class="headerlink" title="BiLSTM + Max Pooling"></a>BiLSTM + Max Pooling</h5><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/blog_img/bilstm-max.png" alt="BiLSTM-Max网络结构" title="BiLSTM-Max网络结构"><figcaption>BiLSTM-Max网络结构</figcaption></figure>
+
+<p>先通过BiLSTM对句子进行编码，每个\(t\)时刻的前后向隐层拼接成\(h_{t}\)；然后将\(n\)个隐层转化成一个定长向量：具体地，可以\(h_{t}\)对应各个维度上取\(n\)个数的最大值（max-pooling）或者求平均（mean-pooling），这样就得到一个维度和\(h_{t}\)一样的向量来表示句子。</p>
+<h5 id="Self-attentive-network"><a href="#Self-attentive-network" class="headerlink" title="Self-attentive network"></a>Self-attentive network</h5><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/blog_img/self-attention.png" alt="Inner-attention网络结构" title="Inner-attention网络结构"><figcaption>Inner-attention网络结构</figcaption></figure>
+
+<p><div class="math-display">\[\overline{h_{i}} = tanh(w_{i}h_{i}+b_{i})\]</div><br><div class="math-display">\[\alpha_{i} = \frac{e^{\overline{h}_{i}^{T}}u_{w}}{\sum_{i}e^{\overline{h}_{i}^{T}}u_{w}}\]</div><br><div class="math-display">\[u = \sum_{i}^{n}\alpha_{i}h_{i}\]</div></p>
+<p>用BiLSTM进行句子编码，拼接前后向隐层状态\(h_{i}\)，经过\((w_{i}, b_{i})\)仿射变换和\(tanh\)激活函数，得到\(\overline{h_{i}}\)。然后计算\(\overline{h_{i}}\)和上下文向量\(u_{w}\)相似度\(\alpha_{i}\)，后面作为\(\overline{h_{i}}\)的权重；最后各个\(\alpha_{i}\)乘以\(h_{i}\)并累加得到句子向量。</p>
+<p>这里上下文向量\(u_{w}\)没有详细说明。在其引用的文章中，有两种方式计算上下文向量。两种方式通过对隐层状态进行变换得到，但变换方式不一样。文中\(u_{w}\)采用的变换方式<sup>[<a href="https://arxiv.org/pdf/1703.03130.pdf" title="A Structured Self-attentive Sentence Embedding">4</a>]</sup>如下：<br><div class="math-display">\[\alpha  = softmax(w_{s2}tanh(W_{s1}H^{T})\]</div><br><div class="math-display">\[u_{w} = \alpha H^{T}\]</div></p>
+<p>当\(w_{s2}\)为矩阵时，会产出多个\(u_{w}\)，即多个上下文向量，因此会生成多个句子表示，拼接起来即为句子向量。</p>
+<h5 id="Hierarchical-ConvNet"><a href="#Hierarchical-ConvNet" class="headerlink" title="Hierarchical ConvNet"></a>Hierarchical ConvNet</h5><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/blog_img/hconv-net.png" alt="层次卷积网络结构" title="层次卷积网络结构"><figcaption>层次卷积网络结构</figcaption></figure>
+
 <p>层次卷积结构使用了4层卷积层提取不同层次的特征，额外使用3个max-pooling获取不同层次的句子特征，最后把各个层次的特征拼接起来，得到句子向量。</p>
 <h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>训练超参数</p>
 <ul>
-<li>SGD with lr=0.1， weight decay ratio=0.99；每遍训练完成时，若验证集上准确率下降，lr=lr/5</li>
-<li>batch size=64</li>
-<li>当lr&lt;<script type="math/tex">10^{-5}</script>，停止训练</li>
+<li>SGD with lr&#x3D;0.1， weight decay ratio&#x3D;0.99；每遍训练完成时，若验证集上准确率下降，lr&#x3D;lr&#x2F;5</li>
+<li>batch size&#x3D;64</li>
+<li>当lr&lt;\(10^{-5}\)，停止训练</li>
 <li>全联接选用一个含512隐层单元的隐层</li>
 <li>选用Common Crawl 840B数据集上300维GloVe向量作为固定的词向量</li>
 </ul>
-<p>在迁移任务中，输入为句子编码器输出的句子向量，然后使用batch size=64，Adam方式训练出一个LR作为分类器，比较各个句子编码器的效果。</p>
+<p>在迁移任务中，输入为句子编码器输出的句子向量，然后使用batch size&#x3D;64，Adam方式训练出一个LR作为分类器，比较各个句子编码器的效果。</p>
 <h4 id="模型比较"><a href="#模型比较" class="headerlink" title="模型比较"></a>模型比较</h4><p>BiLSTM-MaxPooling输出4096维的句子向量在SNLI和迁移任务上表现最佳。有些模型专注于学习目标任务上的句子向量，而忽视通用用途的句子表示，如Inner-attention网络；相反，BiLSTM-Mean不聚焦目标任务所需的特有特征，但学习到了句子的通用信息。</p>
 <p>在一定范围内，迁移任务效果随句子向量维度增加而更佳。随着向量维度增大，不同模型具有不等程度抽取信息能力。作者认为有些模型抽取的特征虽然和目标任务不直接相关，但对迁移任务还是很有用。</p>
 <p>参考资料：</p>
 <ol>
-<li><a href="https://arxiv.org/pdf/1705.02364.pdf" target="_blank" rel="noopener">Supervised Learning of Universal Sentence Representations from Natural Language Inference Data</a></li>
-<li><a href="https://www.jianshu.com/p/92d7f6eaacf5" target="_blank" rel="noopener">Siamese network 孪生神经网络</a></li>
-<li><a href="https://nlp.stanford.edu/projects/snli/" target="_blank" rel="noopener">SNLI</a></li>
-<li><a href="https://arxiv.org/pdf/1703.03130.pdf" target="_blank" rel="noopener">A Structured Self-attentive Sentence Embedding</a></li>
+<li><a href="https://arxiv.org/pdf/1705.02364.pdf">Supervised Learning of Universal Sentence Representations from Natural Language Inference Data</a></li>
+<li><a href="https://www.jianshu.com/p/92d7f6eaacf5">Siamese network 孪生神经网络</a></li>
+<li><a href="https://nlp.stanford.edu/projects/snli/">SNLI</a></li>
+<li><a href="https://arxiv.org/pdf/1703.03130.pdf">A Structured Self-attentive Sentence Embedding</a></li>
 </ol>
 
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/nlp/" rel="tag"># nlp</a>
-          
-        </div>
-      
-
-      
-        
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/08/04/nlp_pr_ulmfit/" rel="next" title="NLP论文阅读- ULMFiT">
-                <i class="fa fa-chevron-left"></i> NLP论文阅读- ULMFiT
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/17/nlp_pr_elmo/" rel="prev" title="NLP论文阅读- ELMo">
-                NLP论文阅读- ELMo <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
   </div>
+  
+    <nav class="post-nav">
+      
+        <a href="/2019/11/17/nlp_pr_elmo/">上一篇：NLP论文阅读- ELMo</a>
+      
+      
+        <a href="/2019/08/04/nlp_pr_ulmfit/">下一篇：NLP论文阅读- ULMFiT</a>
+      
+    </nav>
+  
+</article>
 
-          
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
+      </main>
+      <footer class="site-footer">
+  <div>
+    &copy; 2015 - 2026
+    Heloowird
   </div>
+</footer>
 
-
-        </div>
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">
-  
-  &copy;  2015 - 
-  <span itemprop="copyrightYear">2026</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Heloowird</span>
-</div>
-
-
-
-        
-
-<div class="busuanzi-count">
-
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-
-  
-  
-</div>
-
-
-
-        
-      </div>
-    </footer>
-
+    </div>
+    <script src="/js/main.js"></script>
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-    
-  </div>
 
-  
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=3.7.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-  
-  
-
-  
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-		  processRefs: true
-        },
-		TeX: {
-		  equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
-		  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
-		},
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
-  
-
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-</body>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="/lib/mathjax/tex-chtml.js"></script>
+
+
+  </body>
 </html>

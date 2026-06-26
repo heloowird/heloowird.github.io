@@ -1,590 +1,109 @@
 <!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TensorFlow 踩坑之内存和耗时不断增加的问题 | Heloowird</title>
 
 
-
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
 
+  <link rel="shortcut icon" href="/favicon.ico">
 
 
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+<link rel="stylesheet" href="/css/main.css?v=20260626-mathjax">
 
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
-
-
-
-
-  
-  
-  
-  
-
-  
+  <meta name="generator" content="Hexo 8.1.2"></head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+  <div class="brand-block">
+    <a class="brand" href="/" aria-label="Heloowird">
+      <span class="brand-title">Heloowird</span>
+    </a>
     
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
-
-
-  <meta name="keywords" content="machine learning,tensorflow,">
-
-
-
-
-
-
-
-
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5.1.0">
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5.1.0">
-
-
-
-
-
-
-<meta name="description" content="问题描述使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的issue。 问题代码 123456789101112131415161718192021222324252627282930...with tf.Graph().as_default():    with slim.arg_scope(in">
-<meta name="keywords" content="machine learning,tensorflow">
-<meta property="og:type" content="article">
-<meta property="og:title" content="TensorFlow 踩坑之内存和耗时不断增加的问题">
-<meta property="og:url" content="https://heloowird.github.io/2017/08/10/tf_issue_about_memory_and_timecost/index.html">
-<meta property="og:site_name" content="Heloowird">
-<meta property="og:description" content="问题描述使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的issue。 问题代码 123456789101112131415161718192021222324252627282930...with tf.Graph().as_default():    with slim.arg_scope(in">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2026-06-14T03:07:02.870Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TensorFlow 踩坑之内存和耗时不断增加的问题">
-<meta name="twitter:description" content="问题描述使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的issue。 问题代码 123456789101112131415161718192021222324252627282930...with tf.Graph().as_default():    with slim.arg_scope(in">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"remove","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="https://heloowird.github.io/2017/08/10/tf_issue_about_memory_and_timecost/">
-
-
-
-
-
-  <title> TensorFlow 踩坑之内存和耗时不断增加的问题 | Heloowird </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Heloowird</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-      
-        <p class="site-subtitle"></p>
-      
   </div>
 
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="site-nav" id="site-nav">
+    
+      <a href="/">Blog</a>
+    
+      <a href="https://github.com/heloowird">GitHub</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main" id="main">
+        <article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">TensorFlow 踩坑之内存和耗时不断增加的问题</h1>
+    <div class="post-meta">
+  
+    <time datetime="2017-08-10T13:43:00.000Z">2017-08-10</time>
+  
 </div>
 
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-blog">
-          <a href="/" rel="section">
-            
-            Blog
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-github">
-          <a href="https://github.com/heloowird" rel="section">
-            
-            GitHub
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
-
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://heloowird.github.io/2017/08/10/tf_issue_about_memory_and_timecost/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Heloowird">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="https://avatars0.githubusercontent.com/u/3436280?v=3&s=460">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Heloowird">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Heloowird" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                TensorFlow 踩坑之内存和耗时不断增加的问题
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-10T21:43:00+08:00">
-                2017-08-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的<a href="https://github.com/tensorflow/tensorflow/issues/9471" target="_blank" rel="noopener">issue</a>。</p>
-<h4 id="问题代码"><a href="#问题代码" class="headerlink" title="问题代码"></a>问题代码</h4> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">with</span> tf.Graph().as_default():</span><br><span class="line">    <span class="keyword">with</span> slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope()):</span><br><span class="line">        <span class="comment"># build graph</span></span><br><span class="line">        preprocessed_image = tf.placeholder(tf.float32, shape=(image_size,image_size,<span class="number">3</span>), name=<span class="string">"preprocessed_images"</span>)</span><br><span class="line">        processed_image = tf.expand_dims(preprocessed_image, <span class="number">0</span>)</span><br><span class="line">        logits, end_points = inception_resnet_v2.inception_resnet_v2(processed_image, num_classes=_NUM_CLASSES, is_training=<span class="literal">False</span>)</span><br><span class="line">        probabilities = logits</span><br><span class="line">        init_fn = slim.assign_from_checkpoint_fn(sys.argv[<span class="number">1</span>], slim.get_model_variables(<span class="string">'InceptionResnetV2'</span>))</span><br><span class="line">        <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">            <span class="comment"># initialize graph</span></span><br><span class="line">            init_fn(sess)</span><br><span class="line">            <span class="comment"># run graph</span></span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">                start_time = time.time()</span><br><span class="line">                line = line.strip(<span class="string">" \r\n"</span>)</span><br><span class="line">                <span class="keyword">if</span> len(line) == <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    image_string_tmp = tf.gfile.FastGFile(line, <span class="string">'rb'</span>).read()</span><br><span class="line">                    image_decode_tmp = tf.image.decode_image(testImage_string_tmp, channels=<span class="number">3</span>)</span><br><span class="line">                    preprocessed_image_tmp = inception_preprocessing.preprocess_image(image_decode_tmp, image_size, image_size, is_training=<span class="literal">False</span>)</span><br><span class="line">                    preprocessed_image_tmp_val = sess.run([preprocessed_image_tmp])</span><br><span class="line">                    np_probabilities = sess.run(probabilities,&#123;<span class="string">"preprocessed_image:0"</span>:preprocessed_image_tmp_val[<span class="number">0</span>]&#125;)</span><br><span class="line">                    np_probabilities = np_probabilities[<span class="number">0</span>, <span class="number">0</span>:]</span><br><span class="line">                    imgfea = np_probabilities.tolist()</span><br><span class="line">                    sys.stdout.write(<span class="string">"%s\t%s\n"</span> % (line, <span class="string">" "</span>.join([<span class="string">"%.17f"</span>%x <span class="keyword">for</span> x <span class="keyword">in</span> imgfea])))</span><br><span class="line">                <span class="keyword">except</span> Exception,e:</span><br><span class="line">                    <span class="keyword">pass</span></span><br><span class="line">                <span class="keyword">print</span> &gt;&gt;sys.stderr, (time.time() - start_time) * <span class="number">1000</span></span><br></pre></td></tr></table></figure>
-<h4 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h4><p>tensorflow都是预先构建好graph，输入使用placeholder占位替代，然后再运行，即一次构建，多次运行。凭直觉，上面的代码中可能存在一个问题：<code>inception_preprocessing.preprocess_image</code>构建图操作放在了运行阶段。所以，第一步尝试把<code>inception_preprocessing.preprocess_image</code>从运行阶段放到构建图阶段，然而问题并未解决。之后查阅相关问题，按照issue上面的做法，详细记录各个步骤的耗时和内存占用。具体地，使用<code>time.time()</code>和<code>resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024</code>分别记录每步大耗时和内存占用情况。举个例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> resource</span><br><span class="line">...</span><br><span class="line">end_read_time = time.time()</span><br><span class="line">image_decode_tmp = tf.image.decode_image(testImage_string_tmp, channels=<span class="number">3</span>)</span><br><span class="line">end_decode_time = time.time()</span><br><span class="line"><span class="keyword">print</span> &gt;&gt;sys.stderr, <span class="string">"[decode image] timecost=%f memory_usage=%f"</span> % (end_decode_time - end_read_time, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / <span class="number">1024</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+  </header>
+  <div class="post-content">
+    <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>使用finetune后的图像分类模型对一批图片进行特征提取时，发现：随着时间推移，每张图片处理耗时增多，占用内存不断变大。tensorflow有类似的<a href="https://github.com/tensorflow/tensorflow/issues/9471">issue</a>。</p>
+<h4 id="问题代码"><a href="#问题代码" class="headerlink" title="问题代码"></a>问题代码</h4> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">with</span> tf.Graph().as_default():</span><br><span class="line">    <span class="keyword">with</span> slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope()):</span><br><span class="line">        <span class="comment"># build graph</span></span><br><span class="line">        preprocessed_image = tf.placeholder(tf.float32, shape=(image_size,image_size,<span class="number">3</span>), name=<span class="string">&quot;preprocessed_images&quot;</span>)</span><br><span class="line">        processed_image = tf.expand_dims(preprocessed_image, <span class="number">0</span>)</span><br><span class="line">        logits, end_points = inception_resnet_v2.inception_resnet_v2(processed_image, num_classes=_NUM_CLASSES, is_training=<span class="literal">False</span>)</span><br><span class="line">        probabilities = logits</span><br><span class="line">        init_fn = slim.assign_from_checkpoint_fn(sys.argv[<span class="number">1</span>], slim.get_model_variables(<span class="string">&#x27;InceptionResnetV2&#x27;</span>))</span><br><span class="line">        <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">            <span class="comment"># initialize graph</span></span><br><span class="line">            init_fn(sess)</span><br><span class="line">            <span class="comment"># run graph</span></span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">                start_time = time.time()</span><br><span class="line">                line = line.strip(<span class="string">&quot; \r\n&quot;</span>)</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(line) == <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    image_string_tmp = tf.gfile.FastGFile(line, <span class="string">&#x27;rb&#x27;</span>).read()</span><br><span class="line">                    image_decode_tmp = tf.image.decode_image(testImage_string_tmp, channels=<span class="number">3</span>)</span><br><span class="line">                    preprocessed_image_tmp = inception_preprocessing.preprocess_image(image_decode_tmp, image_size, image_size, is_training=<span class="literal">False</span>)</span><br><span class="line">                    preprocessed_image_tmp_val = sess.run([preprocessed_image_tmp])</span><br><span class="line">                    np_probabilities = sess.run(probabilities,&#123;<span class="string">&quot;preprocessed_image:0&quot;</span>:preprocessed_image_tmp_val[<span class="number">0</span>]&#125;)</span><br><span class="line">                    np_probabilities = np_probabilities[<span class="number">0</span>, <span class="number">0</span>:]</span><br><span class="line">                    imgfea = np_probabilities.tolist()</span><br><span class="line">                    sys.stdout.write(<span class="string">&quot;%s\t%s\n&quot;</span> % (line, <span class="string">&quot; &quot;</span>.join([<span class="string">&quot;%.17f&quot;</span>%x <span class="keyword">for</span> x <span class="keyword">in</span> imgfea])))</span><br><span class="line">                <span class="keyword">except</span> Exception,e:</span><br><span class="line">                    <span class="keyword">pass</span></span><br><span class="line">                <span class="built_in">print</span> &gt;&gt;sys.stderr, (time.time() - start_time) * <span class="number">1000</span></span><br></pre></td></tr></table></figure>
+<h4 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h4><p>tensorflow都是预先构建好graph，输入使用placeholder占位替代，然后再运行，即一次构建，多次运行。凭直觉，上面的代码中可能存在一个问题：<code>inception_preprocessing.preprocess_image</code>构建图操作放在了运行阶段。所以，第一步尝试把<code>inception_preprocessing.preprocess_image</code>从运行阶段放到构建图阶段，然而问题并未解决。之后查阅相关问题，按照issue上面的做法，详细记录各个步骤的耗时和内存占用。具体地，使用<code>time.time()</code>和<code>resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024</code>分别记录每步大耗时和内存占用情况。举个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> resource</span><br><span class="line">...</span><br><span class="line">end_read_time = time.time()</span><br><span class="line">image_decode_tmp = tf.image.decode_image(testImage_string_tmp, channels=<span class="number">3</span>)</span><br><span class="line">end_decode_time = time.time()</span><br><span class="line"><span class="built_in">print</span> &gt;&gt;sys.stderr, <span class="string">&quot;[decode image] timecost=%f memory_usage=%f&quot;</span> % (end_decode_time - end_read_time, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / <span class="number">1024</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>从记录日志来看，主要是<code>tf.image.decode_image</code>这一步耗时和内存不断增长。所以需要把这一步也挪到构建图阶段。</p>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Graph().as_default():</span><br><span class="line">    <span class="keyword">with</span> slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope()):</span><br><span class="line">        <span class="comment"># build graph</span></span><br><span class="line">        image_str = tf.placeholder(tf.string)</span><br><span class="line">        image_decode = tf.image.decode_image(image_str, channels=<span class="number">3</span>)</span><br><span class="line">        image_tensor = tf.placeholder(tf.uint8, shape=[<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">3</span>])</span><br><span class="line">        preprocessed_image = inception_preprocessing.preprocess_image(image_tensor, image_size, image_size, is_training=<span class="literal">False</span>)</span><br><span class="line">        processed_image = tf.expand_dims(preprocessed_image, <span class="number">0</span>)</span><br><span class="line">        logits, end_points = inception_resnet_v2.inception_resnet_v2(processed_image, num_classes=_NUM_CLASSES, is_training=<span class="literal">False</span>)</span><br><span class="line">        init_fn = slim.assign_from_checkpoint_fn(sys.argv[<span class="number">1</span>], slim.get_model_variables(<span class="string">'InceptionResnetV2'</span>))</span><br><span class="line">        <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">            <span class="comment"># initialize graph</span></span><br><span class="line">            init_fn(sess)</span><br><span class="line">            <span class="comment"># run graph</span></span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">                start_time = time.time()</span><br><span class="line">                line = line.strip(<span class="string">" \r\n"</span>)</span><br><span class="line">                <span class="keyword">if</span> len(line) == <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="keyword">with</span> open(line, <span class="string">"r"</span>) <span class="keyword">as</span> f:</span><br><span class="line">                        image_string_tmp = f.read()</span><br><span class="line">                        image_decode_tmp = sess.run([image_decode], &#123;image_str: image_string_tmp&#125;)</span><br><span class="line">                        image_feature = sess.run(logits, &#123;image_tensor:image_decode_tmp[<span class="number">0</span>]&#125;)</span><br><span class="line">                        image_feature = image_feature[<span class="number">0</span>, <span class="number">0</span>:]</span><br><span class="line">                        imgfea = image_feature.tolist()</span><br><span class="line">                        sys.stdout.write(<span class="string">"%s\t%s\n"</span> % (line, <span class="string">" "</span>.join([<span class="string">"%.17f"</span>%x <span class="keyword">for</span> x <span class="keyword">in</span> imgfea])))</span><br><span class="line">                <span class="keyword">except</span> Exception,e:</span><br><span class="line">                    sys.stderr.write(<span class="string">"%s"</span> % traceback.format_exc())</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"cost:"</span>, (time.time() - start_time) * <span class="number">1000</span></span><br></pre></td></tr></table></figure>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Graph().as_default():</span><br><span class="line">    <span class="keyword">with</span> slim.arg_scope(inception_resnet_v2.inception_resnet_v2_arg_scope()):</span><br><span class="line">        <span class="comment"># build graph</span></span><br><span class="line">        image_str = tf.placeholder(tf.string)</span><br><span class="line">        image_decode = tf.image.decode_image(image_str, channels=<span class="number">3</span>)</span><br><span class="line">        image_tensor = tf.placeholder(tf.uint8, shape=[<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">3</span>])</span><br><span class="line">        preprocessed_image = inception_preprocessing.preprocess_image(image_tensor, image_size, image_size, is_training=<span class="literal">False</span>)</span><br><span class="line">        processed_image = tf.expand_dims(preprocessed_image, <span class="number">0</span>)</span><br><span class="line">        logits, end_points = inception_resnet_v2.inception_resnet_v2(processed_image, num_classes=_NUM_CLASSES, is_training=<span class="literal">False</span>)</span><br><span class="line">        init_fn = slim.assign_from_checkpoint_fn(sys.argv[<span class="number">1</span>], slim.get_model_variables(<span class="string">&#x27;InceptionResnetV2&#x27;</span>))</span><br><span class="line">        <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">            <span class="comment"># initialize graph</span></span><br><span class="line">            init_fn(sess)</span><br><span class="line">            <span class="comment"># run graph</span></span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">                start_time = time.time()</span><br><span class="line">                line = line.strip(<span class="string">&quot; \r\n&quot;</span>)</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(line) == <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="keyword">with</span> <span class="built_in">open</span>(line, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                        image_string_tmp = f.read()</span><br><span class="line">                        image_decode_tmp = sess.run([image_decode], &#123;image_str: image_string_tmp&#125;)</span><br><span class="line">                        image_feature = sess.run(logits, &#123;image_tensor:image_decode_tmp[<span class="number">0</span>]&#125;)</span><br><span class="line">                        image_feature = image_feature[<span class="number">0</span>, <span class="number">0</span>:]</span><br><span class="line">                        imgfea = image_feature.tolist()</span><br><span class="line">                        sys.stdout.write(<span class="string">&quot;%s\t%s\n&quot;</span> % (line, <span class="string">&quot; &quot;</span>.join([<span class="string">&quot;%.17f&quot;</span>%x <span class="keyword">for</span> x <span class="keyword">in</span> imgfea])))</span><br><span class="line">                <span class="keyword">except</span> Exception,e:</span><br><span class="line">                    sys.stderr.write(<span class="string">&quot;%s&quot;</span> % traceback.format_exc())</span><br><span class="line">                <span class="built_in">print</span> <span class="string">&quot;cost:&quot;</span>, (time.time() - start_time) * <span class="number">1000</span></span><br></pre></td></tr></table></figure>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><code>tf.image.decode_image</code>仅仅是对图片进行图片解码（把图片字符转换成tensor），看似人畜无害，其实也暗藏陷阱。个人推测，每次构建图时，会为tensor分配内存。如果在运行时不断构建图，会导致内存急剧上升；时间上涨的原因待探索。所以，使用tensorflow时，<strong>尽量把tensor相关操作一次性定义在graph中</strong>，避免在运行阶段构建图。</p>
 
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
-          
-            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
-          
-        </div>
-      
-
-      
-        
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/03/08/diff_errors_of_neural_network/" rel="next" title="使用神经网络解决分类问题时，为什么交叉熵误差更好">
-                <i class="fa fa-chevron-left"></i> 使用神经网络解决分类问题时，为什么交叉熵误差更好
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/29/hive_python_udf/" rel="prev" title="Hive UDF/UDAF 的Python 实现">
-                Hive UDF/UDAF 的Python 实现 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
   </div>
+  
+    <nav class="post-nav">
+      
+        <a href="/2018/01/29/hive_python_udf/">上一篇：Hive UDF/UDAF 的Python 实现</a>
+      
+      
+        <a href="/2017/03/08/diff_errors_of_neural_network/">下一篇：使用神经网络解决分类问题时，为什么交叉熵误差更好</a>
+      
+    </nav>
+  
+</article>
 
-          
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
+      </main>
+      <footer class="site-footer">
+  <div>
+    &copy; 2015 - 2026
+    Heloowird
   </div>
+</footer>
 
-
-        </div>
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">
-  
-  &copy;  2015 - 
-  <span itemprop="copyrightYear">2026</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Heloowird</span>
-</div>
-
-
-
-        
-
-<div class="busuanzi-count">
-
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-
-  
-  
-</div>
-
-
-
-        
-      </div>
-    </footer>
-
+    </div>
+    <script src="/js/main.js"></script>
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-    
-  </div>
 
-  
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=3.7.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-  
-  
-
-  
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-		  processRefs: true
-        },
-		TeX: {
-		  equationNumbers: { autoNumber: "AMS" },  // only number those equations in specific AMSmath environments
-		  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]  // introduce AMS extensions and suppress generating error messages 
-		},
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
-  
-
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-</body>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="/lib/mathjax/tex-chtml.js"></script>
+
+
+  </body>
 </html>
