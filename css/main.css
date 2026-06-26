@@ -353,7 +353,7 @@ img {
 
 .post-content pre {
   overflow: auto;
-  padding: 16px 18px;
+  padding: 12px 16px;
   line-height: 1.7;
   background: var(--code-bg);
   border: 1px solid var(--line);
@@ -367,7 +367,7 @@ img {
 .post-content figure.highlight {
   position: relative;
   overflow-x: auto;
-  padding: 38px 0 14px;
+  padding: 28px 0 10px;
   line-height: 1.6;
   background: var(--highlight-bg);
   border: 1px solid var(--code-border);
@@ -459,20 +459,9 @@ img {
   color: var(--syntax-meta);
 }
 
-.code-language-label {
-  position: absolute;
-  top: 10px;
-  left: 14px;
-  color: var(--muted);
-  font: 11px/1 var(--font-sans);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  user-select: none;
-}
-
 .code-copy-button {
   position: absolute;
-  top: 8px;
+  top: 5px;
   right: 8px;
   width: 24px;
   height: 24px;

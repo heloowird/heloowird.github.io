@@ -12,42 +12,6 @@
 }());
 
 (function () {
-  var LANGUAGE_NAMES = {
-    bash: 'Shell',
-    plain: 'Text',
-    plaintext: 'Text',
-    python: 'Python',
-    shell: 'Shell',
-    sh: 'Shell',
-    text: 'Text'
-  };
-
-  function getLanguage(block) {
-    var ignored = {
-      highlight: true,
-      'code-block': true
-    };
-    var language = '';
-
-    block.className.split(/\s+/).some(function (name) {
-      if (!name || ignored[name]) return false;
-      language = name.replace(/^language-/, '');
-      return true;
-    });
-
-    return language ? (LANGUAGE_NAMES[language] || language.toUpperCase()) : '';
-  }
-
-  function attachLanguageLabel(block) {
-    var language = getLanguage(block);
-    if (!language || block.querySelector('.code-language-label')) return;
-
-    var label = document.createElement('span');
-    label.className = 'code-language-label';
-    label.textContent = language;
-    block.appendChild(label);
-  }
-
   function getCodeText(block) {
     var codeCell = block.querySelector('td.code');
     var source = codeCell || block.querySelector('pre');
@@ -105,7 +69,6 @@
   }
 
   document.querySelectorAll('figure.highlight').forEach(function (block) {
-    attachLanguageLabel(block);
     attachCopyButton(block);
   });
 
