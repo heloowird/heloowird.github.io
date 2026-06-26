@@ -68,7 +68,7 @@
 </ol>
 <p>特别是第二点，传统词向量基本无能为力，如Word2vec。Word2vec 一般只看周围几个词，仅是语言模型训练过程中的副产物，词向量相对单薄。而ELMo 根据整个句子来决定词的表示，ELMo 是整个双向语言模型中间层表示的融合产物，除了语义语法信息，还可缓解一词多义问题。</p>
 <p>ELMo 全称是<strong>E</strong>mbeddings from <strong>L</strong>anguage <strong>Mo</strong>dels。其实Word2vec 也是来源于语言模型，只不过和ELMo 相比，没有尽可能多地利用语言模型的各中间部分的信息。下面具体看看ELMo 是如何利用双向语言模型各层结果的。</p>
-<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/blog_img/elmo-arch.png" alt="ELMo预训练双向语言模型架构" title="ELMo预训练双向语言模型架构"><figcaption>ELMo预训练双向语言模型架构</figcaption></figure>
+<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/nlp_pr_elmo/elmo-arch.png" alt="ELMo预训练双向语言模型架构" title="ELMo预训练双向语言模型架构"><figcaption>ELMo预训练双向语言模型架构</figcaption></figure>
 
 <p>如图所示，预训练双向语言模型自底而上分别是句子原始输入(input tokens)；输入表示层(token representation layer \(L_{o}\))；双向LSTM 层(context-sensitive representation layer \(L_{1}\))；双向LSTM 层(context-sensitive representation layer \(L_{2}\))。</p>
 <p>原始输入为句子的切分片段\(t_{k}\)，如词、词片段(word piece)。输入表示层一般直接使用embedding 或者使用字符级CNN 进行编码，得到\(\textbf{x}_{k}^{LM}\)。这部分是上下文无关的，仅与\(t_{k}\)有关。</p>

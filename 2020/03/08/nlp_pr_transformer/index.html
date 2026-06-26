@@ -64,10 +64,10 @@
 <h4 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h4><p>RNN，特别是LSTM、GRU 在诸如语言模型和机器翻译等序列建模和转换问题上已经达到SOTA。然而RNN 天然地对并行计算不友好。 在RNN序列中，当前时刻隐层状态<code>h(t)</code> 依赖前一个隐层状态<code>h(t-1)</code> 和当前输入<code>x(t)</code> 。这种结构性问题导致RNN 训练时难以并行。</p>
 <p>另一方面，注意力机制已经成了序列建模和转换模型的必备部分，可以不受距离限制地建模输入和输出之间的依赖关系。现在绝大部分的注意力机制和RNN 捆绑一起使用。</p>
 <p>考虑到以上两点，Transformer 避开了RNN 结构，并且完全使用依赖注意力机制来捕捉输入和输出之间的全局依赖信息。Transformer 在8块P100上12个小时内就可以达到新的SOTA。</p>
-<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/blog_img/transformer-model-arch.png" alt="Transformer 模型架构图" title="Transformer 模型架构图"><figcaption>Transformer 模型架构图</figcaption></figure>
+<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/nlp_pr_transformer/transformer-model-arch.png" alt="Transformer 模型架构图" title="Transformer 模型架构图"><figcaption>Transformer 模型架构图</figcaption></figure>
 
 <p>模型分成三部分，输入层，编&#x2F;解码层，预测输出层。编&#x2F;解码层具有相似结构，区别在于解码层的基础构件多了一个多头自注意力子层。网络基础构件分为有两个，一个为多头自注意力子层，另一个为前向全连接子层。两层之间使用残差连接和层归一化，即：\(LayerNorm(x + Sublayer(x))\)，其中\(Sublayer\)为自注意力子层或者前向全连接层。编码层使用了6 个（多头自注意力子层+ 前向连接子层），解码层使用了6 个（2 个多头自注意力子层+ 前向连接子层）。下面详细介绍各个部分。</p>
-<h5 id="自注意力"><a href="#自注意力" class="headerlink" title="自注意力"></a>自注意力</h5><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/blog_img/transformer-multihead-attention.png" alt="多头注意力" title="多头注意力"><figcaption>多头注意力</figcaption></figure>
+<h5 id="自注意力"><a href="#自注意力" class="headerlink" title="自注意力"></a>自注意力</h5><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/nlp_pr_transformer/transformer-multihead-attention.png" alt="多头注意力" title="多头注意力"><figcaption>多头注意力</figcaption></figure>
 
 <p>注意力函数将输入向量映射成查询向量(query vector)，一系列键(key vector)、值对向量(value vector)，然后转化成输出向量。输出向量是一系列值向量的加权和，是与查询向量对应的隐层表示。每个值向量的权重由查询向量和对应键向量的相关性决定。</p>
 <p>每个输入通过3个转换矩阵，分别映射成查询向量、键值对向量。之后它们的运作方式如上图左边所示。查询向量和键向量做点积，然后除以一个常数进行缩放，经过Softmax 函数得到查询向量和键向量的权重，最后乘以与键向量对应的值向量并累加起来作为查询向量的表示。</p>
@@ -87,7 +87,7 @@ FNN(x) = max(0, xW_1 + b_1)W_2 + b_2
 <li>使用注意力Dropout，即使用Softmax计算完权重后，应用Dropout，然后再乘以值向量。</li>
 </ol>
 <h4 id="为什么使用自注意力"><a href="#为什么使用自注意力" class="headerlink" title="为什么使用自注意力"></a>为什么使用自注意力</h4><p>对比RNN和CNN可从3个指标进行考虑：每层的总计算量，并行计算量（最小串行操作数），输入输出序列任意位置的最大路径长度。前面两个指标好理解，第三个指标可以理解为输入和输出的连结复杂度。输入输出序列任意两个位置连结起来越短，越容易捕捉到长距离依赖关系。自注意力层任意位置是直接相连的，所以最大路径长度为\(O(1)\)。3个指标的对比如下图所示。</p>
-<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/blog_img/why_self_attention_in_transformer.png" alt="不同网络结构的3个指标比较" title="不同网络结构的3个指标比较"><figcaption>不同网络结构的3个指标比较</figcaption></figure> 
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/nlp_pr_transformer/why_self_attention_in_transformer.png" alt="不同网络结构的3个指标比较" title="不同网络结构的3个指标比较"><figcaption>不同网络结构的3个指标比较</figcaption></figure> 
 
 <p>其中<code>n</code>为输入或输出长度，<code>d</code>为隐层向量维度。可以看出，相比于RNN，自注意力结构的每层总计算量更小，因为<code>n</code>通常比<code>d</code>小。另外，自注意力结构的串行操作数和最路径长度更小。相比于CNN，CNN的每层总计算量比RNN更大，多了卷积核大小的倍数。最大路径长度仍然比自注意力结构更大，意味着捕获长距离依赖关系能力更差。</p>
 <p>总的来说，自注意力结构计算量更小，并行度好，且捕捉长距离依赖关系能力更强。还有一个好处是，模型解释能力更好，利用自注意力权重，方便可视化输入和输出的依赖关系的强度。</p>

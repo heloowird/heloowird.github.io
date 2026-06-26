@@ -53,9 +53,9 @@
     <time datetime="2015-06-08T18:19:22.000Z">2015-06-09</time>
   
   <span class="meta-separator">·</span>
-  <span>约 424 字</span>
+  <span>约 320 字</span>
   <span class="meta-separator">·</span>
-  <span>2 分钟读完</span>
+  <span>1 分钟读完</span>
 </div>
 
   </header>
@@ -74,7 +74,7 @@
 **注意**：如果第三步操作完之后仍不起作用，可以将 C:\Windows\Fonts\ 目录下的Microsoft YaHei字体文件拷贝到 [*python_install_dir*]\Lib\site-packages\matplotlib\mpl-data\fonts\ttf\ 目录下
 </code></pre>
 <ol start="3">
-<li><p>重建字体索引列表<br>[matplotlib不会每次启动时都重新扫描所有的字体文件并创建字体索引列表，因此在复制完字体文件之后，需要运行下面的语句以重新创建字体索引列表][1] ,需要在console中运行以下代码： </p>
+<li><p>重建字体索引列表<br><a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6">matplotlib不会每次启动时都重新扫描所有的字体文件并创建字体索引列表，因此在复制完字体文件之后，需要运行下面的语句以重新创建字体索引列表</a> ,需要在console中运行以下代码：</p>
 <blockquote>
 <blockquote>
 <blockquote>
@@ -88,7 +88,10 @@
 <li>显示加载matplotlib的字体管理器，代码如下：</li>
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载自定义字体</span></span><br><span class="line"><span class="comment"># fname 为字体文件路径</span></span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">myfont = matplotlib.font_manager.FontProperties(fname=<span class="string">r&#x27;C:/Windows/Fonts/msyh.ttf&#x27;</span>)</span><br><span class="line"> ...</span><br><span class="line"><span class="comment"># 在需要显示汉字的地方，指定自定义字体即可</span></span><br><span class="line">plt.xlabel(<span class="string">u&#x27;汉字&#x27;</span>,  fontproperties=myfont)</span><br><span class="line">plt.xlabel(<span class="string">u&#x27;汉字&#x27;</span>,  fontproperties=myfont)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<p>参考文献<br>[<a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6][1]">http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6][1]</a><br>[1]: <a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6">http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6</a></p>
+<p>参考文献</p>
+<ol>
+<li><a href="http://hyry.dip.jp/tech/book/page/scipy/matplotlib_fast_plot.html#id6">matplotlib fast plot</a></li>
+</ol>
 
   </div>
   
