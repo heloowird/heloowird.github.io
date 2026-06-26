@@ -74,7 +74,7 @@
 <p>这里主要是\(\frac{\partial L}{\partial a_{j}^{(2)}}\)稍微复杂些，如果再回过头看看公式(7)，\(a_{j}^{(2)}\)和\(z_{i}^{(3)}\)是有联系的，有：<br><div class="math-display">\[\frac{\partial L}{\partial a_{j}^{(l)}} = \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot \frac{\partial z_{i}^{(l+1)}}{\partial a_{j}^{(l)}} = \sum_{i}\frac{\partial L}{\partial z_{i}^{l+1}} \cdot w_{ji} = \sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}\tag{12}\]</div><br>两边同时乘以\(g'(z_{j})\)，则：<br><div class="math-display">\[\delta_{j}^{(l)} = (\sum_{i}\delta_{i}^{(l+1)} \cdot w_{ji}) \cdot g'(z_{j}^{l})\tag{13}\]</div><br>综上推导，神经网络反向传播时，可以依靠公式(13)，将训练误差依次传递到前面的层；然后利用公式(11)对各层的参数进行更新。经过反复训练，最终可以得到一个有效的分类器。详细实现代码在<a href="https://github.com/heloowird/ann">github</a>，欢迎试用。</p>
 <p>参考资料：</p>
 <ol>
-<li>[BP神经网络的数学原理及其算法实现](<a href="http://blog.csdn.net/zhongkejingwang/">http://blog.csdn.net/zhongkejingwang/</a><br> article&#x2F;details&#x2F;44514073)</li>
+<li><a href="http://blog.csdn.net/zhongkejingwang/article/details/44514073">BP神经网络的数学原理及其算法实现</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/22473137">神经网络反向传播的数学原理</a></li>
 </ol>
 
