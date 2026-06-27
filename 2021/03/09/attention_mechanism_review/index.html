@@ -32,7 +32,7 @@
 
   <meta name="twitter:image" content="https://heloowird.github.io/images/posts/attention_mechanism_review/encode-decode-example.png">
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT","name":"注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT","url":"https://heloowird.github.io/2021/03/09/attention_mechanism_review/","inLanguage":"zh-Hans","description":"本文回顾 NLP 中 attention 机制的历史脉络，并梳理 Transformer 架构、Self-Attention 原理和 Multi-Head Attention。","image":"https://heloowird.github.io/images/posts/attention_mechanism_review/encode-decode-example.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2021-03-08T16:00:00.000Z","dateModified":"2026-06-27T05:26:43.071Z","keywords":"attention, self-attention, multi-head attention, transformer, gpt, seq2seq, decoder-only, 注意力机制, 自注意力, 多头注意力, Transformer架构, GPT架构"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT","name":"注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT","url":"https://heloowird.github.io/2021/03/09/attention_mechanism_review/","inLanguage":"zh-Hans","description":"本文回顾 NLP 中 attention 机制的历史脉络，并梳理 Transformer 架构、Self-Attention 原理和 Multi-Head Attention。","image":"https://heloowird.github.io/images/posts/attention_mechanism_review/encode-decode-example.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2021-03-08T16:00:00.000Z","dateModified":"2026-06-27T05:44:30.489Z","keywords":"attention, self-attention, multi-head attention, transformer, gpt, seq2seq, decoder-only, 注意力机制, 自注意力, 多头注意力, Transformer架构, GPT架构"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -79,7 +79,7 @@
     <time datetime="2021-03-08T16:00:00.000Z">2021-03-09</time>
   
   <span class="meta-separator">·</span>
-  <span>约 2.2k 字</span>
+  <span>约 2.3k 字</span>
   <span class="meta-separator">·</span>
   <span>7 分钟读完</span>
 </div>
@@ -168,9 +168,9 @@
 
 <h2 id="后续方向"><a href="#后续方向" class="headerlink" title="后续方向"></a>后续方向</h2><p>本文只讨论注意力机制的基础结构。围绕大模型和长上下文，后续还可以继续展开三个方向：</p>
 <ol>
-<li>推理阶段的KV Cache优化，例如MQA、GQA和MLA。</li>
-<li>长上下文场景下的稀疏attention，例如Longformer、BigBird、Routing Transformer和Native Sparse Attention。</li>
-<li>面向硬件效率的高性能实现，例如FlashAttention。</li>
+<li>推理阶段的KV Cache优化，例如MQA、GQA和MLA，可继续阅读：<a href="/2025/03/27/attention_kv_cache_review/">大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA</a>。</li>
+<li>长上下文场景下的稀疏attention，例如Longformer、BigBird、Routing Transformer和Native Sparse Attention，可继续阅读：<a href="/2025/03/17/long_context_attention_review/">长上下文 Attention：注意力分布、稀疏化与 FlashAttention</a>。</li>
+<li>面向硬件效率的高性能实现，例如FlashAttention，也整理在：<a href="/2025/03/17/long_context_attention_review/">长上下文 Attention：注意力分布、稀疏化与 FlashAttention</a>。</li>
 </ol>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
 <li><a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a></li>
