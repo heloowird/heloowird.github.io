@@ -13,16 +13,16 @@
 
   <meta name="keywords" content="transformer, kv cache, MHA, MQA, GQA, MLA, attention inference, 大模型推理, KV缓存, 显存优化, 多查询注意力, 分组查询注意力">
 
-<link rel="canonical" href="https://heloowird.github.io/2025/03/27/attention_kv_cache_review/">
+<link rel="canonical" href="https://heloowird.com/2025/03/27/attention_kv_cache_review/">
 <meta property="og:title" content="大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA">
 
   <meta property="og:description" content="在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。">
 
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://heloowird.github.io/2025/03/27/attention_kv_cache_review/">
+<meta property="og:url" content="https://heloowird.com/2025/03/27/attention_kv_cache_review/">
 <meta property="og:site_name" content="Heloowird">
 
-  <meta property="og:image" content="https://heloowird.github.io/images/posts/attention_kv_cache_review/mha-gqa-mla.png">
+  <meta property="og:image" content="https://heloowird.com/images/posts/attention_kv_cache_review/mha-gqa-mla.png">
 
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA">
@@ -30,9 +30,9 @@
   <meta name="twitter:description" content="在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。">
 
 
-  <meta name="twitter:image" content="https://heloowird.github.io/images/posts/attention_kv_cache_review/mha-gqa-mla.png">
+  <meta name="twitter:image" content="https://heloowird.com/images/posts/attention_kv_cache_review/mha-gqa-mla.png">
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA","name":"大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA","url":"https://heloowird.github.io/2025/03/27/attention_kv_cache_review/","inLanguage":"zh-Hans","description":"在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。","image":"https://heloowird.github.io/images/posts/attention_kv_cache_review/mha-gqa-mla.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2025-03-26T16:00:00.000Z","dateModified":"2026-06-27T05:22:01.315Z","keywords":"transformer, kv cache, MHA, MQA, GQA, MLA, attention inference, 大模型推理, KV缓存, 显存优化, 多查询注意力, 分组查询注意力"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA","name":"大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA","url":"https://heloowird.com/2025/03/27/attention_kv_cache_review/","inLanguage":"zh-Hans","description":"在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。","image":"https://heloowird.com/images/posts/attention_kv_cache_review/mha-gqa-mla.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2025-03-26T16:00:00.000Z","dateModified":"2026-06-27T05:22:01.315Z","keywords":"transformer, kv cache, MHA, MQA, GQA, MLA, attention inference, 大模型推理, KV缓存, 显存优化, 多查询注意力, 分组查询注意力"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 

@@ -13,16 +13,16 @@
 
   <meta name="keywords" content="transformer, long context, sparse attention, flashattention, longformer, bigbird, native sparse attention, attention sink, 长上下文, 稀疏注意力, 注意力分布, FlashAttention">
 
-<link rel="canonical" href="https://heloowird.github.io/2025/03/17/long_context_attention_review/">
+<link rel="canonical" href="https://heloowird.com/2025/03/17/long_context_attention_review/">
 <meta property="og:title" content="长上下文 Attention：注意力分布、稀疏化与 FlashAttention">
 
   <meta property="og:description" content="当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。">
 
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://heloowird.github.io/2025/03/17/long_context_attention_review/">
+<meta property="og:url" content="https://heloowird.com/2025/03/17/long_context_attention_review/">
 <meta property="og:site_name" content="Heloowird">
 
-  <meta property="og:image" content="https://heloowird.github.io/images/posts/long_context_attention_review/attention-v-shape.webp">
+  <meta property="og:image" content="https://heloowird.com/images/posts/long_context_attention_review/attention-v-shape.webp">
 
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="长上下文 Attention：注意力分布、稀疏化与 FlashAttention">
@@ -30,9 +30,9 @@
   <meta name="twitter:description" content="当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。">
 
 
-  <meta name="twitter:image" content="https://heloowird.github.io/images/posts/long_context_attention_review/attention-v-shape.webp">
+  <meta name="twitter:image" content="https://heloowird.com/images/posts/long_context_attention_review/attention-v-shape.webp">
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"长上下文 Attention：注意力分布、稀疏化与 FlashAttention","name":"长上下文 Attention：注意力分布、稀疏化与 FlashAttention","url":"https://heloowird.github.io/2025/03/17/long_context_attention_review/","inLanguage":"zh-Hans","description":"当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。","image":"https://heloowird.github.io/images/posts/long_context_attention_review/attention-v-shape.webp","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2025-03-16T16:10:00.000Z","dateModified":"2026-06-27T05:26:42.944Z","keywords":"transformer, long context, sparse attention, flashattention, longformer, bigbird, native sparse attention, attention sink, 长上下文, 稀疏注意力, 注意力分布, FlashAttention"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"长上下文 Attention：注意力分布、稀疏化与 FlashAttention","name":"长上下文 Attention：注意力分布、稀疏化与 FlashAttention","url":"https://heloowird.com/2025/03/17/long_context_attention_review/","inLanguage":"zh-Hans","description":"当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。","image":"https://heloowird.com/images/posts/long_context_attention_review/attention-v-shape.webp","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2025-03-16T16:10:00.000Z","dateModified":"2026-06-27T05:26:42.944Z","keywords":"transformer, long context, sparse attention, flashattention, longformer, bigbird, native sparse attention, attention sink, 长上下文, 稀疏注意力, 注意力分布, FlashAttention"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
