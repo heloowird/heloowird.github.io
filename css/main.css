@@ -280,7 +280,8 @@ img {
 }
 
 .post-content {
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.85;
   overflow-wrap: anywhere;
 }
 
@@ -288,9 +289,9 @@ img {
 .post-content h2,
 .post-content h3,
 .post-content h4 {
-  margin: 36px 0 14px;
+  margin: 38px 0 14px;
   color: var(--ink);
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .post-content h1 {
@@ -298,10 +299,15 @@ img {
 }
 
 .post-content h2 {
-  font-size: 22px;
+  margin-top: 44px;
+  padding-bottom: 8px;
+  font-size: 21px;
+  line-height: 1.35;
+  border-bottom: 1px solid var(--line);
 }
 
 .post-content h3 {
+  margin-top: 34px;
   font-size: 18px;
 }
 
@@ -317,7 +323,7 @@ img {
 .post-content table,
 .post-content pre,
 .post-content figure {
-  margin: 0 0 20px;
+  margin: 0 0 18px;
 }
 
 .post-content ul,
@@ -563,6 +569,43 @@ img {
   line-height: 1.6;
 }
 
+.attention-pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0 0 20px;
+}
+
+.post-content .attention-pattern-grid .figure-full-image {
+  margin: 0;
+}
+
+.attention-pattern-grid .figure-full-image img {
+  width: 100%;
+  height: auto;
+}
+
+.attention-pattern-grid .figure-full-image figcaption {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.attention-vector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0 0 20px;
+}
+
+.post-content .attention-vector-grid .figure-full-image {
+  margin: 0;
+}
+
+.attention-vector-grid .figure-full-image img {
+  width: 100%;
+  height: auto;
+}
+
 .post-nav {
   display: grid;
   gap: 12px;
@@ -712,7 +755,15 @@ img {
   }
 
   .post-content {
-    font-size: 14px;
+    font-size: 16px;
+  }
+
+  .post-content h2 {
+    font-size: 20px;
+  }
+
+  .attention-pattern-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .archive-item {
@@ -730,5 +781,13 @@ img {
   .minimal-post-item time {
     display: block;
     margin-bottom: 2px;
+  }
+
+  .attention-pattern-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .attention-vector-grid {
+    grid-template-columns: 1fr;
   }
 }

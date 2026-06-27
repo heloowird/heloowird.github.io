@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+
+<title>注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT | Heloowird</title>
+
+  <meta name="description" content="本文回顾 NLP 中 attention 机制的历史脉络，并梳理 Transformer 架构、Self-Attention 原理和 Multi-Head Attention。">
+
+
+  <meta name="keywords" content="attention, self-attention, multi-head attention, transformer, gpt, seq2seq, decoder-only, 注意力机制, 自注意力, 多头注意力, Transformer架构, GPT架构">
+
+<link rel="canonical" href="https://heloowird.github.io/2021/03/09/attention_mechanism_review/">
+<meta property="og:title" content="注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT">
+
+  <meta property="og:description" content="本文回顾 NLP 中 attention 机制的历史脉络，并梳理 Transformer 架构、Self-Attention 原理和 Multi-Head Attention。">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.github.io/2021/03/09/attention_mechanism_review/">
+<meta property="og:site_name" content="Heloowird">
+
+  <meta property="og:image" content="https://heloowird.github.io/images/posts/attention_mechanism_review/encode-decode-example.png">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT">
+
+  <meta name="twitter:description" content="本文回顾 NLP 中 attention 机制的历史脉络，并梳理 Transformer 架构、Self-Attention 原理和 Multi-Head Attention。">
+
+
+  <meta name="twitter:image" content="https://heloowird.github.io/images/posts/attention_mechanism_review/encode-decode-example.png">
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT","name":"注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT","url":"https://heloowird.github.io/2021/03/09/attention_mechanism_review/","inLanguage":"zh-Hans","description":"本文回顾 NLP 中 attention 机制的历史脉络，并梳理 Transformer 架构、Self-Attention 原理和 Multi-Head Attention。","image":"https://heloowird.github.io/images/posts/attention_mechanism_review/encode-decode-example.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2021-03-08T16:00:00.000Z","dateModified":"2026-06-27T05:26:43.071Z","keywords":"attention, self-attention, multi-head attention, transformer, gpt, seq2seq, decoder-only, 注意力机制, 自注意力, 多头注意力, Transformer架构, GPT架构"}</script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/css/main.css?v=20260626-mathjax">
+
+  <meta name="generator" content="Hexo 8.1.2"></head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+  <div class="brand-block">
+    <a class="brand" href="/" aria-label="Heloowird">
+      <span class="brand-title">Heloowird</span>
+    </a>
+    
+  </div>
+
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="site-nav" id="site-nav">
+    
+      <a href="/">Blog</a>
+    
+      <a href="https://github.com/heloowird">GitHub</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main" id="main">
+        <article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT</h1>
+    <div class="post-meta">
+  
+    <time datetime="2021-03-08T16:00:00.000Z">2021-03-09</time>
+  
+  <span class="meta-separator">·</span>
+  <span>约 2.2k 字</span>
+  <span class="meta-separator">·</span>
+  <span>7 分钟读完</span>
+</div>
+
+  </header>
+  <div class="post-content">
+    <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>本文回顾 NLP 中 attention 机制的历史脉络，并梳理 Transformer 架构、Self-Attention 原理和 Multi-Head Attention。</p>
+<p>NLP（自然语言处理）中的注意力机制（Attention Mechanism）是一种模仿人类在处理信息时的注意力分配方式的技术，它能够使模型在处理如翻译、摘要或问答等任务时更加关注于输入数据的重要部分。注意力机制的历史可回溯至以下几个关键点：</p>
+<ol>
+<li><strong>早期的序列模型</strong>：<br>在注意力机制出现之前，NLP领域主要使用RNN（循环神经网络）和LSTM（长短时记忆网络）来处理序列数据。这些模型通过在时间上递归地处理信息来捕捉序列之间的依赖关系，但随着序列长度的增加，这些模型开始遇到梯度消失或梯度爆炸的问题。</li>
+<li><strong>Seq2Seq与编码器-解码器架构</strong>：<br>在2014年，Ilya Sutskever, Oriol Vinyals和Quoc V. Le提出了一种名为Seq2Seq（Sequence-to-Sequence）的模型，它使用了两个LSTM网络作为编码器和解码器来处理序列到序列的任务。虽然Seq2Seq模型在机器翻译等任务上取得了显著的进步，但将输入序列压缩到固定长度上下文向量的做法仍可能成为信息瓶颈。</li>
+<li><strong>注意力机制的初步引入</strong>：<br>在2014年，Bahdanau等人较早且经典地将可学习的软对齐注意力引入神经机器翻译，提出了一种基于Seq2Seq模型的带有注意力的神经机器翻译系统。在这个系统中，解码器在生成每个输出词时，能够参考整个输入序列，并学习在不同步骤分配不同的注意力权重。这有助于模型更好地处理长距离依赖，因为模型不再需要将所有信息压缩到固定长度的向量中。</li>
+<li><strong>Self-Attention与Transformer模型</strong>：<br>在2017年，Vaswani等人提出了Transformer模型，它完全基于注意力机制，去除了传统的卷积和递归结构。Transformer引入了自注意力机制（Self-Attention），允许模型在处理序列中的每个元素时同时考虑序列中的所有其他元素。这极大地提高了处理长序列的能力，并显著减少了训练时间。</li>
+<li><strong>BERT与预训练语言模型</strong>：<br>在2018年，Google的研究者提出了BERT（Bidirectional Encoder Representations from Transformers），这是一个基于Transformer的预训练语言模型，它采用双向的自注意力机制来捕捉上下文信息。BERT及其变种如RoBERTa、ALBERT等在各种NLP任务中取得了前所未有的效果，推动了整个领域的发展。</li>
+</ol>
+<p>注意力机制的引入和发展极大地推动了NLP领域的进步，使得模型能够更加准确地理解和生成自然语言，同时也为处理复杂任务如文本摘要、语言理解、情感分析等提供了强大的工具。当前，注意力机制已成为现代NLP模型设计中的一个核心组件。</p>
+<p>from：<a href="https://openprompt.co/conversations/4323">https://openprompt.co/conversations/4323</a></p>
+<h2 id="Transformer-架构"><a href="#Transformer-架构" class="headerlink" title="Transformer 架构"></a>Transformer 架构</h2><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_mechanism_review/encode-decode-example.png" alt="翻译示例，from：[illustrated-transformer](https://jalammar.github.io/illustrated-transformer/)" title="翻译示例，from：[illustrated-transformer](https://jalammar.github.io/illustrated-transformer/)"><figcaption>翻译示例，from：[illustrated-transformer](https://jalammar.github.io/illustrated-transformer/)</figcaption></figure>
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/nlp_pr_transformer/transformer-model-arch.png" alt="Transformer 编码器-解码器整体架构" title="Transformer 编码器-解码器整体架构"><figcaption>Transformer 编码器-解码器整体架构</figcaption></figure>
+
+<p>Transformer 的架构主要分为两个部分：<strong>编码器（Encoder）</strong> 和 <strong>解码器（Decoder）</strong>。每个部分由多个子层组成，具体如下：</p>
+<h3 id="编码器（Encoder）"><a href="#编码器（Encoder）" class="headerlink" title="编码器（Encoder）"></a>编码器（Encoder）</h3><p>编码器负责将输入序列转换为一个上下文相关的表示。编码器由多个相同的层堆叠而成，每一层包含以下两个主要子层：</p>
+<ul>
+<li><strong>多头自注意力机制（Multi-Head Self-Attention）</strong>：<br>自注意力机制允许模型在处理每个输入元素时，关注输入序列中的其他元素。具体来说，每个输入元素都会根据其与序列中其他元素的相关性来加权组合，生成一个新的表示。多头注意力机制则是通过并行使用多个注意力头，捕捉不同子空间中的信息。</li>
+<li><strong>前馈神经网络（Feed-Forward Neural Network, FFN）</strong>：<br>在自注意力机制之后，每个位置的表示会通过一个前馈神经网络进行进一步的非线性变换。这个网络对每个位置是独立的，即每个位置的表示经过相同的网络参数进行变换。</li>
+</ul>
+<p>此外，每个子层后面都有一个<strong>残差连接（Residual Connection）和层归一化（Layer Normalization）</strong>，以帮助模型更好地训练。</p>
+<h3 id="解码器（Decoder）"><a href="#解码器（Decoder）" class="headerlink" title="解码器（Decoder）"></a>解码器（Decoder）</h3><p>解码器负责生成输出序列（如翻译任务中的目标语言句子）。解码器也由多个相同的层堆叠而成，每一层包含三个主要子层：</p>
+<ul>
+<li><strong>掩码多头自注意力机制（Masked Multi-Head Self-Attention）</strong>：<br>与编码器中的自注意力机制类似，但为了防止解码器在生成当前词时“偷看”未来的词，解码器使用了掩码（Masking），使得每个位置只能看到当前及之前的词。</li>
+<li><strong>编码器-解码器注意力（Encoder-Decoder Attention）</strong>：<br>这个子层允许解码器关注编码器的输出。解码器通过注意力机制从编码器的输出中提取相关信息，以生成当前的输出词。</li>
+<li><strong>前馈神经网络（Feed-Forward Neural Network, FFN）</strong>：<br>同样地，解码器中的每个位置也会通过一个前馈神经网络进行进一步的非线性变换。</li>
+</ul>
+<p>与编码器类似，解码器的每个子层后面也有残差连接和层归一化。</p>
+<h3 id="输入和输出"><a href="#输入和输出" class="headerlink" title="输入和输出"></a>输入和输出</h3><ul>
+<li><strong>输入嵌入（Input Embedding）</strong>：<br>输入序列首先被转换为词嵌入向量（Embedding Vector），然后加上位置编码（Positional Encoding），以提供序列中词语的位置信息。Transformer 不像 RNN 那样天然具有顺序信息，因此需要显式地加入位置编码。</li>
+<li><strong>输出生成</strong>：<br>解码器的输出经过一个线性变换和 Softmax 函数，生成每个位置上可能的词汇的概率分布，从而预测下一个词。</li>
+</ul>
+<h3 id="GPT-架构"><a href="#GPT-架构" class="headerlink" title="GPT 架构"></a>GPT 架构</h3><p>GPT采取了一个 decoder-only Transformer 架构，不需要 encoder 模块。decoder-only 架构虽然仅使用了文本序列的单向信息，但对预测下一个 token 很友好。后续主流自回归生成式 LLM 大多采用 decoder-only Transformer 架构。</p>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_mechanism_review/full-gpt-architecture.png" alt="from: [wikipedia](https://en.wikipedia.org/wiki/Generative_pre-trained_transformer)" title="from: [wikipedia](https://en.wikipedia.org/wiki/Generative_pre-trained_transformer)"><figcaption>from: [wikipedia](https://en.wikipedia.org/wiki/Generative_pre-trained_transformer)</figcaption></figure>
+
+
+<h2 id="Self-Attention-原理"><a href="#Self-Attention-原理" class="headerlink" title="Self-Attention 原理"></a>Self-Attention 原理</h2><p>自注意力（Self-Attention）机制是Transformer的核心，它允许模型在处理每个token时动态地关注序列中的其他token。具体步骤分为3步：</p>
+<ol>
+<li><strong>计算Query、Key和Value</strong>：<ul>
+<li>对输入序列中的每个token的表示向量，通过线性变换分别生成三个向量：Query（Q）、Key（K）和Value（V）。</li>
+<li>Q和K的维度必须一致，V的维度可以不一样。</li>
+<li>一般地，这些向量的维度通常比原始嵌入维度小。</li>
+</ul>
+</li>
+</ol>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_mechanism_review/self-attention-vectors-input.png" alt="Self-Attention 中输入 token 映射为 Query、Key、Value 向量" title="Self-Attention 中输入 token 映射为 Query、Key、Value 向量"><figcaption>Self-Attention 中输入 token 映射为 Query、Key、Value 向量</figcaption></figure>
+
+
+<ol start="2">
+<li><strong>计算注意力分数</strong>：<ul>
+<li>对于每个Query，计算它与序列所有Key的点积，并除以\(\sqrt{d_k}\)进行缩放，得到注意力分数。</li>
+<li>缩放后的注意力分数经过Softmax归一化后，表示每个单词的权重，即\(\mathrm{softmax}(QK^T/\sqrt{d_k})V\)中的权重部分。</li>
+</ul>
+</li>
+<li><strong>加权求和</strong>：<ul>
+<li>使用归一化后的注意力分数对每个Value进行加权求和，得到每个token的上下文相关表示。</li>
+</ul>
+</li>
+</ol>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_mechanism_review/self-attention-output.png" alt="Self-Attention 对 Value 向量加权求和得到输出表示" title="Self-Attention 对 Value 向量加权求和得到输出表示"><figcaption>Self-Attention 对 Value 向量加权求和得到输出表示</figcaption></figure>
+
+<p>从向量计算的角度看：</p>
+<div class="attention-vector-grid">
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_mechanism_review/query-key-value-cal.png" alt="step1：计算Query、Key和Value" title="step1：计算Query、Key和Value"><figcaption>step1：计算Query、Key和Value</figcaption></figure>
+
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_mechanism_review/atention-score-cal.png" alt="step2 &amp; step3：计算注意力分数、加权求和" title="step2 &amp; step3：计算注意力分数、加权求和"><figcaption>step2 &amp; step3：计算注意力分数、加权求和</figcaption></figure>
+
+</div>
+
+<h3 id="Multi-Head-Attention（MHA）"><a href="#Multi-Head-Attention（MHA）" class="headerlink" title="Multi-Head Attention（MHA）"></a>Multi-Head Attention（MHA）</h3><p>为了增强模型的表达能力，Transformer使用了多头注意力（Multi-Head Attention）机制。具体来说：</p>
+<ul>
+<li>将输入分为多个“头”，每个头独立计算自注意力。</li>
+<li>每个头的输出被拼接在一起，并通过一个线性变换得到当前token得隐式表示。</li>
+</ul>
+<p>多头注意力机制允许模型从不同的子空间中提取信息，从而更好地捕捉复杂的模式。</p>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/nlp_pr_transformer/transformer-multihead-attention.png" alt="多头注意力(MHA)" title="多头注意力(MHA)"><figcaption>多头注意力(MHA)</figcaption></figure>
+
+<h2 id="后续方向"><a href="#后续方向" class="headerlink" title="后续方向"></a>后续方向</h2><p>本文只讨论注意力机制的基础结构。围绕大模型和长上下文，后续还可以继续展开三个方向：</p>
+<ol>
+<li>推理阶段的KV Cache优化，例如MQA、GQA和MLA。</li>
+<li>长上下文场景下的稀疏attention，例如Longformer、BigBird、Routing Transformer和Native Sparse Attention。</li>
+<li>面向硬件效率的高性能实现，例如FlashAttention。</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a></li>
+<li><a href="https://arxiv.org/pdf/1706.03762">Attention Is All You Need</a></li>
+<li><a href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf">GPT</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/667189062">Attention 注意力诞生的几篇关键论文</a></li>
+<li><a href="https://openprompt.co/conversations/4323">介绍一下NLP 中attention机制的历史</a></li>
+<li><a href="https://github.com/harleyszhang/llm_note/tree/main/1-transformer_model">llm_note: transformer model</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/338817680">Transformer模型详解</a></li>
+</ol>
+
+  </div>
+  
+    <nav class="post-nav">
+      
+        <a href="/2025/03/17/long_context_attention_review/">上一篇：长上下文 Attention：注意力分布、稀疏化与 FlashAttention</a>
+      
+      
+        <a href="/2020/09/17/text_matching/">下一篇：文本匹配深度模型综述</a>
+      
+    </nav>
+  
+</article>
+
+      </main>
+      <footer class="site-footer">
+  <div>
+    &copy; 2015 - 2026
+    Heloowird
+  </div>
+</footer>
+
+    </div>
+    <script src="/js/main.js"></script>
+    
+
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="/lib/mathjax/tex-chtml.js"></script>
+
+
+  </body>
+</html>

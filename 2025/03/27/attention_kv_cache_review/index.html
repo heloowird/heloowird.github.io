@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+
+<title>大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA | Heloowird</title>
+
+  <meta name="description" content="在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。">
+
+
+  <meta name="keywords" content="transformer, kv cache, MHA, MQA, GQA, MLA, attention inference, 大模型推理, KV缓存, 显存优化, 多查询注意力, 分组查询注意力">
+
+<link rel="canonical" href="https://heloowird.github.io/2025/03/27/attention_kv_cache_review/">
+<meta property="og:title" content="大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA">
+
+  <meta property="og:description" content="在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.github.io/2025/03/27/attention_kv_cache_review/">
+<meta property="og:site_name" content="Heloowird">
+
+  <meta property="og:image" content="https://heloowird.github.io/images/posts/attention_kv_cache_review/mha-gqa-mla.png">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA">
+
+  <meta name="twitter:description" content="在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。">
+
+
+  <meta name="twitter:image" content="https://heloowird.github.io/images/posts/attention_kv_cache_review/mha-gqa-mla.png">
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA","name":"大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA","url":"https://heloowird.github.io/2025/03/27/attention_kv_cache_review/","inLanguage":"zh-Hans","description":"在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。","image":"https://heloowird.github.io/images/posts/attention_kv_cache_review/mha-gqa-mla.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2025-03-26T16:00:00.000Z","dateModified":"2026-06-27T05:22:01.315Z","keywords":"transformer, kv cache, MHA, MQA, GQA, MLA, attention inference, 大模型推理, KV缓存, 显存优化, 多查询注意力, 分组查询注意力"}</script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/css/main.css?v=20260626-mathjax">
+
+  <meta name="generator" content="Hexo 8.1.2"></head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+  <div class="brand-block">
+    <a class="brand" href="/" aria-label="Heloowird">
+      <span class="brand-title">Heloowird</span>
+    </a>
+    
+  </div>
+
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="site-nav" id="site-nav">
+    
+      <a href="/">Blog</a>
+    
+      <a href="https://github.com/heloowird">GitHub</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main" id="main">
+        <article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA</h1>
+    <div class="post-meta">
+  
+    <time datetime="2025-03-26T16:00:00.000Z">2025-03-27</time>
+  
+  <span class="meta-separator">·</span>
+  <span>约 1.3k 字</span>
+  <span class="meta-separator">·</span>
+  <span>4 分钟读完</span>
+</div>
+
+  </header>
+  <div class="post-content">
+    <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>在自回归生成中，模型每次只生成一个新 token。为了避免在每一步重复计算所有历史 token 的 Key 和 Value，推理框架通常会缓存历史 tokens 的 KV 向量。KV Cache 能显著减少重复计算，但也会带来可观的显存占用，因此 MQA、GQA、MLA 等注意力变种都在不同程度上围绕 KV Cache 做优化。</p>
+<h2 id="KV-Cache-基础：MHA"><a href="#KV-Cache-基础：MHA" class="headerlink" title="KV Cache 基础：MHA"></a>KV Cache 基础：MHA</h2><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_kv_cache_review/mha-gqa-mla.png" alt="Multi-Head Attention vs Grouped-Query Attention vs Multi-head Latent Attention" title="Multi-Head Attention vs Grouped-Query Attention vs Multi-head Latent Attention"><figcaption>Multi-Head Attention vs Grouped-Query Attention vs Multi-head Latent Attention</figcaption></figure>
+
+<p>在 Multi-Head Attention（MHA）中，每个 query head 都有对应的 key head 和 value head。前向计算过程中，为加速生成，可以缓存历史tokens的 Key 和 Value 向量。从向量计算的角度看，每个token需要存储的缓存元素为：</p>
+<ul>
+<li>每层的 KV Cache 需要存储\(n_h\)个头的 key 和 value。</li>
+<li>每个头的 key 和 value 维度为\(d_h\)。</li>
+<li>因此，每层单 token 的存储量为：</li>
+</ul>
+<p>\(单 token 存储量=n_h⋅(d_h+d_h)=2⋅n_h⋅d_h\)</p>
+<ul>
+<li>对于 \(l\) 层 的Transformer，单 token 总存储量为：</li>
+</ul>
+<p>\(单 token 总存储量=l⋅n_h⋅(d_h+d_h)=2⋅l⋅n_h⋅d_h\)</p>
+<p>举个例子：Transformer层数\(l=60\)，注意力头数\(n_h=128\)，每个头的向量维度\(d_h=128\)。假设每个缓存元素采取FP16精度，占2个字节。则单token KV cache总存储大小为3840KiB，即3.75MiB。</p>
+<h2 id="KV-Cache-优化一：Multi-Query-Attention（MQA）"><a href="#KV-Cache-优化一：Multi-Query-Attention（MQA）" class="headerlink" title="KV Cache 优化一：Multi-Query Attention（MQA）"></a>KV Cache 优化一：Multi-Query Attention（MQA）</h2><p>对于每个token，映射成key和value向量时，共享一个 \(W_k\) 和 \(W_v\)，得到每个头都一样的 key 和 value 向量；映射成query向量时，和MHA保持一致，每个头是各不相同的 query 向量。所以：</p>
+<ol>
+<li>计算上，减少了token向量映射到key和value的计算量，softmax score的计算量保持不变。</li>
+<li>内存上，key 和 value 的向量缓存量级大大减少。</li>
+</ol>
+<p>缺点是可能带来模型效果下降，具体幅度取决于模型规模、训练方式和任务。</p>
+<h2 id="KV-Cache-优化二：Grouped-Query-Attention（GQA）"><a href="#KV-Cache-优化二：Grouped-Query-Attention（GQA）" class="headerlink" title="KV Cache 优化二：Grouped-Query Attention（GQA）"></a>KV Cache 优化二：Grouped-Query Attention（GQA）</h2><p>为了缓解模型效果衰退，需要适当增加 key 和 value 的头数。对于单个token，映射成多头的key和value向量时，会把所有head分为g组，同一组内的head共享\(W_K\)和\(W_V\)。因为key和value的头数介于MQA和MHA，所以计算和存储上的节省介于二者之间；在合适训练或uptraining下，GQA通常可以取得接近MHA的效果，同时保留接近MQA的推理效率优势。</p>
+<h2 id="MHA-MQA-GQA-源码实现"><a href="#MHA-MQA-GQA-源码实现" class="headerlink" title="MHA&#x2F;MQA&#x2F;GQA 源码实现"></a>MHA&#x2F;MQA&#x2F;GQA 源码实现</h2><p>下面我们一起看 Llama3 attention 源码，它通过 <code>n_kv_heads</code> 把MHA、MQA、GQA统一起来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://github.com/meta-llama/llama3/blob/main/llama/model.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Attention</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, args: ModelArgs</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># kv的head数，决定attention的类型</span></span><br><span class="line">        <span class="comment"># 	MHA：args.n_kv_heads = args.n_heads</span></span><br><span class="line">        <span class="comment"># 	MQA：args.n_kv_heads = 1</span></span><br><span class="line">        <span class="comment"># 	GQA：args.n_kv_heads &gt; 1 and args.n_kv_head &lt; args.n_heads</span></span><br><span class="line">        <span class="variable language_">self</span>.n_kv_heads = args.n_heads <span class="keyword">if</span> args.n_kv_heads <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> args.n_kv_heads</span><br><span class="line">        <span class="comment"># 训练集群模型并行数，便于理解，假设为1，即整个模型在单卡中训练</span></span><br><span class="line">        model_parallel_size = fs_init.get_model_parallel_world_size()</span><br><span class="line">        <span class="comment"># 单卡：query的head数</span></span><br><span class="line">        <span class="variable language_">self</span>.n_local_heads = args.n_heads // model_parallel_size</span><br><span class="line">        <span class="comment"># 单卡：key、value的head数</span></span><br><span class="line">        <span class="variable language_">self</span>.n_local_kv_heads = <span class="variable language_">self</span>.n_kv_heads // model_parallel_size</span><br><span class="line">        <span class="comment"># 单卡：每个kv head需要复制到多少个query head</span></span><br><span class="line">        <span class="variable language_">self</span>.n_rep = <span class="variable language_">self</span>.n_local_heads // <span class="variable language_">self</span>.n_local_kv_heads</span><br><span class="line">        <span class="comment"># 每个head的维度 = 输入embeding维度 // query的head数</span></span><br><span class="line">        <span class="variable language_">self</span>.head_dim = args.dim // args.n_heads</span><br><span class="line"></span><br><span class="line">        <span class="comment"># token映射成query的变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.wq = ColumnParallelLinear(</span><br><span class="line">            args.dim,</span><br><span class="line">            args.n_heads * <span class="variable language_">self</span>.head_dim, <span class="comment"># 注意：这里是n_heads</span></span><br><span class="line">            bias=<span class="literal">False</span>,</span><br><span class="line">            gather_output=<span class="literal">False</span>,</span><br><span class="line">            init_method=<span class="keyword">lambda</span> x: x,</span><br><span class="line">        )</span><br><span class="line">        <span class="comment"># token映射成key的变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.wk = ColumnParallelLinear(</span><br><span class="line">            args.dim,</span><br><span class="line">            <span class="variable language_">self</span>.n_kv_heads * <span class="variable language_">self</span>.head_dim, <span class="comment"># 注意：这里是n_kv_heads</span></span><br><span class="line">            bias=<span class="literal">False</span>,</span><br><span class="line">            gather_output=<span class="literal">False</span>,</span><br><span class="line">            init_method=<span class="keyword">lambda</span> x: x,</span><br><span class="line">        )</span><br><span class="line">        <span class="comment"># token映射成value的变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.wv = ColumnParallelLinear(</span><br><span class="line">            args.dim,</span><br><span class="line">            <span class="variable language_">self</span>.n_kv_heads * <span class="variable language_">self</span>.head_dim, <span class="comment"># 注意：这里是n_kv_heads</span></span><br><span class="line">            bias=<span class="literal">False</span>,</span><br><span class="line">            gather_output=<span class="literal">False</span>,</span><br><span class="line">            init_method=<span class="keyword">lambda</span> x: x,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 多头concat后映射回d_model的变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.wo = RowParallelLinear(</span><br><span class="line">            args.n_heads * <span class="variable language_">self</span>.head_dim,</span><br><span class="line">            args.dim,</span><br><span class="line">            bias=<span class="literal">False</span>,</span><br><span class="line">            input_is_parallel=<span class="literal">True</span>,</span><br><span class="line">            init_method=<span class="keyword">lambda</span> x: x,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 历史token的K缓存</span></span><br><span class="line">        <span class="variable language_">self</span>.cache_k = torch.zeros(</span><br><span class="line">            (</span><br><span class="line">                args.max_batch_size,</span><br><span class="line">                args.max_seq_len,</span><br><span class="line">                <span class="variable language_">self</span>.n_local_kv_heads,</span><br><span class="line">                <span class="variable language_">self</span>.head_dim,</span><br><span class="line">            )</span><br><span class="line">        ).cuda()</span><br><span class="line">        <span class="comment"># 历史token的V缓存</span></span><br><span class="line">        <span class="variable language_">self</span>.cache_v = torch.zeros(</span><br><span class="line">            (</span><br><span class="line">                args.max_batch_size,</span><br><span class="line">                args.max_seq_len,</span><br><span class="line">                <span class="variable language_">self</span>.n_local_kv_heads,</span><br><span class="line">                <span class="variable language_">self</span>.head_dim,</span><br><span class="line">            )</span><br><span class="line">        ).cuda()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        x: torch.Tensor,</span></span><br><span class="line"><span class="params">        start_pos: <span class="built_in">int</span>,</span></span><br><span class="line"><span class="params">        freqs_cis: torch.Tensor,</span></span><br><span class="line"><span class="params">        mask: <span class="type">Optional</span>[torch.Tensor],</span></span><br><span class="line"><span class="params">    </span>):</span><br><span class="line">        bsz, seqlen, _ = x.shape</span><br><span class="line"></span><br><span class="line">        <span class="comment"># token -&gt; query, key, value</span></span><br><span class="line">        xq, xk, xv = <span class="variable language_">self</span>.wq(x), <span class="variable language_">self</span>.wk(x), <span class="variable language_">self</span>.wv(x)</span><br><span class="line"></span><br><span class="line">        xq = xq.view(bsz, seqlen, <span class="variable language_">self</span>.n_local_heads, <span class="variable language_">self</span>.head_dim)</span><br><span class="line">        xk = xk.view(bsz, seqlen, <span class="variable language_">self</span>.n_local_kv_heads, <span class="variable language_">self</span>.head_dim)</span><br><span class="line">        xv = xv.view(bsz, seqlen, <span class="variable language_">self</span>.n_local_kv_heads, <span class="variable language_">self</span>.head_dim)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 旋转位置编码（Rotary Position Embedding，RoPE）</span></span><br><span class="line">        xq, xk = apply_rotary_emb(xq, xk, freqs_cis=freqs_cis)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.cache_k = <span class="variable language_">self</span>.cache_k.to(xq)</span><br><span class="line">        <span class="variable language_">self</span>.cache_v = <span class="variable language_">self</span>.cache_v.to(xq)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 缓存当前tokens的key、value向量</span></span><br><span class="line">        <span class="variable language_">self</span>.cache_k[:bsz, start_pos : start_pos + seqlen] = xk</span><br><span class="line">        <span class="variable language_">self</span>.cache_v[:bsz, start_pos : start_pos + seqlen] = xv</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取序列历史tokens的key、value向量</span></span><br><span class="line">        keys = <span class="variable language_">self</span>.cache_k[:bsz, : start_pos + seqlen]</span><br><span class="line">        values = <span class="variable language_">self</span>.cache_v[:bsz, : start_pos + seqlen]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 对于GQA/MQA，保证相同group下的key保持一致</span></span><br><span class="line">        <span class="comment"># repeat k/v heads if n_kv_heads &lt; n_heads</span></span><br><span class="line">        keys = repeat_kv(</span><br><span class="line">            keys, <span class="variable language_">self</span>.n_rep</span><br><span class="line">        )  <span class="comment"># (bs, cache_len + seqlen, n_local_heads, head_dim)</span></span><br><span class="line">        values = repeat_kv(</span><br><span class="line">            values, <span class="variable language_">self</span>.n_rep</span><br><span class="line">        )  <span class="comment"># (bs, cache_len + seqlen, n_local_heads, head_dim)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算softmax score</span></span><br><span class="line">        xq = xq.transpose(<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># (bs, n_local_heads, seqlen, head_dim)</span></span><br><span class="line">        keys = keys.transpose(<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># (bs, n_local_heads, cache_len + seqlen, head_dim)</span></span><br><span class="line">        values = values.transpose(</span><br><span class="line">            <span class="number">1</span>, <span class="number">2</span></span><br><span class="line">        )  <span class="comment"># (bs, n_local_heads, cache_len + seqlen, head_dim)</span></span><br><span class="line">        scores = torch.matmul(xq, keys.transpose(<span class="number">2</span>, <span class="number">3</span>)) / math.sqrt(<span class="variable language_">self</span>.head_dim)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># decode-only架构，需要mask掉右边的token</span></span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            scores = scores + mask  <span class="comment"># (bs, n_local_heads, seqlen, cache_len + seqlen)</span></span><br><span class="line">        scores = F.softmax(scores.<span class="built_in">float</span>(), dim=-<span class="number">1</span>).type_as(xq)</span><br><span class="line">        <span class="comment"># 对所有value加权求和</span></span><br><span class="line">        output = torch.matmul(scores, values)  <span class="comment"># (bs, n_local_heads, seqlen, head_dim)</span></span><br><span class="line">        output = output.transpose(<span class="number">1</span>, <span class="number">2</span>).contiguous().view(bsz, seqlen, -<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 把向量映射回输入embeding维度，方便输入到下一层</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.wo(output)</span><br></pre></td></tr></table></figure>
+
+<h2 id="KV-Cache-优化三：Multi-Head-Latent-Attention（MLA）"><a href="#KV-Cache-优化三：Multi-Head-Latent-Attention（MLA）" class="headerlink" title="KV Cache 优化三：Multi-Head Latent Attention（MLA）"></a>KV Cache 优化三：Multi-Head Latent Attention（MLA）</h2><p>多头潜在注意力（Multi-Head Latent Attention，MLA）的核心在于对注意力的键（key）和值（value）进行<strong>低秩联合压缩</strong>，以便在推理过程中减少键值（KV）缓存。MLA的计算过程如下：</p>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_kv_cache_review/multi-head-laten-attention-detail.png" alt="Multi-Head Latent Attention 通过低秩压缩减少 KV Cache 存储" title="Multi-Head Latent Attention 通过低秩压缩减少 KV Cache 存储"><figcaption>Multi-Head Latent Attention 通过低秩压缩减少 KV Cache 存储</figcaption></figure>
+
+<p>通过多头向量计算，对比MHA和MLA的向量计算过程：</p>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/attention_kv_cache_review/mha_mla_kv_compare.png" alt="MHA 与 MLA 的 Key/Value 向量缓存结构对比" title="MHA 与 MLA 的 Key/Value 向量缓存结构对比"><figcaption>MHA 与 MLA 的 Key/Value 向量缓存结构对比</figcaption></figure>
+
+<p>上述图示仅展示了MLA对token向量如何映射为多头key和value向量的过程，未展示RoPE位置编码的映射计算过程。MLA将内容相关的低秩压缩向量与解耦的RoPE key向量分开缓存：前者用于恢复key&#x2F;value的内容部分，后者提供注意力打分所需的位置信息。</p>
+<p>从向量计算的角度看，每个token需要存储的缓存元素为：</p>
+<ul>
+<li>每层的 KV Cache 需要存储一个潜在压缩向量（compressed latent vector），维度为\(d_c\)。其中\(d_c\)远小于\(n_h d_h\)。对于DeepSeek-V2，\(d_c\)设置为\(4d_h\)</li>
+<li>同时，每层的 KV Cache 需要存储一个解耦的RoPE key向量，维度为\(d_h^R\)。对于DeepSeek-V2，\(d_h^R\)设置为\(\frac{d_h}{2}\)。</li>
+<li>因此，每层单 token 的存储量为：</li>
+</ul>
+<p>\(单 token 存储量=(d_c+d_h^R) = \frac{9}{2}d_h\)</p>
+<ul>
+<li>对于 \(l\) 层 的Transformer，单 token 总存储量为：</li>
+</ul>
+<p>\(单 token 总存储量=l⋅\frac{9}{2}d_h=\frac{9}{2}·d_h·l\)</p>
+<h2 id="参数对比"><a href="#参数对比" class="headerlink" title="参数对比"></a>参数对比</h2><p>以DeepSeek-V2的参数为例，</p>
+<ul>
+<li>Transformer层数\(l=60\)</li>
+<li>注意力头数\(n_h=128\)</li>
+<li>每个头的向量维度\(d_h=128\)</li>
+<li>KV压缩向量维度\(d_c=512\)</li>
+<li>Q和K每个头的解耦RoPE维度\(d_h^R=64\)</li>
+<li>\(n_g=8\)</li>
+</ul>
+<p>假设每个缓存元素采取FP16精度，占2个字节。</p>
+<table>
+<thead>
+<tr>
+<th>注意力机制</th>
+<th>单token的KV Cache元素数</th>
+<th>单token KV Cache存储大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Multi-Head Attention（MHA）</td>
+<td>\(2n_hd_hl\)</td>
+<td>3840KiB ~ 3.75MiB</td>
+</tr>
+<tr>
+<td>Grouped-Query Attention（GQA）</td>
+<td>\(2n_gd_hl\)</td>
+<td>240KiB</td>
+</tr>
+<tr>
+<td>Multi-Query Attention（MQA）</td>
+<td>\(2d_hl\)</td>
+<td>30KiB</td>
+</tr>
+<tr>
+<td>Multi-Head Latent Attention（MLA）</td>
+<td>\((d_c+d_h^R)l\approx\frac92d_hl\)</td>
+<td>67.5KiB</td>
+</tr>
+</tbody></table>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://arxiv.org/pdf/2305.13245">GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints</a></li>
+<li><a href="https://arxiv.org/pdf/2405.04434">DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model</a></li>
+<li><a href="https://arxiv.org/pdf/2412.19437">DeepSeek-V3 Technical Report</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/685853516">大模型百倍推理加速之KV cache篇</a></li>
+<li><a href="https://github.com/harleyszhang/llm_note/tree/main/1-transformer_model">llm_note: transformer model</a></li>
+</ol>
+
+  </div>
+  
+    <nav class="post-nav">
+      
+      
+        <a href="/2025/03/17/long_context_attention_review/">下一篇：长上下文 Attention：注意力分布、稀疏化与 FlashAttention</a>
+      
+    </nav>
+  
+</article>
+
+      </main>
+      <footer class="site-footer">
+  <div>
+    &copy; 2015 - 2026
+    Heloowird
+  </div>
+</footer>
+
+    </div>
+    <script src="/js/main.js"></script>
+    
+
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="/lib/mathjax/tex-chtml.js"></script>
+
+
+  </body>
+</html>

@@ -5,8 +5,30 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+
 <title>使用神经网络解决分类问题时，为什么交叉熵误差更好 | Heloowird</title>
 
+  <meta name="description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。">
+
+
+  <meta name="keywords" content="neural network, cross entropy, loss function, mean squared error, softmax, gradient descent, classification loss, 神经网络, 交叉熵, 均方误差, 损失函数, 分类问题">
+
+<link rel="canonical" href="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/">
+<meta property="og:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
+
+  <meta property="og:description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/">
+<meta property="og:site_name" content="Heloowird">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用神经网络解决分类问题时，为什么交叉熵误差更好">
+
+  <meta name="twitter:description" content="在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。">
+
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"使用神经网络解决分类问题时，为什么交叉熵误差更好","name":"使用神经网络解决分类问题时，为什么交叉熵误差更好","url":"https://heloowird.github.io/2017/03/08/diff_errors_of_neural_network/","inLanguage":"zh-Hans","description":"在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2017-03-08T14:52:20.000Z","dateModified":"2026-06-27T05:27:04.862Z","keywords":"neural network, cross entropy, loss function, mean squared error, softmax, gradient descent, classification loss, 神经网络, 交叉熵, 均方误差, 损失函数, 分类问题"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -60,9 +82,9 @@
 
   </header>
   <div class="post-content">
-    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。</p>
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在机器学习中，如何度量模型已经达到较好的效果呢？通常我们使用模型的预测值和真实值之间的差值作为指标，即误差(error)。定义这个误差的函数，我们称为损失函数(loss function)或者代价函数(cost function)。常见的损失函数有0-1损失函数、平方损失函数、交叉熵损失函数、Hinge损失函数、指数损失函数等。</p>
 <p>在使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏。为什么不使用0-1分类误差或者均方差呢？</p>
-<h3 id="交叉熵误差和0-1分类误差"><a href="#交叉熵误差和0-1分类误差" class="headerlink" title="交叉熵误差和0-1分类误差"></a>交叉熵误差和0-1分类误差</h3><p>为说明这个问题，可以先从一个例子出发。例如预测某天天气情况（下雨、晴天、阴天），需要收集湿度、温度、云种等数据。在多分类且类别互斥问题中，通常选用<em>softmax函数</em><sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归">1</a>]</sup>作为神经网络输出层的激活函数。现在假设有3个样本，在神经网络分类模型某个训练阶段前向传播过程中最后输出层的输出结果如下：</p>
+<h2 id="交叉熵误差和0-1分类误差"><a href="#交叉熵误差和0-1分类误差" class="headerlink" title="交叉熵误差和0-1分类误差"></a>交叉熵误差和0-1分类误差</h2><p>为说明这个问题，可以先从一个例子出发。例如预测某天天气情况（下雨、晴天、阴天），需要收集湿度、温度、云种等数据。在多分类且类别互斥问题中，通常选用<em>softmax函数</em><sup>[<a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" title="UFLDL Softmax回归">1</a>]</sup>作为神经网络输出层的激活函数。现在假设有3个样本，在神经网络分类模型某个训练阶段前向传播过程中最后输出层的输出结果如下：</p>
 <table>
 <thead>
 <tr>
@@ -128,7 +150,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(0.14 + 0.14 + 0.74) / 3 = 0.34</span><br></pre></td></tr></table></figure>
 <p>从误差数值变化来看，均方差和交叉熵误差一样，从第一个模型到第二个更好的模型时，误差有明显的下降。在衡量模型好坏方面差别似乎不大，但均方差更强调预测错误的样本。</p>
 <p>以上通过具体例子可以看到，在训练神经网络分类模型训练过程中，交叉熵误差比0-1分类误差更好；但是很难说服我们交叉熵误差比均方差更好。</p>
-<h3 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h3><p>从均方差公式来看:<br><div class="math-display">\[L(y, x) = {\frac 12}{(y - a)^2}\tag{1}\]</div><br>其中\(x\)为输入，\(y\)为label，\(a\)为最后分类器的输出：\(a = \sigma(z), z = wx + b\)<br>在训练神经网络时，根据梯度下降算法，最后一层参数\(w\) 和\(b\)的更新公式为：<br><div class="math-display">\[\begin{cases}
+<h2 id="交叉熵误差和均方差"><a href="#交叉熵误差和均方差" class="headerlink" title="交叉熵误差和均方差"></a>交叉熵误差和均方差</h2><p>从均方差公式来看:<br><div class="math-display">\[L(y, x) = {\frac 12}{(y - a)^2}\tag{1}\]</div><br>其中\(x\)为输入，\(y\)为label，\(a\)为最后分类器的输出：\(a = \sigma(z), z = wx + b\)<br>在训练神经网络时，根据梯度下降算法，最后一层参数\(w\) 和\(b\)的更新公式为：<br><div class="math-display">\[\begin{cases}
 w \leftarrow w - \eta \cdot {\frac {\partial L} {\partial w}} \\\\
 b \leftarrow b - \eta \cdot {\frac {\partial L} {\partial b}}
 \end{cases}\tag{2}\]</div><br>根据链式求导法则：<br><div class="math-display">\[\begin{cases}
@@ -149,7 +171,7 @@ w \leftarrow w - \eta \cdot (a-y) \cdot x \\\\
 b \leftarrow b - \eta \cdot (a-y)
 \end{cases}\tag{8}\]</div><br>比较公式(5)和公式(8)易知，引发“梯度消失”的项已经消除，当输出值\(a\)为\(0.9\)时，\(0.09\)这项乘式因子变为1，故\(w\)和\(b\)更新更快。</p>
 <p>综上所知，使用交叉熵误差使得整个梯度下降算法对参数更新方式比均方差的更加有效率。</p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏，而不使用0-1分类误差或者均方差。以上的误差均为训练过程中对模型好坏的度量。而在测试过程中，通常使用0-1误差，即分类准确率指标，更贴近应用层面。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>使用神经网络训练分类模型时，通常以交叉熵误差来度量神经网络模型的好坏，而不使用0-1分类误差或者均方差。以上的误差均为训练过程中对模型好坏的度量。而在测试过程中，通常使用0-1误差，即分类准确率指标，更贴近应用层面。</p>
 <p>参考资料：</p>
 <ol>
 <li><a href="http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92">UFLDL Softmax回归</a></li>

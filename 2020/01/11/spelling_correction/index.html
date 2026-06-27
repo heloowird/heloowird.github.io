@@ -5,8 +5,30 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+
 <title>拼写纠错概述 | Heloowird</title>
 
+  <meta name="description" content="拼写错误介绍在输入过程中，会存在拼写错误。拼写错误分为两类： 非单词拼写错误（non-word spelling error），即需要纠错的单词不在现有词典中，如把success 输错成succest 。">
+
+
+  <meta name="keywords" content="spelling correction, noisy channel model, edit distance, damerau levenshtein, language model, real-word error, 拼写纠错, 编辑距离, 噪声信道模型, 实词错误, 语言模型">
+
+<link rel="canonical" href="https://heloowird.github.io/2020/01/11/spelling_correction/">
+<meta property="og:title" content="拼写纠错概述">
+
+  <meta property="og:description" content="拼写错误介绍在输入过程中，会存在拼写错误。拼写错误分为两类： 非单词拼写错误（non-word spelling error），即需要纠错的单词不在现有词典中，如把success 输错成succest 。">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.github.io/2020/01/11/spelling_correction/">
+<meta property="og:site_name" content="Heloowird">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="拼写纠错概述">
+
+  <meta name="twitter:description" content="拼写错误介绍在输入过程中，会存在拼写错误。拼写错误分为两类： 非单词拼写错误（non-word spelling error），即需要纠错的单词不在现有词典中，如把success 输错成succest 。">
+
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"拼写纠错概述","name":"拼写纠错概述","url":"https://heloowird.github.io/2020/01/11/spelling_correction/","inLanguage":"zh-Hans","description":"拼写错误介绍在输入过程中，会存在拼写错误。拼写错误分为两类： 非单词拼写错误（non-word spelling error），即需要纠错的单词不在现有词典中，如把success 输错成succest 。","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2020-01-10T18:19:22.000Z","dateModified":"2026-06-27T05:27:04.726Z","keywords":"spelling correction, noisy channel model, edit distance, damerau levenshtein, language model, real-word error, 拼写纠错, 编辑距离, 噪声信道模型, 实词错误, 语言模型"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -60,13 +82,13 @@
 
   </header>
   <div class="post-content">
-    <h4 id="拼写错误介绍"><a href="#拼写错误介绍" class="headerlink" title="拼写错误介绍"></a>拼写错误介绍</h4><p>在输入过程中，会存在拼写错误。拼写错误分为两类：</p>
+    <h2 id="拼写错误介绍"><a href="#拼写错误介绍" class="headerlink" title="拼写错误介绍"></a>拼写错误介绍</h2><p>在输入过程中，会存在拼写错误。拼写错误分为两类：</p>
 <ul>
 <li>非单词拼写错误（non-word spelling error），即需要纠错的单词不在现有词典中，如把success 输错成succest 。</li>
 <li>实单词拼写错误（real word spelling error），即需要纠错的单词存在现有词典中，如把there 输错成three 。</li>
 </ul>
 <p>拼写错误一般由字母增删改、字母调换顺序等错误造成。在手机输入中，由于键盘小，手指大(fat fingure problem)而造成多、错、漏输入等情况。另一方面，由于发音相同或相似，容易造成实单词拼写错误。在汉语中表现为n、l不分，f、h不分，前后鼻音不分，平翘舌音不分等。</p>
-<h4 id="拼写纠错通用框架"><a href="#拼写纠错通用框架" class="headerlink" title="拼写纠错通用框架"></a>拼写纠错通用框架</h4><p>拼写纠错一般分为三大步：</p>
+<h2 id="拼写纠错通用框架"><a href="#拼写纠错通用框架" class="headerlink" title="拼写纠错通用框架"></a>拼写纠错通用框架</h2><p>拼写纠错一般分为三大步：</p>
 <ul>
 <li>拼写错误检测（检测）</li>
 <li>纠错候选生成（召回）</li>
@@ -77,7 +99,7 @@
 <p>最后，如何排序上一步生成的纠错候选。已知用户错误拼写记为\(x\) ，第\(i\) 个纠错候选单词为\(w_i\) ，那么\(p(w_i|x)\) 为\(w_i\)错输成\(x\) 的概率，作为各个\(w_i\) 的权重。对于同一个\(x\) ，\(p(w_i|x)\) 越大， \(w_i\) 越有可能是\(x\) 的正确单词。所以有：<br><div class="math-display">\[\begin{aligned}
 \hat{w}=\arg\max_{w \in C}p(x|w)p(w)
 \end{aligned}\]</div></p>
-<h4 id="噪声信道模型-Noisy-Channel-Model"><a href="#噪声信道模型-Noisy-Channel-Model" class="headerlink" title="噪声信道模型(Noisy Channel Model)"></a>噪声信道模型(Noisy Channel Model)</h4><p>根据贝叶斯公式：<br><div class="math-display">\[\begin{aligned}
+<h2 id="噪声信道模型-Noisy-Channel-Model"><a href="#噪声信道模型-Noisy-Channel-Model" class="headerlink" title="噪声信道模型(Noisy Channel Model)"></a>噪声信道模型(Noisy Channel Model)</h2><p>根据贝叶斯公式：<br><div class="math-display">\[\begin{aligned}
 p(w|x) = \frac{p(x|w) * p(w)}{p(x)}
 \end{aligned}\]</div></p>
 <p>对于所有的纠错候选词\(w\) ，\(x\) 是一样的。所以\(p(x)\) 可以去掉。得：<br><div class="math-display">\[\begin{aligned}
@@ -85,14 +107,14 @@ p(w|x) = p(x|w) * p(w)
 \end{aligned}\]</div></p>
 <p>\(p(x|w)\) 为\(w\) 错输成\(x\) 的概率，亦称作似然或者\(w\) 转化成\(x\) 的信道模型。\(p(w)\) 为纠错候选的先验概率，从语料中统计得到，p(w) 可以是unigram 、bigram 或者trigram 。</p>
 <p>影响\(p(x|w)\) 的因素有很多。一般我们转化为字符错误类型。错误类型分为：增、删、改以及交换（Damerau-Levenshtein)。通过统计字符四种错误类型的混淆矩阵来近似\(p(x|w)\) 。举个例子：\(p(acress|across)\) 可以使用大语料中字符o 被e 替换的概率\(p(e|o)\) 代替。</p>
-<h4 id="实单词拼写错误"><a href="#实单词拼写错误" class="headerlink" title="实单词拼写错误"></a>实单词拼写错误</h4><p>实单词拼写错误依然遵循通用框架的后两步。 首先，通过编辑距离召回候选，然后根据先验概率和信道噪声模型进行排序。 在召回候选时，一般编辑距离小于等于1，这里和非单词错误不一样，需要纠错单词本身也是候选词之一。信道噪声模型首先要考虑需要纠错的单词其实是没有错误，即\(p(w|w)\) 的概率\(\alpha\) 会根据不同任务设定不同的值。通常为\(.95\)。那么，剩下的候选词分摊\(1-\alpha\) 。<br><div class="math-display">\[\begin{aligned}
+<h2 id="实单词拼写错误"><a href="#实单词拼写错误" class="headerlink" title="实单词拼写错误"></a>实单词拼写错误</h2><p>实单词拼写错误依然遵循通用框架的后两步。 首先，通过编辑距离召回候选，然后根据先验概率和信道噪声模型进行排序。 在召回候选时，一般编辑距离小于等于1，这里和非单词错误不一样，需要纠错单词本身也是候选词之一。信道噪声模型首先要考虑需要纠错的单词其实是没有错误，即\(p(w|w)\) 的概率\(\alpha\) 会根据不同任务设定不同的值。通常为\(.95\)。那么，剩下的候选词分摊\(1-\alpha\) 。<br><div class="math-display">\[\begin{aligned}
 p(x|w) = \begin{cases}
 \alpha &amp;  \text{if }  x=w \\ 
 \frac{1-\alpha}{\left | C(x) \right |} &amp; \text{if } x\subset C(x) \\ 
 0 &amp; \text{otherwise }
 \end{cases}
 \end{aligned}\]</div><br>除了使用均匀分布，更精确的做法是：按照字符混淆矩阵的概率分配。先验概率\(p(w)\) 依然采用语言模型，bigram 或者trigram。</p>
-<h4 id="改进点"><a href="#改进点" class="headerlink" title="改进点"></a>改进点</h4><ul>
+<h2 id="改进点"><a href="#改进点" class="headerlink" title="改进点"></a>改进点</h2><ul>
 <li>不再假设一句话只有一处错误。对每个单词进行检查。如果仅使用简单的纠错模型，会造成很多误纠错。特别是不常见的单词。<ul>
 <li>使用不纠错白名单</li>
 <li>使用\(logP(w|x) - log(x|x) &gt; \theta\) 代替\(logP(w|x) - log(x|x) &gt; 0\)</li>

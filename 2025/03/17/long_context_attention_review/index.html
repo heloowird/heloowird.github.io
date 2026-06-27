@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+
+<title>长上下文 Attention：注意力分布、稀疏化与 FlashAttention | Heloowird</title>
+
+  <meta name="description" content="当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。">
+
+
+  <meta name="keywords" content="transformer, long context, sparse attention, flashattention, longformer, bigbird, native sparse attention, attention sink, 长上下文, 稀疏注意力, 注意力分布, FlashAttention">
+
+<link rel="canonical" href="https://heloowird.github.io/2025/03/17/long_context_attention_review/">
+<meta property="og:title" content="长上下文 Attention：注意力分布、稀疏化与 FlashAttention">
+
+  <meta property="og:description" content="当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.github.io/2025/03/17/long_context_attention_review/">
+<meta property="og:site_name" content="Heloowird">
+
+  <meta property="og:image" content="https://heloowird.github.io/images/posts/long_context_attention_review/attention-v-shape.webp">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="长上下文 Attention：注意力分布、稀疏化与 FlashAttention">
+
+  <meta name="twitter:description" content="当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。">
+
+
+  <meta name="twitter:image" content="https://heloowird.github.io/images/posts/long_context_attention_review/attention-v-shape.webp">
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"长上下文 Attention：注意力分布、稀疏化与 FlashAttention","name":"长上下文 Attention：注意力分布、稀疏化与 FlashAttention","url":"https://heloowird.github.io/2025/03/17/long_context_attention_review/","inLanguage":"zh-Hans","description":"当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。","image":"https://heloowird.github.io/images/posts/long_context_attention_review/attention-v-shape.webp","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2025-03-16T16:10:00.000Z","dateModified":"2026-06-27T05:26:42.944Z","keywords":"transformer, long context, sparse attention, flashattention, longformer, bigbird, native sparse attention, attention sink, 长上下文, 稀疏注意力, 注意力分布, FlashAttention"}</script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/css/main.css?v=20260626-mathjax">
+
+  <meta name="generator" content="Hexo 8.1.2"></head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+  <div class="brand-block">
+    <a class="brand" href="/" aria-label="Heloowird">
+      <span class="brand-title">Heloowird</span>
+    </a>
+    
+  </div>
+
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="site-nav" id="site-nav">
+    
+      <a href="/">Blog</a>
+    
+      <a href="https://github.com/heloowird">GitHub</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main" id="main">
+        <article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">长上下文 Attention：注意力分布、稀疏化与 FlashAttention</h1>
+    <div class="post-meta">
+  
+    <time datetime="2025-03-16T16:10:00.000Z">2025-03-17</time>
+  
+  <span class="meta-separator">·</span>
+  <span>约 2.1k 字</span>
+  <span class="meta-separator">·</span>
+  <span>7 分钟读完</span>
+</div>
+
+  </header>
+  <div class="post-content">
+    <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>当上下文长度变长后，标准全量 attention 的计算量和 KV Cache 访问成本都会迅速上升。围绕长上下文，常见研究方向包括：观察语言模型如何分配 attention weights、通过稀疏模式降低计算复杂度，以及通过 FlashAttention 这类 IO-aware 实现提升硬件效率。</p>
+<h2 id="长上下文中的-Attention-分布模式"><a href="#长上下文中的-Attention-分布模式" class="headerlink" title="长上下文中的 Attention 分布模式"></a>长上下文中的 Attention 分布模式</h2><p><a href="https://yaofu.notion.site/How-Do-Language-Models-put-Attention-Weights-over-Long-Context-10250219d5ce42e8b465087c383a034e">Fu Yao</a>在<a href="https://zhida.zhihu.com/search?content_id=241282387&content_type=Article&match_order=1&q=LLaMA-2-7B-80K%E6%A3%80%E6%9F%A5%E7%82%B9&zhida_source=entity">LLaMA-2-7B-80K</a>模型上进行了实验，并提取了其注意力张量（tensor）。注意力tensor包含了三个维度&#x2F;层级：</p>
+<ul>
+<li>网络层数，即深度（depth）：32层</li>
+<li>注意力头数（heads）：每层有32个头</li>
+<li>上下文长度（context length）：输入文档有50K tokens</li>
+</ul>
+<p>作者在不同层观测到注意力的分布不尽相同：</p>
+<ul>
+<li>在Layer 0和Layer 1中，大多数（或全部）注意力头（attention heads）遵循均匀分布（uniform distribution）。</li>
+<li>在Layer 2-30中，许多注意力头呈现V型模式（V-shaped pattern）– 即注意力权重（attention mass）主要分配在序列的起始和末尾部分（first and last few tokens）。不过，也有一些注意力头表现出其他模式，例如：分散在中间部分（scattered over the middle）、集中在中间位置（concentrated on the middle）。<strong>值得注意的是，Layer 2-30中未观察到均匀分布。</strong></li>
+<li>最后，在Layer 31（即最后一层），所有上述注意力模式均存在。</li>
+</ul>
+<div class="attention-pattern-grid">
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/attention-v-shape.webp" alt="V-shaped：第5层，第20头，注意力遵循V形模式" title="V-shaped：第5层，第20头，注意力遵循V形模式"><figcaption>V-shaped：第5层，第20头，注意力遵循V形模式</figcaption></figure>
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/attention-sink.webp" alt="Attention sink：第12层，第23头，注意力沉没模式" title="Attention sink：第12层，第23头，注意力沉没模式"><figcaption>Attention sink：第12层，第23头，注意力沉没模式</figcaption></figure>
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/attention-recency-bias.webp" alt="Recency bias：第5层，第15头，最近偏见模式" title="Recency bias：第5层，第15头，最近偏见模式"><figcaption>Recency bias：第5层，第15头，最近偏见模式</figcaption></figure>
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/attention-scattered-over-middle.webp" alt="Scattered over middle：第11层，第2头。概率质量在中间的多个token上分散" title="Scattered over middle：第11层，第2头。概率质量在中间的多个token上分散"><figcaption>Scattered over middle：第11层，第2头。概率质量在中间的多个token上分散</figcaption></figure>
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/attention-concentrated-on-middle.webp" alt="Concentrated on middle：第11层，第14头。概率质量集中在中间的很少几个token上" title="Concentrated on middle：第11层，第14头。概率质量集中在中间的很少几个token上"><figcaption>Concentrated on middle：第11层，第14头。概率质量集中在中间的很少几个token上</figcaption></figure>
+
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/attention-uniform.webp" alt="Uniform：第0层，第5头，所有token上的均匀分布" title="Uniform：第0层，第5头，所有token上的均匀分布"><figcaption>Uniform：第0层，第5头，所有token上的均匀分布</figcaption></figure>
+
+</div>
+
+<p>from：<a href="https://yaofu.notion.site/How-Do-Language-Models-put-Attention-Weights-over-Long-Context-10250219d5ce42e8b465087c383a034e">https://yaofu.notion.site/How-Do-Language-Models-put-Attention-Weights-over-Long-Context-10250219d5ce42e8b465087c383a034e</a></p>
+<h2 id="稀疏-Attention-变种"><a href="#稀疏-Attention-变种" class="headerlink" title="稀疏 Attention 变种"></a>稀疏 Attention 变种</h2><h3 id="Longformer（2020，AllenAI）"><a href="#Longformer（2020，AllenAI）" class="headerlink" title="Longformer（2020，AllenAI）"></a>Longformer（2020，AllenAI）</h3><p>Sparse Attention优化，主要结合<strong>滑动窗口局部注意力+任务驱动全局注意力</strong>方式，也支持空洞滑动窗口变体，把注意力计算从长度平方降低到线性。</p>
+<p>如何选择全局注意力：</p>
+<ol>
+<li>不同任务选择不同的全局注意力</li>
+<li>分类任务：CLS token；QA任务：所有Q对应的token。</li>
+</ol>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/longformer.png" alt="Longformer 的滑动窗口注意力与全局注意力结构" title="Longformer 的滑动窗口注意力与全局注意力结构"><figcaption>Longformer 的滑动窗口注意力与全局注意力结构</figcaption></figure>
+
+<h3 id="BigBird（2020，Google）"><a href="#BigBird（2020，Google）" class="headerlink" title="BigBird（2020，Google）"></a>BigBird（2020，Google）</h3><p>Sparse Attention优化，结合<strong>随机+滑动窗口+全局注意力</strong>方式，把注意力计算从长度平方降低到线性。</p>
+<p>全局注意力：</p>
+<ol>
+<li>内部选择一些行或者列</li>
+<li>外部扩展：如Bert分类任务中的CLS token。</li>
+</ol>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/bigbird.png" alt="BigBird 结合局部窗口、全局 token 与随机注意力的稀疏结构" title="BigBird 结合局部窗口、全局 token 与随机注意力的稀疏结构"><figcaption>BigBird 结合局部窗口、全局 token 与随机注意力的稀疏结构</figcaption></figure>
+
+<h3 id="Routing-Transformer（2020-2021，Google）"><a href="#Routing-Transformer（2020-2021，Google）" class="headerlink" title="Routing Transformer（2020&#x2F;2021，Google）"></a>Routing Transformer（2020&#x2F;2021，Google）</h3><p>与传统的全注意力机制相比，Routing Transformer通过在线k-means聚类算法动态地学习和分配注意力权重，使得每个位置仅关注其所在簇内的关键点，从而将注意力计算复杂度从\(O(n^2d)\)降低到约\(O(n^{1.5}d)\)。具体地：</p>
+<ol>
+<li>首先使用LN把 key 和 query 投影到d维的单元球上。</li>
+<li>然后计算历史query、key和聚类中心的距离。聚成\(k\)簇，每个簇选择相似度最高的窗口大小\(w = n/k\)的index，获取对应index的 query 和 key，并计算簇内 softmax。</li>
+<li>在每个簇中，加权求和value 得到token的上下文表示。</li>
+</ol>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/routing-transformer.png" alt="Routing Transformer 基于聚类路由的稀疏注意力模式" title="Routing Transformer 基于聚类路由的稀疏注意力模式"><figcaption>Routing Transformer 基于聚类路由的稀疏注意力模式</figcaption></figure>
+
+<h3 id="Native-Sparse-Attention（2025，DeepSeek）"><a href="#Native-Sparse-Attention（2025，DeepSeek）" class="headerlink" title="Native Sparse Attention（2025，DeepSeek）"></a>Native Sparse Attention（2025，DeepSeek）</h3><p>NSA采用动态构建的层次化稀疏策略，结合粗粒度令牌压缩和细粒度令牌选择来保留全局、局部上下文信息。方法如下：</p>
+<ol>
+<li>Token压缩：首先将历史的 k 和 v 通过滑动窗口分割成块，滑动窗口大小为\(l\)，滑动步幅为\(d\)，保证\(d &lt; l\)避免产生信息碎片。然后，每个块通过一个MLP压缩到一个key和value。</li>
+<li>Token选择：将键值序列划分为选择块，为每个块分配重要性得分。借用压缩token注意力计算产生的中间注意力分数，推导出选择块的重要性分数。最后选出top n个token块。</li>
+<li>滑动窗口：在一个窗口w中维护最近的token，来明确处理局部上下文。</li>
+</ol>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/native-sparse-attention.png" alt="Native Sparse Attention 的压缩、选择与滑动窗口注意力模块" title="Native Sparse Attention 的压缩、选择与滑动窗口注意力模块"><figcaption>Native Sparse Attention 的压缩、选择与滑动窗口注意力模块</figcaption></figure>
+
+<h2 id="高性能-Attention-实现"><a href="#高性能-Attention-实现" class="headerlink" title="高性能 Attention 实现"></a>高性能 Attention 实现</h2><h3 id="FlashAttention"><a href="#FlashAttention" class="headerlink" title="FlashAttention"></a>FlashAttention</h3><p>FlashAttention的原理可以通俗理解为“<strong>化整为零，边算边扔</strong>”。它是精确attention实现，不是近似attention；通过将注意力计算分块处理，使用online softmax和分块累积，避免显式存储完整的注意力矩阵，并利用GPU的高效内存访问（如SRAM）来加速计算。反向传播阶段还会通过重计算减少显存占用。</p>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/flash-attention.png" alt="FlashAttention 通过分块计算减少 HBM 读写开销" title="FlashAttention 通过分块计算减少 HBM 读写开销"><figcaption>FlashAttention 通过分块计算减少 HBM 读写开销</figcaption></figure>
+
+<h3 id="标准-Attention-实现伪码"><a href="#标准-Attention-实现伪码" class="headerlink" title="标准 Attention 实现伪码"></a>标准 Attention 实现伪码</h3><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/standard-attention-code.png" alt="标准 Attention 计算流程伪代码" title="标准 Attention 计算流程伪代码"><figcaption>标准 Attention 计算流程伪代码</figcaption></figure>
+
+<h3 id="FlashAttention-实现伪码"><a href="#FlashAttention-实现伪码" class="headerlink" title="FlashAttention 实现伪码"></a>FlashAttention 实现伪码</h3><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/flash-attention-code.png" alt="FlashAttention 分块计算流程伪代码" title="FlashAttention 分块计算流程伪代码"><figcaption>FlashAttention 分块计算流程伪代码</figcaption></figure>
+
+<blockquote>
+<ul>
+<li>向量 \(\ell\) 初始化为零，用于存储累积的归一化因子。</li>
+<li>向量 \(m\) 初始化为负无穷，用于跟踪最大值，以便在计算过程中进行数值稳定处理。</li>
+<li>10行：<ul>
+<li>这一步计算每一行的最大值（<code>rowmax</code>）用于数值稳定。这在计算注意力分数的时候非常关键，因为通过从logits中减去每一行的最大值，可以防止指数计算中出现数值过大的情况，从而避免溢出。</li>
+<li>对稳定后的分数进行指数运算，以得到注意力权重。这是点对点的计算（<code>pointwise</code>），意味着对矩阵中的每一个元素进行操作。</li>
+<li>计算每一行的注意力权重和。这是为了随后进行标准化，使得注意力权重能正常归一化到0到1之间。</li>
+</ul>
+</li>
+<li>11行：<ul>
+<li>更新适应的最大值，对于当前行的最大值 \(m_i\) 与最新计算的 \(\tilde{m}_{ij}\) 进行比较并保留较大的值。这确保在随后计算中，记忆曾经遇到过的最大值，以保证数值稳定。</li>
+<li>更新归一化因子 \(\ell_i\)。使用先前与新的指数因子来调整当前块的注意力和归一化。这一步在结合权重时很关键，以确保所有概率值在理论上的总和能够稳定在期望值附近。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="补充讨论：复杂度、优化目标与注意力权重"><a href="#补充讨论：复杂度、优化目标与注意力权重" class="headerlink" title="补充讨论：复杂度、优化目标与注意力权重"></a>补充讨论：复杂度、优化目标与注意力权重</h2><ol>
+<li><a href="https://supaiku.com/attention-is-logarithmic">《attention is logarithmic, actually》</a></li>
+</ol>
+<p>中文地址：<a href="https://mp.weixin.qq.com/s/iDWcMYhTpqs-4hqsPGmVaA">https://mp.weixin.qq.com/s/iDWcMYhTpqs-4hqsPGmVaA</a></p>
+<blockquote>
+<p>一个时间复杂度为 O (n³) 但能够并行的算法，和一个必须按顺序执行的算法，单从时间复杂度上看不出来它们的区别。而且，有些算法天生就是并行的，比如线性代数，但人们还在用时间复杂度来描述它们，这其实是很荒谬的。</p>
+<p>我们不仅要考虑算法执行的原始操作数量（即「work」），更要关注计算图相对于输入大小的「depth」，也就是不可并行的顺序操作的最小数量。因为这些顺序操作是不可避免的，无论你的计算机有多少个核心，它们都会造成阻塞。</p>
+<p>逐个元素相乘的时间复杂度是多少？</p>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/long_context_attention_review/element-wise-multiple.png" alt="Attention 输出中权重矩阵与 Value 矩阵的逐元素加权示意" title="Attention 输出中权重矩阵与 Value 矩阵的逐元素加权示意"><figcaption>Attention 输出中权重矩阵与 Value 矩阵的逐元素加权示意</figcaption></figure></blockquote>
+<p>延伸阅读：《Neural GPUS LEARN ALGORITHMS》<a href="https://arxiv.org/pdf/1511.08228">https://arxiv.org/pdf/1511.08228</a></p>
+<ol start="2">
+<li>在attention加速上，不同阶段Attention的优化目标有所不同</li>
+</ol>
+<p>在DeepSeek的《Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention》中提到：</p>
+<blockquote>
+<p><strong>算术强度（Arithmetic Intensity）<strong>是计算操作与内存访问的比率。它内在地决定了算法在硬件上的优化。每个GPU都有一个关键的算术强度，由其峰值计算能力和内存带宽决定，通过这两个硬件限制的比例来计算。对于计算任务来说，高于这个临界值的算术强度成为</strong>计算受限</strong>（受GPU FLOPS限制），而低于它的则成为<strong>内存受限</strong>（受内存带宽限制）。</p>
+<p>具体来说，对于自注意力机制，<strong>在训练和预填充阶段</strong>，批矩阵乘法和注意计算表现出高算术强度，使得这些阶段在现代加速器上成为<strong>计算限制</strong>。相比之下，<strong>自回归解码</strong>由于每次前向传递生成一个令牌，同时需要加载整个键值缓存而受到<strong>内存带宽</strong>的约束，导致低算术强度。这导致了不同的优化目标：</p>
+<ul>
+<li>减少训练和预填充期间的计算成本。</li>
+<li>减少解码期间的内存访问。</li>
+</ul>
+</blockquote>
+<ol start="3">
+<li><a href="https://yaofu.notion.site/How-Do-Language-Models-put-Attention-Weights-over-Long-Context-10250219d5ce42e8b465087c383a034e">《How Do Language Models put Attention Weights over Long Context?》</a></li>
+</ol>
+<p>中文地址：<a href="https://zhuanlan.zhihu.com/p/689183412?utm_psn=1758575332435820544">https://zhuanlan.zhihu.com/p/689183412</a></p>
+<blockquote>
+<p>1%的注意力权重是否真的不重要？</p>
+<ul>
+<li>目前尚无定论。</li>
+<li>考虑到语言模型的敏感性，即使某个标记（token）仅占<strong>1%的注意力权重（attention mass）</strong>，它仍可能对**下一个词预测（next-word prediction）**起到关键作用。</li>
+</ul>
+<p>是否忽略了值向量（value vector）的影响</p>
+<ul>
+<li>确实如此。</li>
+<li>假设某个标记的值向量范数（value vector’s norm）是其他标记的100倍，即使其仅接收1%的注意力权重，仍会对输出向量（output vector）产生显著影响。</li>
+</ul>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://arxiv.org/pdf/2003.05997">Efficient Content-Based Sparse Attention with Routing Transformers</a></li>
+<li><a href="https://arxiv.org/pdf/2007.14062">Big Bird: Transformers for Longer Sequences</a></li>
+<li><a href="https://arxiv.org/pdf/2004.05150">Longformer: The Long-Document Transformer</a></li>
+<li><a href="https://openreview.net/pdf?id=H4DqfPSibmx">FlashAttention</a></li>
+<li><a href="https://supaiku.com/attention-is-logarithmic">attention is logarithmic, actually</a></li>
+<li><a href="https://mp.weixin.qq.com/s/iDWcMYhTpqs-4hqsPGmVaA">注意力实际上是对数的</a></li>
+<li><a href="https://yaofu.notion.site/How-Do-Language-Models-put-Attention-Weights-over-Long-Context-10250219d5ce42e8b465087c383a034e">How Do Language Models put Attention Weights over Long Context?</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/689183412?utm_psn=1758575332435820544">语言模型如何将注意力权重放在长上下文上</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/687404612">如何可视化LLM Attention</a></li>
+<li><a href="https://github.com/jessevig/bertviz?tab=readme-ov-file">BertViz 可视化工具库</a></li>
+</ol>
+
+  </div>
+  
+    <nav class="post-nav">
+      
+        <a href="/2025/03/27/attention_kv_cache_review/">上一篇：大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA</a>
+      
+      
+        <a href="/2021/03/09/attention_mechanism_review/">下一篇：注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT</a>
+      
+    </nav>
+  
+</article>
+
+      </main>
+      <footer class="site-footer">
+  <div>
+    &copy; 2015 - 2026
+    Heloowird
+  </div>
+</footer>
+
+    </div>
+    <script src="/js/main.js"></script>
+    
+
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="/lib/mathjax/tex-chtml.js"></script>
+
+
+  </body>
+</html>

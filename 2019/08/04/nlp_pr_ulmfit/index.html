@@ -5,8 +5,34 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+
 <title>NLP论文阅读- ULMFiT | Heloowird</title>
 
+  <meta name="description" content="Universal Language Model Fine-tuning for Text Classification(ULMFiT) 背景介绍迁移学习对CV领域有着巨大影响，然而现存NLP领域的相关方法需要针对特定任务做相应修改，并从头开始训练。">
+
+
+  <meta name="keywords" content="论文阅读, ulmfit, transfer learning, language model fine-tuning, text classification, discriminative fine-tuning, gradual unfreezing, ULMFiT论文, 文本分类, 迁移学习, 语言模型微调">
+
+<link rel="canonical" href="https://heloowird.github.io/2019/08/04/nlp_pr_ulmfit/">
+<meta property="og:title" content="NLP论文阅读- ULMFiT">
+
+  <meta property="og:description" content="Universal Language Model Fine-tuning for Text Classification(ULMFiT) 背景介绍迁移学习对CV领域有着巨大影响，然而现存NLP领域的相关方法需要针对特定任务做相应修改，并从头开始训练。">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.github.io/2019/08/04/nlp_pr_ulmfit/">
+<meta property="og:site_name" content="Heloowird">
+
+  <meta property="og:image" content="https://heloowird.github.io/images/posts/nlp_pr_ulmfit/ulmfit-model-arch.png">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NLP论文阅读- ULMFiT">
+
+  <meta name="twitter:description" content="Universal Language Model Fine-tuning for Text Classification(ULMFiT) 背景介绍迁移学习对CV领域有着巨大影响，然而现存NLP领域的相关方法需要针对特定任务做相应修改，并从头开始训练。">
+
+
+  <meta name="twitter:image" content="https://heloowird.github.io/images/posts/nlp_pr_ulmfit/ulmfit-model-arch.png">
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"NLP论文阅读- ULMFiT","name":"NLP论文阅读- ULMFiT","url":"https://heloowird.github.io/2019/08/04/nlp_pr_ulmfit/","inLanguage":"zh-Hans","description":"Universal Language Model Fine-tuning for Text Classification(ULMFiT) 背景介绍迁移学习对CV领域有着巨大影响，然而现存NLP领域的相关方法需要针对特定任务做相应修改，并从头开始训练。","image":"https://heloowird.github.io/images/posts/nlp_pr_ulmfit/ulmfit-model-arch.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2019-08-04T06:19:22.000Z","dateModified":"2026-06-27T05:27:04.475Z","keywords":"论文阅读, ulmfit, transfer learning, language model fine-tuning, text classification, discriminative fine-tuning, gradual unfreezing, ULMFiT论文, 文本分类, 迁移学习, 语言模型微调"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -53,17 +79,17 @@
     <time datetime="2019-08-04T06:19:22.000Z">2019-08-04</time>
   
   <span class="meta-separator">·</span>
-  <span>约 988 字</span>
+  <span>约 1k 字</span>
   <span class="meta-separator">·</span>
   <span>3 分钟读完</span>
 </div>
 
   </header>
   <div class="post-content">
-    <h4 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h4><p>Universal Language Model Fine-tuning for Text Classification(ULMFiT)</p>
-<h4 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h4><p>迁移学习对CV领域有着巨大影响，然而现存NLP领域的相关方法需要针对特定任务做相应修改，并从头开始训练。所以，本文提出了一种有效的文本分类的迁移学习方法–通用语言模型微调方法（Universal Language Model Fine-tuning）–可应用于所有的NLP任务，并介绍了微调语言模型的关键技术。</p>
+    <h2 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h2><p>Universal Language Model Fine-tuning for Text Classification(ULMFiT)</p>
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>迁移学习对CV领域有着巨大影响，然而现存NLP领域的相关方法需要针对特定任务做相应修改，并从头开始训练。所以，本文提出了一种有效的文本分类的迁移学习方法–通用语言模型微调方法（Universal Language Model Fine-tuning）–可应用于所有的NLP任务，并介绍了微调语言模型的关键技术。</p>
 <p>预训练的语言模型被证明是有效的，如word2vec。作者认为，并非语言模型微调思想本身有问题，而是缺乏<strong>如何有效地微调语言模型</strong>这方面知识才是阻碍其广泛应用的「罪魁祸首」。</p>
-<h4 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h4><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/nlp_pr_ulmfit/ulmfit-model-arch.png" alt="ULMFiT模型主框架图" title="ULMFiT模型主框架图"><figcaption>ULMFiT模型主框架图</figcaption></figure>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/nlp_pr_ulmfit/ulmfit-model-arch.png" alt="ULMFiT模型主框架图" title="ULMFiT模型主框架图"><figcaption>ULMFiT模型主框架图</figcaption></figure>
 
 <p>ULMFiT包含3个步骤：</p>
 <ol>
@@ -74,14 +100,14 @@
 <p>三步使用了相同的主框架：首先是embedding层，然后接三层LSTM层，最后接一个Softmax层。</p>
 <p>在目标分类任务微调中，为解决分类问题，加了两个全连接层：第一个全连接为bn+dropout+relu；第二个全连接层为bn+dropout+softmax，输出各个类别的概率。</p>
 <p>另外：第一个全连接的输入除了LSTM最后一层的最后一个隐层状态，还分别拼接了最后一层各个隐层状态经max-pool和mean-pool后的结果，尽可能地保真文档的信息。</p>
-<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>使用大规模通用领域语料预训练语言模型，文中用到的通用语料为Wikitext-103。使用具体的语言模型为：通过上文，预测下一个词，即从左到右建模。在大规模通用预训练时，不同模型层次提取不同级别的通用特征，这点期待和CV领域的IMAGENET模型达到l类似的效果。</p>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>使用大规模通用领域语料预训练语言模型，文中用到的通用语料为Wikitext-103。使用具体的语言模型为：通过上文，预测下一个词，即从左到右建模。在大规模通用预训练时，不同模型层次提取不同级别的通用特征，这点期待和CV领域的IMAGENET模型达到l类似的效果。</p>
 <p>使用目标任务的语料微调语言模型。目标任务物料与通用语料的分布通常是不一样，所以需要针对目标任务预料语义特性，进行参数微调。这里使用了两个trick：</p>
 <ul>
 <li>每层学习到的特征不一样，需要进行不同程度的微调：越低层网络学习到的特征越基础，微调幅度应越小。所以每层设置不同的初始学习率。最后一层学习率为\(\eta ^{l}\)，则前一层学习率为的\(\eta ^{l-1} = \eta^{l}/2.6\)，依次类推.</li>
 <li>开始时，学习率随着每次迭代逐渐增加至最大学习率，然后随着训练迭代依次递减。学习率随着迭代次数呈斜三角形分布。</li>
 </ul>
 <p>最后一步是在目标文本分类任务上进行参数微调。在此步中微调程度把握至关重要，过大幅度的微调会导致忽略从语言模型中学习到的知识；过小幅度微调又影响收敛速度，且易过拟合。所以，这里又使用一个技巧：逐层微调。具体来说：从LSTM最后一层开始，每遍训练将该层添加到微调集合，其它层固定，直到所有层完全解冻。</p>
-<h4 id="模型优劣"><a href="#模型优劣" class="headerlink" title="模型优劣"></a>模型优劣</h4><p>优点：</p>
+<h2 id="模型优劣"><a href="#模型优劣" class="headerlink" title="模型优劣"></a>模型优劣</h2><p>优点：</p>
 <ul>
 <li>适用于不同语料量级、类别数量和类型</li>
 <li>统一框架和训练过程</li>

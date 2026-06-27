@@ -5,8 +5,30 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+
 <title>Matplot中文乱码解决方案 | Heloowird</title>
 
+  <meta name="description" content="修改matplotlibrc文件 （永久解决方案） 定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。 修改matplotlibrc文件内容matplotlibrc文件部分内容如下： 12345font.">
+
+
+  <meta name="keywords" content="matplotlib, python, chinese font, font manager, matplotlibrc, visualization, Matplotlib中文乱码, Python画图, 中文字体, 字体配置, 数据可视化">
+
+<link rel="canonical" href="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/">
+<meta property="og:title" content="Matplot中文乱码解决方案">
+
+  <meta property="og:description" content="修改matplotlibrc文件 （永久解决方案） 定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。 修改matplotlibrc文件内容matplotlibrc文件部分内容如下： 12345font.">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/">
+<meta property="og:site_name" content="Heloowird">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Matplot中文乱码解决方案">
+
+  <meta name="twitter:description" content="修改matplotlibrc文件 （永久解决方案） 定位matplotlibrc文件该文件位于[python_install_dir]\Lib\site-packages\matplotlib\mpl-data目录下。 修改matplotlibrc文件内容matplotlibrc文件部分内容如下： 12345font.">
+
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Matplot中文乱码解决方案","name":"Matplot中文乱码解决方案","url":"https://heloowird.github.io/2015/06/09/display_chinese_problem_in_matplot/","inLanguage":"zh-Hans","description":"修改matplotlibrc文件 （永久解决方案） 定位matplotlibrc文件该文件位于[python_install_dir]\\Lib\\site-packages\\matplotlib\\mpl-data目录下。 修改matplotlibrc文件内容matplotlibrc文件部分内容如下： 12345font.","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2015-06-08T18:19:22.000Z","dateModified":"2026-06-27T05:27:04.599Z","keywords":"matplotlib, python, chinese font, font manager, matplotlibrc, visualization, Matplotlib中文乱码, Python画图, 中文字体, 字体配置, 数据可视化"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -60,7 +82,7 @@
 
   </header>
   <div class="post-content">
-    <h3 id="修改matplotlibrc文件-（永久解决方案）"><a href="#修改matplotlibrc文件-（永久解决方案）" class="headerlink" title="修改matplotlibrc文件 （永久解决方案）"></a>修改matplotlibrc文件 （永久解决方案）</h3><ol>
+    <h2 id="修改matplotlibrc文件-（永久解决方案）"><a href="#修改matplotlibrc文件-（永久解决方案）" class="headerlink" title="修改matplotlibrc文件 （永久解决方案）"></a>修改matplotlibrc文件 （永久解决方案）</h2><ol>
 <li><p>定位matplotlibrc文件<br>该文件位于[<em>python_install_dir</em>]\Lib\site-packages\matplotlib\mpl-data目录下。</p>
 </li>
 <li><p>修改matplotlibrc文件内容<br>matplotlibrc文件部分内容如下：</p>
@@ -84,7 +106,7 @@
 </blockquote>
 </li>
 </ol>
-<h3 id="在py文件中显式加载字体-（临时解决方案）"><a href="#在py文件中显式加载字体-（临时解决方案）" class="headerlink" title="在py文件中显式加载字体 （临时解决方案）"></a>在py文件中显式加载字体 （临时解决方案）</h3><ol>
+<h2 id="在py文件中显式加载字体-（临时解决方案）"><a href="#在py文件中显式加载字体-（临时解决方案）" class="headerlink" title="在py文件中显式加载字体 （临时解决方案）"></a>在py文件中显式加载字体 （临时解决方案）</h2><ol>
 <li>显示加载matplotlib的字体管理器，代码如下：</li>
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载自定义字体</span></span><br><span class="line"><span class="comment"># fname 为字体文件路径</span></span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line">myfont = matplotlib.font_manager.FontProperties(fname=<span class="string">r&#x27;C:/Windows/Fonts/msyh.ttf&#x27;</span>)</span><br><span class="line"> ...</span><br><span class="line"><span class="comment"># 在需要显示汉字的地方，指定自定义字体即可</span></span><br><span class="line">plt.xlabel(<span class="string">u&#x27;汉字&#x27;</span>,  fontproperties=myfont)</span><br><span class="line">plt.xlabel(<span class="string">u&#x27;汉字&#x27;</span>,  fontproperties=myfont)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
