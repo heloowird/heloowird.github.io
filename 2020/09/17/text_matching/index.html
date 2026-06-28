@@ -32,7 +32,7 @@
 
   <meta name="twitter:image" content="https://heloowird.com/images/posts/text_matching/dssm_arch.png">
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"文本匹配深度模型综述","name":"文本匹配深度模型综述","url":"https://heloowird.com/2020/09/17/text_matching/","inLanguage":"zh-Hans","description":"文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。","image":"https://heloowird.com/images/posts/text_matching/dssm_arch.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2020-09-16T18:19:22.000Z","dateModified":"2026-06-27T05:34:30.036Z","keywords":"text matching, semantic matching, relevance matching, information retrieval, dssm, matchpyramid, esim, 文本匹配, 语义匹配, 相关性匹配, 信息检索, 双塔模型"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"文本匹配深度模型综述","name":"文本匹配深度模型综述","url":"https://heloowird.com/2020/09/17/text_matching/","inLanguage":"zh-Hans","description":"文本匹配任务文本匹配是自然语言理解的基础方向之一。具体的任务有：自然语言推理（NLI），问答（QA），释义识别（Paraphrase Identification）以及文本检索（Ad-hoc Retrieval）。本质上，文本匹配归结成给定两个文本，判定两个文本之间的关系，转化为分类问题或者排序问题。","image":"https://heloowird.com/images/posts/text_matching/dssm_arch.png","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2020-09-16T18:19:22.000Z","dateModified":"2026-06-28T12:36:44.782Z","keywords":"text matching, semantic matching, relevance matching, information retrieval, dssm, matchpyramid, esim, 文本匹配, 语义匹配, 相关性匹配, 信息检索, 双塔模型"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -150,7 +150,7 @@
 <p>MatchPyramid实验有一定的启发性。在释义识别任务中，指示函数表现比余弦函数效果要好，说明释义识别任务比较看作词匹配信息。无论在释义识别还是论文引用匹配任务中，点积函数的效果都要比余弦函数的好，因为实验发现词的点积越大，词的语义信息越丰富；而余弦函数相当于归一化的点积，从而减弱了这部分信息。</p>
 <p>另外，MatchPyramid是不是可以使用多个表示函数，从而构建一幅多通道图像呢？后面有文章基于个点进行了优化。</p>
 <h4 id="ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017"><a href="#ESIM-Enhanced-LSTM-for-Natural-Language-Inference-2017" class="headerlink" title="ESIM - Enhanced LSTM for Natural Language Inference (2017)"></a>ESIM - Enhanced LSTM for Natural Language Inference (2017)</h4><p>ESIM是一个基于LSTM的文本匹配模型。ESIM的网络结构如下：</p>
-<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/text_matching/esim-architecture.jpg" alt="ESIM模型架构" title="ESIM模型架构"><figcaption>ESIM模型架构</figcaption></figure>
+<figure class="figure-full-image"><img referrerpolicy="no-referrer" src="/images/posts/text_matching/esim-architecture.png" alt="ESIM模型架构" title="ESIM模型架构"><figcaption>ESIM模型架构</figcaption></figure>
 
 <p>ESIM使用BiLSTM对输入进行编码，可以得到各个词的隐层或输出层表示。输入编码完成之后为交互层，即文中的局部推理建模(Local Inference Modeling)。这里的BiLSTM也可以替换为句法TreeLSTM。句法信息有助于理解句子的结构，对NLI任务有一定帮助。</p>
 <p>交互层的核心是注意力机制。对于句子的每个词，计算该词与另一个句子所有词的语义相关程度。计算方法为：该词隐层表示作为query，另一个句子的每个词隐层作为key和value对；然后计算query和key的点乘作为该词与另一个句子各个词的非归一化权重；经归一化后乘以各自的value；这样就得到该词与另一个句子的语义相关信息。使用注意力的方法需要计算任意词与另一个句子各个词的加权语义，即交互信息，维度和该词隐层表示一样。同样，另一个句子每个词可采用同样的方式进行交互处理。最后将每个词的原始隐层，与另一个句子的加权语义信息，以及它们之间的逐元素相乘和做差拼接起来作为组合层的输入。</p>
