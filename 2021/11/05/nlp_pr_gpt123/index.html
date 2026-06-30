@@ -28,7 +28,7 @@
   <meta name="twitter:description" content="Improving Language Understanding by Generative Pre-Training Language Models are Unsupervised Multitask Learners Language Models are Few-Shot Learners 这三篇论文分别对应 ">
 
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"NLP论文阅读- GPT-1、GPT-2、GPT-3","name":"NLP论文阅读- GPT-1、GPT-2、GPT-3","url":"https://heloowird.com/2021/11/05/nlp_pr_gpt123/","inLanguage":"zh-Hans","description":"Improving Language Understanding by Generative Pre-Training Language Models are Unsupervised Multitask Learners Language Models are Few-Shot Learners 这三篇论文分别对应 ","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2021-11-04T16:00:00.000Z","dateModified":"2026-06-30T00:45:53.581Z","keywords":"GPT-3, 论文阅读, GPT, GPT-1, GPT-2, Transformer, language model, pre-training, fine-tuning, zero-shot, few-shot, in-context learning, 大语言模型, 预训练, 微调, 上下文学习"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"NLP论文阅读- GPT-1、GPT-2、GPT-3","name":"NLP论文阅读- GPT-1、GPT-2、GPT-3","url":"https://heloowird.com/2021/11/05/nlp_pr_gpt123/","inLanguage":"zh-Hans","description":"Improving Language Understanding by Generative Pre-Training Language Models are Unsupervised Multitask Learners Language Models are Few-Shot Learners 这三篇论文分别对应 ","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2021-11-04T16:00:00.000Z","dateModified":"2026-06-30T01:05:10.655Z","keywords":"GPT-3, 论文阅读, GPT, GPT-1, GPT-2, Transformer, language model, pre-training, fine-tuning, zero-shot, few-shot, in-context learning, 大语言模型, 预训练, 微调, 上下文学习"}</script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
@@ -75,7 +75,7 @@
     <time datetime="2021-11-04T16:00:00.000Z">2021-11-05</time>
   
   <span class="meta-separator">·</span>
-  <span>约 3.5k 字</span>
+  <span>约 3.8k 字</span>
   <span class="meta-separator">·</span>
   <span>11 分钟读完</span>
 </div>
@@ -137,35 +137,36 @@
 <h2 id="多任务学习中的样本组织方式"><a href="#多任务学习中的样本组织方式" class="headerlink" title="多任务学习中的样本组织方式"></a>多任务学习中的样本组织方式</h2><p>GPT-1、GPT-2 和 GPT-3 都在讨论语言模型如何迁移到多个任务，但三者对“任务样本”的组织方式很不一样。这也是理解 GPT 系列从 fine-tuning 走向 prompting 的关键。</p>
 <h3 id="GPT-1：任务样本用于监督微调"><a href="#GPT-1：任务样本用于监督微调" class="headerlink" title="GPT-1：任务样本用于监督微调"></a>GPT-1：任务样本用于监督微调</h3><p>GPT-1 的多任务能力主要来自“预训练 + 下游任务微调”。预训练阶段只做普通语言模型训练；到了下游任务阶段，每个任务仍然需要标注样本，并把样本改造成 GPT 可以接收的连续 token 序列。</p>
 <p>例如文本蕴含任务可以组织为：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Premise $ Hypothesis</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;start&gt; Premise $ Hypothesis &lt;end&gt;</span><br></pre></td></tr></table></figure>
 
 <p>相似度任务可以把两个句子按不同顺序输入：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Sentence1 \(Sentence2&lt;/span&gt;&lt;br&gt;&lt;span class="line"&gt;Sentence2\) Sentence1</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;start&gt; Sentence1 $ Sentence2 &lt;end&gt;</span><br><span class="line">&lt;start&gt; Sentence2 $ Sentence1 &lt;end&gt;</span><br></pre></td></tr></table></figure>
 
 <p>问答或多选任务可以组织为：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Context \(Question\) AnswerCandidate</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;start&gt; Context Question $ AnswerCandidate &lt;end&gt;</span><br></pre></td></tr></table></figure>
 
-<p>这里的 <code>$</code> 表示分隔符。GPT-1 的关键是：不同任务被改造成统一的序列输入形式，但这些样本仍然是训练样本，会参与梯度更新。换句话说，GPT-1 的样本组织目标是让不同监督任务可以接到同一个预训练 Transformer 上。</p>
+<p>这里的 <code>$</code> 对应 GPT-1 论文中的 delimiter token 记号，实际微调输入还会加入随机初始化的 start&#x2F;end token。对问答或常识推理任务，论文里的写法是把 context 和 question 与每个候选答案拼接，并在候选答案前加入 delimiter token。GPT-1 的关键是：不同任务被改造成统一的序列输入形式，但这些样本仍然是训练样本，会参与梯度更新。换句话说，GPT-1 的样本组织目标是让不同监督任务可以接到同一个预训练 Transformer 上。</p>
 <h3 id="GPT-2：任务样本隐含在网页文本格式中"><a href="#GPT-2：任务样本隐含在网页文本格式中" class="headerlink" title="GPT-2：任务样本隐含在网页文本格式中"></a>GPT-2：任务样本隐含在网页文本格式中</h3><p>GPT-2 不再针对每个下游任务微调。它的假设是：大规模网页文本本身包含大量自然出现的任务格式，比如问答、翻译、摘要、教程、列表、评论和解释。模型在 WebText 上训练时，虽然目标仍然只是预测下一个 token，但可能已经从这些文本中隐式学到任务模式。</p>
-<p>因此，推理时只需要把任务写成自然语言 prompt，让模型继续生成。</p>
-<p>翻译可以写成：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Translate English to French:</span><br><span class="line">cheese =&gt;</span><br></pre></td></tr></table></figure>
+<p>因此，推理时主要是把任务包装成语言模型可以续写的上下文，让模型根据文本模式继续生成。GPT-2 论文里的重点不是人工设计一套统一 prompt 模板，而是模型可能已经从 WebText 中见过大量“自然发生的任务示范”。</p>
+<p>翻译任务在论文实验中会给出若干类似的平行句对，然后让模型补全最后一个等号后的内容：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">English sentence = French sentence</span><br><span class="line">English sentence = French sentence</span><br><span class="line">English sentence =</span><br></pre></td></tr></table></figure>
 
-<p>摘要可以写成：</p>
+<p>摘要任务则明确用了 <code>TL;DR:</code> 作为任务提示：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">文章正文 ...</span><br><span class="line"></span><br><span class="line">TL;DR:</span><br></pre></td></tr></table></figure>
 
-<p>问答可以写成：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Context: ...</span><br><span class="line">Question: ...</span><br><span class="line">Answer:</span><br></pre></td></tr></table></figure>
+<p>阅读理解问答任务使用的是“文档 + 对话历史 + 最后一个 A:”的形式：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Document ...</span><br><span class="line"></span><br><span class="line">Q: ...</span><br><span class="line">A: ...</span><br><span class="line">Q: ...</span><br><span class="line">A:</span><br></pre></td></tr></table></figure>
 
 <p>GPT-2 和 GPT-1 的差异在于：GPT-2 推理时不给标注训练集，也不更新参数，而是把任务变成文本续写问题。样本组织从“训练数据集格式转换”变成了“自然语言上下文提示”。</p>
 <h3 id="GPT-3：少量样本直接放进上下文"><a href="#GPT-3：少量样本直接放进上下文" class="headerlink" title="GPT-3：少量样本直接放进上下文"></a>GPT-3：少量样本直接放进上下文</h3><p>GPT-3 进一步把样本组织方式显式化。它不更新模型参数，而是把任务说明、少量输入输出示例和待预测样本一起放进上下文，让模型在前向推理过程中归纳任务模式。</p>
-<p>例如情感分类可以组织为：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Decide whether the sentence is positive or negative.</span><br><span class="line"></span><br><span class="line">Sentence: I loved the movie.</span><br><span class="line">Sentiment: Positive</span><br><span class="line"></span><br><span class="line">Sentence: The food was cold.</span><br><span class="line">Sentiment: Negative</span><br><span class="line"></span><br><span class="line">Sentence: The book is wonderful.</span><br><span class="line">Sentiment:</span><br></pre></td></tr></table></figure>
+<p>论文对 few-shot 的一般组织方式是：从同一任务的训练集中抽取 K 个示例作为上下文，每个示例包含 context 和 completion，示例之间用 1 到 2 个换行分隔；最后放入一个只有 context 的待预测样本，让模型补全 completion。</p>
+<p>例如分类任务可以抽象为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Sentence: I loved the movie.</span><br><span class="line">Sentiment: positive</span><br><span class="line"></span><br><span class="line">Sentence: The food was cold.</span><br><span class="line">Sentiment: negative</span><br><span class="line"></span><br><span class="line">Sentence: The book is wonderful.</span><br><span class="line">Sentiment:</span><br></pre></td></tr></table></figure>
 
-<p>翻译可以组织为：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">English: I love this movie.</span><br><span class="line">French: J&#x27;adore ce film.</span><br><span class="line"></span><br><span class="line">English: This book is interesting.</span><br><span class="line">French:</span><br></pre></td></tr></table></figure>
+<p>翻译任务在 GPT-3 论文附录中使用的 one-shot &#x2F; few-shot 格式更接近等号连接的 context-completion：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">I love this movie.</span><br><span class="line">=</span><br><span class="line">J&#x27;adore ce film.</span><br><span class="line"></span><br><span class="line">This book is interesting.</span><br><span class="line">=</span><br></pre></td></tr></table></figure>
 
-<p>这些示例不是传统意义上的训练样本，因为模型参数不会更新。它们更像是临时任务定义，告诉模型“输入长什么样、输出长什么样、映射关系是什么”。这就是 GPT-3 论文强调的 in-context learning。</p>
+<p>这些示例不是传统意义上的训练样本，因为模型参数不会更新。它们更像是临时任务定义，告诉模型“输入长什么样、输出长什么样、映射关系是什么”。GPT-3 论文把这种方式明确称为 few-shot：推理时给出少量 demonstrations，但只做前向计算，不做梯度更新。</p>
 <h3 id="样本组织方式对比"><a href="#样本组织方式对比" class="headerlink" title="样本组织方式对比"></a>样本组织方式对比</h3><table>
 <thead>
 <tr>
