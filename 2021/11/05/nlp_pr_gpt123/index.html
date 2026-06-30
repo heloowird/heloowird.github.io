@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+
+<title>NLP论文阅读- GPT-1、GPT-2、GPT-3 | Heloowird</title>
+
+  <meta name="description" content="Improving Language Understanding by Generative Pre-Training Language Models are Unsupervised Multitask Learners Language Models are Few-Shot Learners 这三篇论文分别对应 ">
+
+
+  <meta name="keywords" content="论文阅读, language model, GPT-3, GPT, GPT-1, GPT-2, Transformer, pre-training, fine-tuning, zero-shot, few-shot, in-context learning, 大语言模型, 预训练, 微调, 上下文学习">
+
+<link rel="canonical" href="https://heloowird.com/2021/11/05/nlp_pr_gpt123/">
+<meta property="og:title" content="NLP论文阅读- GPT-1、GPT-2、GPT-3">
+
+  <meta property="og:description" content="Improving Language Understanding by Generative Pre-Training Language Models are Unsupervised Multitask Learners Language Models are Few-Shot Learners 这三篇论文分别对应 ">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.com/2021/11/05/nlp_pr_gpt123/">
+<meta property="og:site_name" content="Heloowird">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NLP论文阅读- GPT-1、GPT-2、GPT-3">
+
+  <meta name="twitter:description" content="Improving Language Understanding by Generative Pre-Training Language Models are Unsupervised Multitask Learners Language Models are Few-Shot Learners 这三篇论文分别对应 ">
+
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"NLP论文阅读- GPT-1、GPT-2、GPT-3","name":"NLP论文阅读- GPT-1、GPT-2、GPT-3","url":"https://heloowird.com/2021/11/05/nlp_pr_gpt123/","inLanguage":"zh-Hans","description":"Improving Language Understanding by Generative Pre-Training Language Models are Unsupervised Multitask Learners Language Models are Few-Shot Learners 这三篇论文分别对应 ","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2021-11-04T16:00:00.000Z","dateModified":"2026-06-30T00:45:53.581Z","keywords":"论文阅读, language model, GPT-3, GPT, GPT-1, GPT-2, Transformer, pre-training, fine-tuning, zero-shot, few-shot, in-context learning, 大语言模型, 预训练, 微调, 上下文学习"}</script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/css/main.css?v=20260626-mathjax">
+
+  <meta name="generator" content="Hexo 8.1.2"></head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+  <div class="brand-block">
+    <a class="brand" href="/" aria-label="Heloowird">
+      <span class="brand-title">Heloowird</span>
+    </a>
+    
+  </div>
+
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="site-nav" id="site-nav">
+    
+      <a href="/">Blog</a>
+    
+      <a href="https://github.com/heloowird">GitHub</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main" id="main">
+        <article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">NLP论文阅读- GPT-1、GPT-2、GPT-3</h1>
+    <div class="post-meta">
+  
+    <time datetime="2021-11-04T16:00:00.000Z">2021-11-05</time>
+  
+  <span class="meta-separator">·</span>
+  <span>约 3.5k 字</span>
+  <span class="meta-separator">·</span>
+  <span>11 分钟读完</span>
+</div>
+
+  </header>
+  <div class="post-content">
+    <h2 id="论文题目"><a href="#论文题目" class="headerlink" title="论文题目"></a>论文题目</h2><ol>
+<li>Improving Language Understanding by Generative Pre-Training</li>
+<li>Language Models are Unsupervised Multitask Learners</li>
+<li>Language Models are Few-Shot Learners</li>
+</ol>
+<p>这三篇论文分别对应 GPT-1、GPT-2 和 GPT-3。它们的模型结构没有发生根本性变化，主线是沿着 decoder-only Transformer 语言模型不断扩大模型规模、训练数据和任务适配方式。GPT-1 关注预训练后微调，GPT-2 关注零样本迁移，GPT-3 进一步把重点推进到上下文学习和少样本学习。</p>
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>在 GPT-1 之前，NLP 任务通常依赖任务特定模型结构和人工设计特征。词向量、语言模型预训练等方法已经证明未标注文本有价值，但如何把大规模未标注语料中的知识稳定迁移到多种下游任务，还不是一个统一范式。</p>
+<p>GPT 系列的基本思路很直接：把自然语言建模成从左到右的序列预测问题，给定前文 tokens，预测下一个 token：</p>
+<p><div class="math-display">\[P(x)=\prod_{i=1}^{n}P(x_i|x_1,\ldots,x_{i-1})\]</div></p>
+<p>这类目标天然适合互联网规模文本，因为训练数据不需要人工标注。模型只要不断学习“下一个词是什么”，就会被迫吸收语法、语义、事实、文体、任务格式等信息。GPT-1 到 GPT-3 的关键变化，是这些能力如何被下游任务调用出来。</p>
+<h2 id="GPT-1：生成式预训练-下游微调"><a href="#GPT-1：生成式预训练-下游微调" class="headerlink" title="GPT-1：生成式预训练 + 下游微调"></a>GPT-1：生成式预训练 + 下游微调</h2><p>GPT-1 的核心问题是：能不能先用大规模无标注文本训练一个通用语言模型，再把它迁移到各种自然语言理解任务上？</p>
+<p>模型采用 12 层 Transformer decoder，hidden size 为 768，12 个 attention heads，上下文长度为 512，参数量约 1.17 亿。训练语料使用 BooksCorpus。训练分成两个阶段：</p>
+<ol>
+<li>无监督预训练：使用标准语言模型目标，通过前文预测下一个 token。</li>
+<li>监督微调：把下游任务改写成统一输入格式，在任务标注数据上继续训练。</li>
+</ol>
+<p>GPT-1 比较关键的地方在于，它没有为每个任务设计一套完全不同的模型结构，而是尽量把不同 NLP 任务统一成“输入一段 token 序列，然后输出标签或答案”的形式。例如文本蕴含、相似度判断、问答和分类任务，都可以通过特殊分隔符和线性输出层接到同一个 Transformer 上。</p>
+<p>从实验结果看，GPT-1 在 12 个任务中的 9 个达到或接近当时最好效果。它的意义不只是指标提升，更重要的是确立了一种清晰的迁移学习范式：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">大规模无监督预训练 -&gt; 任务数据监督微调 -&gt; 下游任务效果提升</span><br></pre></td></tr></table></figure>
+
+<p>GPT-1 仍然明显依赖下游标注数据和微调。如果换一个任务，通常需要重新构造输入格式、加入任务头并微调参数。此时的 GPT 更像一个强大的迁移学习底座，而不是只靠自然语言提示就能适配任务的通用模型。</p>
+<h2 id="GPT-2：语言模型作为无监督多任务学习器"><a href="#GPT-2：语言模型作为无监督多任务学习器" class="headerlink" title="GPT-2：语言模型作为无监督多任务学习器"></a>GPT-2：语言模型作为无监督多任务学习器</h2><p>GPT-2 继承 GPT-1 的 decoder-only Transformer 架构，但把核心问题往前推了一步：如果模型足够大、训练数据足够多样，它能不能不经过微调，直接完成很多任务？</p>
+<p>GPT-2 的训练数据是 WebText，来自 Reddit 高赞外链网页，略多于 800 万文档、40GB 文本。论文特意去掉 Wikipedia，以降低评测集污染风险。模型规模分为 117M、345M、762M 和 1542M 四档，最大模型即 1542M 参数 GPT-2，通常简称 15 亿参数模型。相比 GPT-1，GPT-2 的上下文长度扩展到 1024，词表扩展到 50,257，并使用 byte-level BPE。</p>
+<p>GPT-2 的一个重要观察是：很多监督学习数据集，本质上也可以被看成自然语言中的一种“任务格式”。比如翻译任务可以写成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Translate English to French:</span><br><span class="line">sea otter =&gt; loutre de mer</span><br><span class="line">cheese =&gt;</span><br></pre></td></tr></table></figure>
+
+<p>摘要任务可以在文章后面加上 <code>TL;DR:</code>，问答任务可以把上下文、问题和答案提示拼成一个文本序列。模型不需要为任务更新参数，只需要继续生成文本。</p>
+<p>这就是 GPT-2 论文标题中“Unsupervised Multitask Learners”的含义：语言模型在大规模网页文本中见过大量任务痕迹，训练目标虽然只是预测下一个词，但模型可能隐式学到翻译、摘要、问答、阅读理解等任务。</p>
+<p>实验上，GPT-2 在多个语言建模数据集上取得很强的 zero-shot 结果，在阅读理解 CoQA 上也展示出一定迁移能力。不过论文也承认，GPT-2 的零样本能力并不稳定。比如摘要、翻译等任务有时表现仍然较弱，不少任务距离有监督系统还有明显差距。</p>
+<p>GPT-2 的贡献在于，它把 GPT-1 的“预训练后微调”推进到“只靠提示和续写也能做任务”的方向。虽然 GPT-2 还不是一个可靠的通用任务求解器，但它让 prompt 的雏形变得清晰起来。</p>
+<h2 id="GPT-3：上下文学习与少样本学习"><a href="#GPT-3：上下文学习与少样本学习" class="headerlink" title="GPT-3：上下文学习与少样本学习"></a>GPT-3：上下文学习与少样本学习</h2><p>GPT-3 的问题意识更加直接：人类看到任务说明和少量示例后，往往不需要成千上万条标注样本就能理解新任务。语言模型如果继续扩大规模，是否也能通过上下文中的示例完成新任务？</p>
+<p>GPT-3 仍然是自回归 decoder-only Transformer。最大模型达到 1750 亿参数，训练数据包括过滤后的 Common Crawl、WebText2、Books1、Books2 和 Wikipedia。所有模型都训练 300B tokens，即约 3000 亿 tokens；上下文长度扩展到 2048 tokens。</p>
+<p>GPT-3 论文系统比较了三种任务适配方式：</p>
+<ol>
+<li>Zero-shot：只给任务说明，不给示例。</li>
+<li>One-shot：给一个示例。</li>
+<li>Few-shot：给少量示例，但不更新模型参数。</li>
+</ol>
+<p>例如情感分类可以写成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Decide whether the sentence is positive or negative.</span><br><span class="line"></span><br><span class="line">Sentence: I loved the movie.</span><br><span class="line">Sentiment: Positive</span><br><span class="line"></span><br><span class="line">Sentence: The food was cold and tasteless.</span><br><span class="line">Sentiment:</span><br></pre></td></tr></table></figure>
+
+<p>模型需要根据 prompt 中的说明和示例，在上下文里临时推断任务模式，然后生成答案。这个过程被称为 in-context learning。它和传统 fine-tuning 的区别是：模型参数不发生变化，任务信息只存在于上下文窗口中。</p>
+<p>GPT-3 在翻译、问答、完形填空、常识推理、算术、词形变换等任务上展示了明显的规模效应。模型越大，few-shot 相比 zero-shot 的收益越明显。特别是在一些任务上，GPT-3 不通过梯度更新也能接近甚至超过早期监督模型。</p>
+<p>不过 GPT-3 的局限也很清楚：</p>
+<ol>
+<li>事实性不稳定，容易生成看似合理但错误的内容。</li>
+<li>对 prompt 表述敏感，不同写法可能导致效果差异很大。</li>
+<li>推理能力并不可靠，尤其在多步逻辑和复杂数学上容易失败。</li>
+<li>训练数据存在偏见，模型会继承甚至放大部分社会偏见。</li>
+<li>训练和推理成本极高，普通研究者难以复现。</li>
+</ol>
+<p>GPT-3 的意义在于，它把语言模型从“需要微调的预训练模型”推进到“可以通过自然语言接口和少量示例调用的通用模型”。它同时也暴露了可控性、事实性、偏见和交互方式等问题，这些问题也是理解大规模语言模型能力边界时必须关注的部分。</p>
+<h2 id="多任务学习中的样本组织方式"><a href="#多任务学习中的样本组织方式" class="headerlink" title="多任务学习中的样本组织方式"></a>多任务学习中的样本组织方式</h2><p>GPT-1、GPT-2 和 GPT-3 都在讨论语言模型如何迁移到多个任务，但三者对“任务样本”的组织方式很不一样。这也是理解 GPT 系列从 fine-tuning 走向 prompting 的关键。</p>
+<h3 id="GPT-1：任务样本用于监督微调"><a href="#GPT-1：任务样本用于监督微调" class="headerlink" title="GPT-1：任务样本用于监督微调"></a>GPT-1：任务样本用于监督微调</h3><p>GPT-1 的多任务能力主要来自“预训练 + 下游任务微调”。预训练阶段只做普通语言模型训练；到了下游任务阶段，每个任务仍然需要标注样本，并把样本改造成 GPT 可以接收的连续 token 序列。</p>
+<p>例如文本蕴含任务可以组织为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Premise $ Hypothesis</span><br></pre></td></tr></table></figure>
+
+<p>相似度任务可以把两个句子按不同顺序输入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Sentence1 \(Sentence2&lt;/span&gt;&lt;br&gt;&lt;span class="line"&gt;Sentence2\) Sentence1</span><br></pre></td></tr></table></figure>
+
+<p>问答或多选任务可以组织为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Context \(Question\) AnswerCandidate</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>$</code> 表示分隔符。GPT-1 的关键是：不同任务被改造成统一的序列输入形式，但这些样本仍然是训练样本，会参与梯度更新。换句话说，GPT-1 的样本组织目标是让不同监督任务可以接到同一个预训练 Transformer 上。</p>
+<h3 id="GPT-2：任务样本隐含在网页文本格式中"><a href="#GPT-2：任务样本隐含在网页文本格式中" class="headerlink" title="GPT-2：任务样本隐含在网页文本格式中"></a>GPT-2：任务样本隐含在网页文本格式中</h3><p>GPT-2 不再针对每个下游任务微调。它的假设是：大规模网页文本本身包含大量自然出现的任务格式，比如问答、翻译、摘要、教程、列表、评论和解释。模型在 WebText 上训练时，虽然目标仍然只是预测下一个 token，但可能已经从这些文本中隐式学到任务模式。</p>
+<p>因此，推理时只需要把任务写成自然语言 prompt，让模型继续生成。</p>
+<p>翻译可以写成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Translate English to French:</span><br><span class="line">cheese =&gt;</span><br></pre></td></tr></table></figure>
+
+<p>摘要可以写成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">文章正文 ...</span><br><span class="line"></span><br><span class="line">TL;DR:</span><br></pre></td></tr></table></figure>
+
+<p>问答可以写成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Context: ...</span><br><span class="line">Question: ...</span><br><span class="line">Answer:</span><br></pre></td></tr></table></figure>
+
+<p>GPT-2 和 GPT-1 的差异在于：GPT-2 推理时不给标注训练集，也不更新参数，而是把任务变成文本续写问题。样本组织从“训练数据集格式转换”变成了“自然语言上下文提示”。</p>
+<h3 id="GPT-3：少量样本直接放进上下文"><a href="#GPT-3：少量样本直接放进上下文" class="headerlink" title="GPT-3：少量样本直接放进上下文"></a>GPT-3：少量样本直接放进上下文</h3><p>GPT-3 进一步把样本组织方式显式化。它不更新模型参数，而是把任务说明、少量输入输出示例和待预测样本一起放进上下文，让模型在前向推理过程中归纳任务模式。</p>
+<p>例如情感分类可以组织为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Decide whether the sentence is positive or negative.</span><br><span class="line"></span><br><span class="line">Sentence: I loved the movie.</span><br><span class="line">Sentiment: Positive</span><br><span class="line"></span><br><span class="line">Sentence: The food was cold.</span><br><span class="line">Sentiment: Negative</span><br><span class="line"></span><br><span class="line">Sentence: The book is wonderful.</span><br><span class="line">Sentiment:</span><br></pre></td></tr></table></figure>
+
+<p>翻译可以组织为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">English: I love this movie.</span><br><span class="line">French: J&#x27;adore ce film.</span><br><span class="line"></span><br><span class="line">English: This book is interesting.</span><br><span class="line">French:</span><br></pre></td></tr></table></figure>
+
+<p>这些示例不是传统意义上的训练样本，因为模型参数不会更新。它们更像是临时任务定义，告诉模型“输入长什么样、输出长什么样、映射关系是什么”。这就是 GPT-3 论文强调的 in-context learning。</p>
+<h3 id="样本组织方式对比"><a href="#样本组织方式对比" class="headerlink" title="样本组织方式对比"></a>样本组织方式对比</h3><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>样本放在哪里</th>
+<th align="right">样本是否参与参数更新</th>
+<th>任务适配方式</th>
+<th>关键变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-1</td>
+<td>下游任务训练集中</td>
+<td align="right">是</td>
+<td>监督微调</td>
+<td>把不同任务改造成统一序列输入</td>
+</tr>
+<tr>
+<td>GPT-2</td>
+<td>大规模 WebText 中隐式存在；推理时只给 prompt</td>
+<td align="right">否</td>
+<td>zero-shot 续写</td>
+<td>把任务写成自然语言续写格式</td>
+</tr>
+<tr>
+<td>GPT-3</td>
+<td>prompt 上下文中显式给出少量示例</td>
+<td align="right">否</td>
+<td>zero-shot &#x2F; one-shot &#x2F; few-shot in-context learning</td>
+<td>用上下文示例临时定义任务</td>
+</tr>
+</tbody></table>
+<p>所以从多任务学习的样本组织角度看，GPT 系列的演进可以概括为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GPT-1：样本用于训练参数</span><br><span class="line">GPT-2：任务格式隐含在预训练语料中，推理时只给提示</span><br><span class="line">GPT-3：样本直接放进 prompt，作为上下文中的任务定义</span><br></pre></td></tr></table></figure>
+
+<p>在 GPT-3 的设定中，prompt 不再只是“提示模型输出什么”，而是变成了“组织任务样本和任务说明的接口”。</p>
+<h2 id="三代-GPT-的关键差异"><a href="#三代-GPT-的关键差异" class="headerlink" title="三代 GPT 的关键差异"></a>三代 GPT 的关键差异</h2><table>
+<thead>
+<tr>
+<th>模型</th>
+<th align="right">发布时间</th>
+<th align="right">参数规模</th>
+<th>训练数据</th>
+<th>任务适配方式</th>
+<th>核心贡献</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-1</td>
+<td align="right">2018</td>
+<td align="right">约 1.17 亿</td>
+<td>BooksCorpus</td>
+<td>预训练 + 监督微调</td>
+<td>确立生成式预训练迁移范式</td>
+</tr>
+<tr>
+<td>GPT-2</td>
+<td align="right">2019</td>
+<td align="right">最大 1542M，约 15.4 亿</td>
+<td>WebText</td>
+<td>zero-shot prompt &#x2F; 文本续写</td>
+<td>展示语言模型的无监督多任务能力</td>
+</tr>
+<tr>
+<td>GPT-3</td>
+<td align="right">2020</td>
+<td align="right">最大约 1750 亿</td>
+<td>Common Crawl、WebText2、Books、Wikipedia</td>
+<td>zero-shot &#x2F; one-shot &#x2F; few-shot in-context learning</td>
+<td>系统展示少样本上下文学习能力</td>
+</tr>
+</tbody></table>
+<p>从 GPT-1 到 GPT-3，最关键的变化不是模型从 Transformer 换成了另一种架构，而是任务调用方式变了：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GPT-1：模型学通用表示，下游任务再微调</span><br><span class="line">GPT-2：模型通过自然语言提示，尝试零样本完成任务</span><br><span class="line">GPT-3：模型通过任务说明和少量示例，在上下文中学习任务</span><br></pre></td></tr></table></figure>
+
+<h2 id="为什么规模会这么重要"><a href="#为什么规模会这么重要" class="headerlink" title="为什么规模会这么重要"></a>为什么规模会这么重要</h2><p>三篇论文共同指向一个结论：语言模型能力很大程度上受规模影响。这里的规模至少包含三层含义：</p>
+<ol>
+<li>参数规模：更大的模型有更强的模式记忆和组合能力。</li>
+<li>数据规模：更多样的文本让模型接触到更多任务、知识和表达格式。</li>
+<li>计算规模：更长时间、更大 batch、更稳定的训练使模型能吸收数据中的规律。</li>
+</ol>
+<p>GPT-2 和 GPT-3 论文都展示了类似现象：同一类模型，随着参数和数据增长，困惑度下降，迁移能力增强，少样本能力变得更明显。这不意味着“只要变大就能解决一切”，但它说明了一个非常重要的工程事实：在足够通用的训练目标下，扩大模型和数据本身就可能带来新的可用能力。</p>
+<h2 id="个人理解"><a href="#个人理解" class="headerlink" title="个人理解"></a>个人理解</h2><p>GPT-1 的价值在于把“语言模型预训练”变成了 NLP 的基础设施。它告诉我们，语言模型不只是生成文本的模型，也可以为理解任务提供通用表示。</p>
+<p>GPT-2 的价值在于改变了任务建模视角。很多任务不一定非要加一个分类头或设计专门网络，也可以被写成自然语言上下文中的生成问题。这为用 prompt 组织任务提供了一个很直接的视角。</p>
+<p>GPT-3 的价值在于把 prompt 从“提示模型输出”提升为“在上下文中描述任务”。少样本示例不再只是输入数据，而是临时任务定义。模型看起来像是在学习新任务，但学习发生在前向推理过程中，而不是参数更新过程中。</p>
+<p>因此，GPT-1、GPT-2、GPT-3 的演进可以概括为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">预训练迁移 -&gt; 零样本续写 -&gt; 上下文学习</span><br></pre></td></tr></table></figure>
+
+<p>这条线索可以帮助理解 GPT 系列三篇论文的共同范式：先用通用语言模型目标从大规模文本中学习知识和模式，再通过微调、提示或上下文示例等方式把能力调用出来。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf">Improving Language Understanding by Generative Pre-Training</a></li>
+<li><a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">Language Models are Unsupervised Multitask Learners</a></li>
+<li><a href="https://arxiv.org/abs/2005.14165">Language Models are Few-Shot Learners</a></li>
+</ol>
+
+  </div>
+  
+    <nav class="post-nav">
+      
+        <a href="/2023/03/12/instructgpt_rlhf/">上一篇：InstructGPT 与 RLHF：大模型如何学会听懂人话</a>
+      
+      
+        <a href="/2021/03/09/attention_mechanism_review/">下一篇：注意力机制基础：从 Seq2Seq 到 Transformer 与 GPT</a>
+      
+    </nav>
+  
+</article>
+
+      </main>
+      <footer class="site-footer">
+  <div>
+    &copy; 2015 - 2026
+    Heloowird
+  </div>
+</footer>
+
+    </div>
+    <script src="/js/main.js"></script>
+    
+
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="/lib/mathjax/tex-chtml.js"></script>
+
+
+  </body>
+</html>

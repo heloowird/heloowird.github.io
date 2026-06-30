@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+
+<title>InstructGPT 与 RLHF：大模型如何学会听懂人话 | Heloowird</title>
+
+  <meta name="description" content="问题背景：会续写，不代表会帮忙论文 Training language models to follow instructions with human feedback 是 InstructGPT 的技术报告，也是理解 ChatGPT 这类指令跟随模型的重要论文。">
+
+
+  <meta name="keywords" content="InstructGPT, RLHF, GPT-3, alignment, reward model, PPO, SFT, 大模型, 指令微调, 人类反馈强化学习">
+
+<link rel="canonical" href="https://heloowird.com/2023/03/12/instructgpt_rlhf/">
+<meta property="og:title" content="InstructGPT 与 RLHF：大模型如何学会听懂人话">
+
+  <meta property="og:description" content="问题背景：会续写，不代表会帮忙论文 Training language models to follow instructions with human feedback 是 InstructGPT 的技术报告，也是理解 ChatGPT 这类指令跟随模型的重要论文。">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://heloowird.com/2023/03/12/instructgpt_rlhf/">
+<meta property="og:site_name" content="Heloowird">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="InstructGPT 与 RLHF：大模型如何学会听懂人话">
+
+  <meta name="twitter:description" content="问题背景：会续写，不代表会帮忙论文 Training language models to follow instructions with human feedback 是 InstructGPT 的技术报告，也是理解 ChatGPT 这类指令跟随模型的重要论文。">
+
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"InstructGPT 与 RLHF：大模型如何学会听懂人话","name":"InstructGPT 与 RLHF：大模型如何学会听懂人话","url":"https://heloowird.com/2023/03/12/instructgpt_rlhf/","inLanguage":"zh-Hans","description":"问题背景：会续写，不代表会帮忙论文 Training language models to follow instructions with human feedback 是 InstructGPT 的技术报告，也是理解 ChatGPT 这类指令跟随模型的重要论文。","author":{"@type":"Person","name":"Heloowird"},"datePublished":"2023-03-11T16:00:00.000Z","dateModified":"2026-06-30T00:41:45.636Z","keywords":"InstructGPT, RLHF, GPT-3, alignment, reward model, PPO, SFT, 大模型, 指令微调, 人类反馈强化学习"}</script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/css/main.css?v=20260626-mathjax">
+
+  <meta name="generator" content="Hexo 8.1.2"></head>
+  <body>
+    <div class="site-frame">
+      <header class="site-header">
+  <div class="brand-block">
+    <a class="brand" href="/" aria-label="Heloowird">
+      <span class="brand-title">Heloowird</span>
+    </a>
+    
+  </div>
+
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="site-nav" id="site-nav">
+    
+      <a href="/">Blog</a>
+    
+      <a href="https://github.com/heloowird">GitHub</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main" id="main">
+        <article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">InstructGPT 与 RLHF：大模型如何学会听懂人话</h1>
+    <div class="post-meta">
+  
+    <time datetime="2023-03-11T16:00:00.000Z">2023-03-12</time>
+  
+  <span class="meta-separator">·</span>
+  <span>约 5k 字</span>
+  <span class="meta-separator">·</span>
+  <span>15 分钟读完</span>
+</div>
+
+  </header>
+  <div class="post-content">
+    <h2 id="问题背景：会续写，不代表会帮忙"><a href="#问题背景：会续写，不代表会帮忙" class="headerlink" title="问题背景：会续写，不代表会帮忙"></a>问题背景：会续写，不代表会帮忙</h2><p>论文 <a href="https://arxiv.org/pdf/2203.02155">Training language models to follow instructions with human feedback</a> 是 InstructGPT 的技术报告，也是理解 ChatGPT 这类指令跟随模型的重要论文。</p>
+<p>这篇论文想解决的问题很朴素：<strong>语言模型会预测下一个词，不等于它会按用户意图办事。</strong></p>
+<p>GPT-3 这类预训练语言模型的训练目标是 next token prediction，也就是根据互联网上的大量文本预测下一个 token。这个目标很强，能让模型学到语法、知识、推理模式和很多任务形式；但它和真实产品里的目标并不完全一致。用户真正想要的是：</p>
+<ul>
+<li>有帮助：能解决任务，而不是机械续写。</li>
+<li>诚实：不知道时不要瞎编。</li>
+<li>无害：不要生成有毒、偏见、危险或误导性的内容。</li>
+</ul>
+<p>这就是论文里说的 alignment 问题：模型优化的训练目标，和用户真正关心的行为目标不一致。</p>
+<p>一个典型例子是：用户问“用两句话总结下面这段文本”，预训练模型可能只是继续写文本、模仿网页风格，或者生成看起来合理但原文没有的信息。它不是不会写，而是没有被明确训练成“一个会跟随指令的语言模型”。</p>
+<p>InstructGPT 的核心思想是：既然“好回答”很难用一个自动指标定义，那就让人来比较、示范和打分，再把这些反馈转成模型能优化的训练信号。</p>
+<h2 id="核心思路：用人类反馈校准模型行为"><a href="#核心思路：用人类反馈校准模型行为" class="headerlink" title="核心思路：用人类反馈校准模型行为"></a>核心思路：用人类反馈校准模型行为</h2><p>InstructGPT 不是换了一个全新模型结构，而是在 GPT-3 架构基础上，用人类反馈做了三步微调：</p>
+<ol>
+<li><strong>SFT（Supervised Fine-Tuning）</strong>：让标注员写高质量回答，先教模型模仿。</li>
+<li><strong>RM（Reward Model）</strong>：让标注员比较多个模型回答，训练一个奖励模型判断哪个更好。</li>
+<li><strong>PPO（Reinforcement Learning）</strong>：用奖励模型给回答打分，再用强化学习继续优化语言模型。</li>
+</ol>
+<p>可以把它理解成：</p>
+<ul>
+<li>SFT 负责“入门”：先学会大致怎么回答指令。</li>
+<li>RM 负责“审美”：学会人类更喜欢哪类回答。</li>
+<li>PPO 负责“强化”：让模型朝奖励模型偏好的方向继续改。</li>
+</ul>
+<p>论文把最终模型称为 InstructGPT。其中默认的 InstructGPT 指的是 PPO-ptx 版本，也就是 PPO 训练时混入预训练分布的梯度，用来减少对通用 NLP 能力的破坏。</p>
+<h2 id="Prompt-的边界：临时引导不是默认能力"><a href="#Prompt-的边界：临时引导不是默认能力" class="headerlink" title="Prompt 的边界：临时引导不是默认能力"></a>Prompt 的边界：临时引导不是默认能力</h2><p>在 InstructGPT 之前，让 GPT-3 跟随指令的常见做法是写更复杂的 prompt，比如在用户输入前面加几个示例，让模型进入“指令回答模式”。这确实有用，论文也比较了 GPT-3 prompted 版本。</p>
+<p>但 prompt 有几个问题：</p>
+<ul>
+<li>它依赖用户或产品方持续调 prompt，稳定性有限。</li>
+<li>它没有真正改变模型的偏好，只是在上下文里临时引导。</li>
+<li>它容易被输入分布影响，遇到复杂、敏感或格式约束任务时仍然不可靠。</li>
+</ul>
+<p>InstructGPT 的结果很直接：从 GPT-3 到 few-shot prompted GPT-3，再到 SFT，再到 PPO，每一步都带来了明显提升。也就是说，prompt engineering 能改善行为，但如果要把“跟随指令”变成模型的默认能力，就需要训练过程本身参与进来。</p>
+<h2 id="数据来源：真实用户任务比-Benchmark-更复杂"><a href="#数据来源：真实用户任务比-Benchmark-更复杂" class="headerlink" title="数据来源：真实用户任务比 Benchmark 更复杂"></a>数据来源：真实用户任务比 Benchmark 更复杂</h2><p>论文的数据主要来自 OpenAI API Playground 中早期 InstructGPT 模型的用户 prompt，以及标注员自己写的 prompt。为了避免数据泄露和评估污染，论文做了几件事：</p>
+<ul>
+<li>训练、验证、测试按 user ID 切分，避免同一用户的数据同时出现在训练和测试里。</li>
+<li>对训练集中的 prompt 做 PII 过滤。</li>
+<li>对每个 user ID 的 prompt 数量做上限限制。</li>
+<li>最早期没有足够 instruction-style prompt 时，让标注员手写多样化任务作为冷启动数据。</li>
+</ul>
+<p>训练中用到三类数据：</p>
+<ul>
+<li>SFT 数据：约 13k 个训练 prompt，表中精确数是 12,725，用来训练监督微调模型。</li>
+<li>RM 数据：约 33k 个训练 prompt，表中精确数是 33,207，用来收集排序并训练奖励模型。</li>
+<li>PPO 数据：约 31k 个训练 prompt，表中精确数是 31,144，不需要人工标签，用作强化学习阶段的输入。</li>
+</ul>
+<p>这些任务并不是传统 NLP benchmark 那种整齐划一的分类、抽取、问答。论文统计的 API prompt 分布里，生成类占 45.6%，开放问答占 12.4%，头脑风暴占 11.2%，聊天占 8.4%，改写占 6.6%，摘要占 4.2%，分类占 3.5%，其他占 3.5%，封闭域问答占 2.6%，抽取占 1.9%。</p>
+<p>这点很重要：真实用户并不是只拿模型做标准测试集任务，而是大量使用开放式生成、想法扩展、改写、聊天和辅助写作。也正因为如此，只在公开 NLP 数据集上做 instruction tuning，并不一定能覆盖真实产品里的使用方式。</p>
+<h2 id="SFT：用人工示范建立指令响应能力"><a href="#SFT：用人工示范建立指令响应能力" class="headerlink" title="SFT：用人工示范建立指令响应能力"></a>SFT：用人工示范建立指令响应能力</h2><p>SFT 是最容易理解的一步。给定一个 prompt，标注员写出理想回答，然后用这些 prompt-response 对微调 GPT-3。</p>
+<p>形式上，它还是普通的语言模型监督学习：最大化人工示范回答的概率。假设 prompt 是 \(x\)，人工示范答案是 \(y = (y_1, y_2, ..., y_T)\)，SFT 的目标就是让模型在看到 \(x\) 和前面的答案 token 时，更高概率预测下一个人工答案 token：</p>
+<p><div class="math-display">\[\max_\theta \sum_{t=1}^{T} \log \pi_\theta(y_t | x, y_{&lt;t})\]</div></p>
+<p>也可以理解为：把“用户指令 + 人类理想回答”拼成一段训练文本，对回答部分做 teacher forcing。训练时，模型不需要自己探索，也不需要知道哪个答案更好，只需要尽量复刻标注员写出的答案。</p>
+<p>这一步的作用是把模型从“网页续写器”先拉到“指令响应器”。例如：</p>
+<ul>
+<li>用户要求“列出五个职业发展建议”，模型应该列建议，而不是继续补全一个网页。</li>
+<li>用户要求“用两句话总结”，模型应该控制长度，而不是无限展开。</li>
+<li>用户给出一段文本做封闭域问答，模型应该只基于原文回答，而不是调动自己记忆里的类似事实。</li>
+</ul>
+<p>论文里 SFT 还有几个值得注意的训练细节：</p>
+<ul>
+<li>它不是从零训练模型，而是从预训练 GPT-3 初始化，只做指令数据上的微调。</li>
+<li>SFT 训练了多个 epoch。论文提到验证集 loss 在 1 个 epoch 后会过拟合，但继续训练反而能提升奖励模型分数和人工偏好评分。这说明语言模型 loss 和“人觉得好不好”并不完全一致。</li>
+<li>最终 SFT checkpoint 不是按语言模型验证 loss 选，而是按 reward model 在验证集上的分数选。也就是说，从 SFT 阶段开始，模型选择就已经向人类偏好靠拢。</li>
+<li>SFT 是后续 RM 和 PPO 的基础。RM 通常从 SFT 模型初始化，PPO 也从 SFT 策略继续优化。</li>
+</ul>
+<p>SFT 的优点是稳定、简单、成本相对可控。只要有高质量示范数据，就能显著改善指令遵循能力。它的问题也很明显：人类必须为每个 prompt 写完整答案，而写一个好答案比判断两个答案哪个更好贵得多。</p>
+<p>不过，SFT 有天然上限。因为它只告诉模型“这个回答是好的”，却没有直接告诉模型“两个看起来都还行的回答中，哪个更符合人类偏好”。现实中，大量质量差异是相对的：更简洁、更准确、更少废话、更会遵守格式、更不瞎编。</p>
+<p>这就需要第二步奖励模型。</p>
+<h2 id="RM：把人类偏好变成可学习的奖励信号"><a href="#RM：把人类偏好变成可学习的奖励信号" class="headerlink" title="RM：把人类偏好变成可学习的奖励信号"></a>RM：把人类偏好变成可学习的奖励信号</h2><p>奖励模型的训练方式是：对同一个 prompt，让多个模型生成多个回答，然后请标注员排序。排序之后可以拆成两两比较，比如回答 A 优于回答 B、回答 C 优于回答 D。</p>
+<p>奖励模型输入 prompt 和 response，输出一个标量 reward。它的目标不是预测下一个 token，而是预测“人更喜欢哪个回答”。</p>
+<p>奖励模型通常可以看成“去掉最后词表输出层的语言模型 + 一个标量打分头”。普通语言模型最后会输出词表上每个 token 的概率；奖励模型最后只输出一个数，例如 \(r_\theta(x, y) = 2.3\)。这个分数本身没有绝对意义，重要的是同一个 prompt 下不同回答的相对高低。</p>
+<p>论文中的损失函数可以直观理解为：</p>
+<ul>
+<li>如果人类更喜欢回答 \(y_w\) 而不是 \(y_l\)；</li>
+<li>奖励模型就应该让 \(r(x, y_w)\) 大于 \(r(x, y_l)\)；</li>
+<li>两者差距越符合排序，loss 越低。</li>
+</ul>
+<p>论文用的是类似 Bradley-Terry 的 pairwise preference 建模：</p>
+<p><div class="math-display">\[loss(\theta) = -E[\log(\sigma(r_\theta(x, y_w) - r_\theta(x, y_l)))]\]</div></p>
+<p>其中 \(x\) 是 prompt，\(y_w\) 是 winner，\(y_l\) 是 loser，\(r_\theta\) 是奖励模型。</p>
+<p>为什么不用 1-7 分这种绝对打分，而是做排序？因为绝对分数很难校准。不同标注员对“4 分”和“5 分”的理解可能不一样，同一个标注员在不同时间的判断也可能波动。但在同一个 prompt 下，比较两个回答哪个更好，通常更稳定。</p>
+<p>这里有一个工程细节很有意思：标注员不是每次只比较两个回答，而是会对 \(K=4\) 到 \(K=9\) 个回答排序。这样一次排序可以产生 \(K(K-1)/2\) 个两两比较，采集效率更高。但同一个 prompt 下的比较高度相关，如果简单打散训练，奖励模型容易过拟合。论文选择把同一 prompt 下的所有比较作为一个 batch element 来处理。</p>
+<p>举个例子，同一个 prompt 下有 4 个候选回答，标注员排序为：</p>
+<p><div class="math-display">\[A &gt; C &gt; B &gt; D\]</div></p>
+<p>那么可以得到 6 个偏好对：</p>
+<ul>
+<li>A 优于 C、B、D。</li>
+<li>C 优于 B、D。</li>
+<li>B 优于 D。</li>
+</ul>
+<p>奖励模型训练后，就能把“人类排序”压缩成一个可微的打分函数。后续 PPO 阶段不可能每生成一个回答就请人打分，所以 RM 的角色就是当“人类偏好的代理评委”。</p>
+<p>但 RM 也有风险：它学到的是标注数据里的偏好近似，不是真正的人类价值本身。如果 RM 对某些模式误判，PPO 会专门朝这些误判方向优化，把小偏差放大成明显行为问题。这就是为什么后面需要 KL 约束、人工评估和持续迭代。</p>
+<h2 id="PPO：在奖励模型引导下继续优化策略"><a href="#PPO：在奖励模型引导下继续优化策略" class="headerlink" title="PPO：在奖励模型引导下继续优化策略"></a>PPO：在奖励模型引导下继续优化策略</h2><p>有了奖励模型后，就可以把语言模型当成一个策略模型：输入 prompt，输出 response；奖励模型给 response 打分；然后用强化学习优化策略。</p>
+<p>论文使用 PPO（Proximal Policy Optimization）。直觉上，PPO 会鼓励模型生成奖励模型更喜欢的回答。</p>
+<p>这里的强化学习环境其实很简单，不是 AlphaGo 那种多步复杂环境，而更像一个 single-step bandit：</p>
+<ol>
+<li>环境采样一个用户 prompt。</li>
+<li>当前策略模型 \(\pi_\phi^{RL}\) 生成一个完整回答。</li>
+<li>奖励模型读取 prompt 和回答，输出一个 reward。</li>
+<li>这一轮结束，用 PPO 更新策略模型。</li>
+</ol>
+<p>把它翻译成语言模型语境：</p>
+<ul>
+<li>状态：prompt 和已经生成的 token。</li>
+<li>动作：下一个 token。</li>
+<li>策略：语言模型的 token 分布。</li>
+<li>回报：完整回答结束后，奖励模型给出的分数，再加上一些约束项。</li>
+</ul>
+<p>但这里不能只追求 reward 最大化，否则会出现 reward hacking：模型可能找到奖励模型的漏洞，生成一些奖励模型高分但人类并不真正喜欢的文本。为了约束模型不要偏离 SFT 模型太远，论文加入了 KL penalty。</p>
+<p>也就是说，PPO 阶段同时追求两件事：</p>
+<ul>
+<li>回答要让奖励模型打高分。</li>
+<li>新策略不要和 SFT 模型差得太离谱。</li>
+</ul>
+<p>论文里的 RL 目标可以粗略写成：</p>
+<p><div class="math-display">\[reward = r_\theta(x, y) - \beta \log \frac{\pi_\phi^{RL}(y|x)}{\pi^{SFT}(y|x)}\]</div></p>
+<p>第一项 \(r_\theta(x, y)\) 来自奖励模型，鼓励回答更符合人类偏好。第二项是 KL 约束的近似写法，惩罚 RL 策略相对 SFT 策略偏移太远。\(\beta\) 越大，模型越保守；\(\beta\) 越小，模型越容易追逐奖励模型。</p>
+<p>为什么 PPO 从 SFT 模型开始，而不是直接从 GPT-3 开始？因为 SFT 已经把模型带到了一个比较合理的指令回答区域。PPO 在这个基础上做“偏好微调”更稳。如果直接从原始 GPT-3 开始做 RL，探索空间太大，奖励模型也更容易被奇怪输出攻击。</p>
+<p>PPO 还有一个实际作用：它能优化那些很难用监督学习表达的偏好。例如两个回答都正确，但一个更简洁；两个回答都遵守任务，但一个语气更符合用户预期；两个摘要都覆盖重点，但一个更少幻觉。这些差异很难靠单一参考答案训练出来，却适合通过偏好排序和 reward 优化。</p>
+<p>论文还提出 PPO-ptx：在 PPO 梯度之外，混入一部分预训练数据上的语言模型梯度。它的目的不是提升人类偏好分，而是缓解 alignment tax。完整目标可以理解为：</p>
+<ul>
+<li>PPO 目标：在用户 prompt 上提高奖励模型分数。</li>
+<li>KL 约束：不要偏离 SFT 策略太远。</li>
+<li>Pretraining mix：继续保持对预训练分布的语言建模能力。</li>
+</ul>
+<p>这三股力量分别对应“更符合偏好”“别优化过头”“别忘掉通用能力”。InstructGPT 默认指的 PPO-ptx，本质上就是在这三者之间做折中。</p>
+<h2 id="Alignment-Tax：对齐不能以遗忘能力为代价"><a href="#Alignment-Tax：对齐不能以遗忘能力为代价" class="headerlink" title="Alignment Tax：对齐不能以遗忘能力为代价"></a>Alignment Tax：对齐不能以遗忘能力为代价</h2><p>Alignment tax 可以理解为：为了让模型更符合人类偏好，模型在其他能力上付出的代价。</p>
+<p>论文观察到，直接用 PPO 做 RLHF 后，模型在人类偏好评测上变好了，但在一些公开 NLP 数据集上会退化，比如 SQuAD、DROP、HellaSwag、WMT 2015 法英翻译等。</p>
+<p>这其实很好理解。PPO 训练的目标变成了“在 API prompt 分布上拿到高 reward”，它不再纯粹保持原始语言建模能力。如果优化太猛，模型可能在标准任务上的泛化能力下降。</p>
+<p>PPO-ptx 的做法是把预训练分布的 log likelihood 也放进目标里，让模型一边朝人类偏好靠拢，一边不要忘掉原来学到的语言能力。论文发现，这能显著减少公开 NLP 数据集上的性能退化，同时不明显损害人类偏好评测结果。</p>
+<p>这是 InstructGPT 里非常值得关注的一点：alignment 不只是“把模型调得更听话”，还要控制副作用。一个实际可用的对齐技术，必须尽量低 tax，否则大家会因为能力损失而不愿意采用。</p>
+<h2 id="核心结果：1-3B-InstructGPT-也能胜过-175B-GPT-3"><a href="#核心结果：1-3B-InstructGPT-也能胜过-175B-GPT-3" class="headerlink" title="核心结果：1.3B InstructGPT 也能胜过 175B GPT-3"></a>核心结果：1.3B InstructGPT 也能胜过 175B GPT-3</h2><p>论文最有冲击力的结果是：<strong>1.3B 参数的 InstructGPT 输出，比 175B 参数的 GPT-3 输出更受标注员偏好。</strong></p>
+<p>注意这不是说 1.3B InstructGPT 在所有能力上超过 175B GPT-3，而是在论文的 API prompt 分布、人类偏好评价下，标注员更喜欢它的回答。这说明：对真实用户任务来说，模型是否按意图回答，有时比单纯扩大参数更重要。</p>
+<p>论文还报告：</p>
+<ul>
+<li>175B InstructGPT 相比 175B GPT-3，回答有 85±3% 的时间更受偏好。</li>
+<li>175B InstructGPT 相比 few-shot prompted 175B GPT-3，回答有 71±4% 的时间更受偏好。</li>
+<li>InstructGPT 更容易遵守显式约束，比如字数、段落数、格式要求。</li>
+<li>在封闭域任务中，InstructGPT 的幻觉更少。论文摘要中给出的数字是：InstructGPT 幻觉率约 21%，GPT-3 约 41%。</li>
+</ul>
+<p>从产品视角看，这些指标都非常关键。一个指令跟随模型不只是要“聪明”，还要可控、稳定、少编、能按格式交付。</p>
+<h2 id="安全评估：真实性提升，但偏见和有害指令仍棘手"><a href="#安全评估：真实性提升，但偏见和有害指令仍棘手" class="headerlink" title="安全评估：真实性提升，但偏见和有害指令仍棘手"></a>安全评估：真实性提升，但偏见和有害指令仍棘手</h2><p>论文还评估了真实性、有毒输出和偏见。</p>
+<p>在 TruthfulQA 上，InstructGPT 比 GPT-3 更常生成真实且有信息量的回答。论文摘要里说，InstructGPT 生成 truthful and informative answers 的频率大约是 GPT-3 的两倍。尤其在被提示“不确定就回答 I have no comment”时，PPO 模型更倾向于避免自信地说错。</p>
+<p>在 RealToxicityPrompts 上，结果更微妙：</p>
+<ul>
+<li>如果 prompt 明确要求生成安全、尊重的回答，InstructGPT 的毒性低于 GPT-3，论文摘要提到约减少 25%。</li>
+<li>如果没有 respectful prompt，这个优势会消失。</li>
+<li>如果明确要求模型生成有毒内容，InstructGPT 甚至可能比 GPT-3 更容易照做。</li>
+</ul>
+<p>这说明 InstructGPT 学到的核心能力是“跟随指令”，但“跟随指令”和“拒绝有害指令”不是同一件事。论文也承认，当用户要求潜在有害内容时，模型仍可能服从。</p>
+<p>在 Bias 评估上，InstructGPT 没有显著优于 GPT-3。也就是说，RLHF 改善了许多“指令跟随行为”，但并没有自动解决社会偏见问题。</p>
+<h2 id="数据分布差异：为什么-FLAN-T0-还不够"><a href="#数据分布差异：为什么-FLAN-T0-还不够" class="headerlink" title="数据分布差异：为什么 FLAN&#x2F;T0 还不够"></a>数据分布差异：为什么 FLAN&#x2F;T0 还不够</h2><p>论文还比较了在公开 NLP instruction 数据集上微调的模型，比如 FLAN 和 T0。结果是：这些模型比原始 GPT-3 好，也接近带精心 prompt 的 GPT-3，但不如 SFT 和 InstructGPT。</p>
+<p>原因主要有两个：</p>
+<ol>
+<li>公开 NLP 数据集更偏向容易自动评测的任务，比如分类、问答、翻译、摘要。</li>
+<li>真实 API prompt 中，大量任务是开放式生成、头脑风暴、改写、聊天，这些任务很难用传统 benchmark 完整覆盖。</li>
+</ol>
+<p>这给我们的启发是：训练数据的分布很重要。想做真实可用的指令跟随模型，不能只在“学术任务集合”上优化，还要覆盖用户实际会怎么用。</p>
+<h2 id="方法价值：把-RLHF-做成工程闭环"><a href="#方法价值：把-RLHF-做成工程闭环" class="headerlink" title="方法价值：把 RLHF 做成工程闭环"></a>方法价值：把 RLHF 做成工程闭环</h2><p>我觉得 InstructGPT 的贡献不只是“用了 RLHF”，而是把一套对齐流程工程化了：</p>
+<ul>
+<li>从真实用户 prompt 中构造训练分布。</li>
+<li>用标注员示范建立初始行为。</li>
+<li>用偏好排序训练奖励模型。</li>
+<li>用 PPO 优化模型行为。</li>
+<li>用 KL penalty 和预训练梯度控制过优化与能力退化。</li>
+<li>用人类偏好、真实性、毒性、偏见、公开 NLP benchmark 多维度评估。</li>
+</ul>
+<p>更重要的是，它证明了一个现象：<strong>在用户体验层面，微调目标可能比模型规模更关键。</strong></p>
+<p>预训练让模型拥有广泛能力，但 RLHF 让这些能力以更符合人类意图的方式释放出来。一个不太严谨但很形象的说法是：</p>
+<ul>
+<li>预训练解决“会不会”。</li>
+<li>SFT 解决“像不像”。</li>
+<li>RM 解决“好不好”。</li>
+<li>PPO 解决“能不能稳定变好”。</li>
+</ul>
+<h2 id="局限性：它对齐的是特定人群的偏好"><a href="#局限性：它对齐的是特定人群的偏好" class="headerlink" title="局限性：它对齐的是特定人群的偏好"></a>局限性：它对齐的是特定人群的偏好</h2><p>论文对自身局限写得很诚实，主要包括以下几点。</p>
+<p>第一，对齐对象并不是“全人类价值观”。模型对齐的是一组特定标注员、研究者指令、API 用户 prompt 分布共同塑造出来的偏好。标注员大约 40 人，主要是英语使用者，来自 Upwork 和 ScaleAI，并不代表所有用户和所有受影响群体。</p>
+<p>第二，大部分比较只由 1 名标注员完成。对于价值判断、敏感内容、文化差异明显的任务，单一偏好并不总是可靠。</p>
+<p>第三，模型仍然会犯简单错误。论文明确提到，InstructGPT 仍可能不遵守指令、编造事实、给简单问题写很长的模糊回答，或者没识别出带错误前提的指令。</p>
+<p>第四，有害指令处理不足。由于训练中更偏向 helpfulness，如果用户要求模型生成有害内容，模型可能仍然会照做。这也是 ChatGPT 类系统必须重点补强的安全能力。</p>
+<p>第五，偏见问题没有显著改善。RLHF 并不是自动消除偏见的银弹。</p>
+<h2 id="工程启发：训练指令跟随模型时真正要抓什么"><a href="#工程启发：训练指令跟随模型时真正要抓什么" class="headerlink" title="工程启发：训练指令跟随模型时真正要抓什么"></a>工程启发：训练指令跟随模型时真正要抓什么</h2><p>如果要训练一个真正可用的指令跟随模型，重点不只是“要不要做 RLHF”。更关键的是：指令跟随模型的质量不是单点技术决定的，而是数据、偏好、优化约束、安全策略和评估体系共同决定的。</p>
+<ol>
+<li><p><strong>先定义模型要服务的任务分布。</strong> 做通用问答、代码助手、客服、办公写作、搜索增强问答，所需数据分布完全不同。没有真实任务分布，SFT 和 RM 都容易训练成“看起来会回答”，但上线后不稳定的模型。</p>
+</li>
+<li><p><strong>SFT 解决的是行为冷启动，不是最终偏好。</strong> 高质量示范数据能让模型学会基本格式、语气和任务模式，但它无法覆盖所有“哪个回答更好”的细微差别。SFT 数据要重质量和覆盖面，不宜只堆数量。</p>
+</li>
+<li><p><strong>RM 决定 PPO 的上限，也决定很多风险。</strong> PPO 优化的不是人类本身，而是奖励模型。如果 RM 对啰嗦、迎合、空泛安全话术、格式化废话给了高分，策略模型就会放大这些偏差。奖励模型需要持续校准，而不是训练一次就结束。</p>
+</li>
+<li><p><strong>优化偏好时要保留原有能力。</strong> RLHF 会改变模型行为，也可能伤害原来的知识、推理、翻译、阅读理解等能力。KL penalty、pretraining mix、能力回归测试和人工抽检，本质上都是为了控制 alignment tax。</p>
+</li>
+<li><p><strong>安全不能只依赖“让模型更听话”。</strong> InstructGPT 说明指令遵循能力会提升，但坏指令也可能被更好地执行。真正可用的指令跟随模型还需要拒答数据、安全偏好、红队样本、策略边界和上线后的监控。</p>
+</li>
+<li><p><strong>评估要覆盖用户体验，而不只是公开榜单。</strong> 公开 benchmark 能测一部分能力，但很难衡量是否遵守约束、是否少幻觉、是否语气合适、是否能处理真实长尾需求。上线前要有贴近业务的人工偏好评测和失败案例集。</p>
+</li>
+<li><p><strong>对齐对象必须说清楚。</strong> “人类偏好”不是一个天然统一的东西。标注员、产品团队、客户、终端用户和受影响群体可能有不同偏好。做模型对齐时，至少要明确：数据来自谁，标注规则是谁写的，冲突偏好如何处理。</p>
+</li>
+</ol>
+<h2 id="总结：预训练给能力，对齐给可用性"><a href="#总结：预训练给能力，对齐给可用性" class="headerlink" title="总结：预训练给能力，对齐给可用性"></a>总结：预训练给能力，对齐给可用性</h2><p>InstructGPT 的核心不是神秘的强化学习公式，而是一个很清晰的工程闭环：</p>
+<ul>
+<li>先用人类示范告诉模型“应该怎么答”。</li>
+<li>再用人类偏好告诉模型“哪个答得更好”。</li>
+<li>然后用奖励模型把偏好变成可优化信号。</li>
+<li>最后用 PPO 在不偏离太远的前提下优化模型。</li>
+</ul>
+<p>这套流程让 1.3B InstructGPT 在人类偏好上超过了 175B GPT-3，也显著改善了指令遵循、真实性和可控性。但它没有彻底解决幻觉、偏见、有害请求和“到底对齐谁”的问题。</p>
+<p>用我自己的话总结：预训练给了模型广泛的语言能力，而基于人类反馈的微调，让这些能力更容易以用户想要的方式表现出来。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://arxiv.org/pdf/2203.02155">Training language models to follow instructions with human feedback</a></li>
+<li><a href="https://arxiv.org/abs/2009.01325">Learning to summarize with human feedback</a></li>
+<li><a href="https://arxiv.org/abs/1707.06347">Proximal Policy Optimization Algorithms</a></li>
+<li><a href="https://openai.com/research/instruction-following">Training language models to follow instructions with human feedback - OpenAI</a></li>
+</ol>
+
+  </div>
+  
+    <nav class="post-nav">
+      
+        <a href="/2025/03/27/attention_kv_cache_review/">上一篇：大模型推理中的 KV Cache：从 MHA、MQA、GQA 到 MLA</a>
+      
+      
+        <a href="/2021/11/05/nlp_pr_gpt123/">下一篇：NLP论文阅读- GPT-1、GPT-2、GPT-3</a>
+      
+    </nav>
+  
+</article>
+
+      </main>
+      <footer class="site-footer">
+  <div>
+    &copy; 2015 - 2026
+    Heloowird
+  </div>
+</footer>
+
+    </div>
+    <script src="/js/main.js"></script>
+    
+
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="/lib/mathjax/tex-chtml.js"></script>
+
+
+  </body>
+</html>
