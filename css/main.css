@@ -548,6 +548,13 @@ img {
   background: var(--table-head-bg);
 }
 
+.post-content > table th:nth-child(1),
+.post-content > table td:nth-child(1),
+.post-content > table th:nth-child(2),
+.post-content > table td:nth-child(2) {
+  min-width: 72px;
+}
+
 .post-content .math-display {
   overflow-x: auto;
   overflow-y: hidden;
